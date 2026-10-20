@@ -1,20 +1,23 @@
 {
-  "name": "nft-ticket-dapp",
+  "name": "glowpet-dapp",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "serials": "node scripts/build-serials.mjs",
+    "serials:demo": "node scripts/build-serials.mjs --supply 100 --out .glowpet-demo --split 1-100 --split-dir .glowpet-demo/proofs --force"
   },
   "dependencies": {
+    "dompurify": "^3.4.17",
     "ethers": "^6.15.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.7.0",
-    "vite": "^7.1.0"
+    "vite": "^6.4.4"
   }
 }

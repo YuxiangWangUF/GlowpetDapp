@@ -1,12 +1,15 @@
-# Dependencies and generated production files can always be rebuilt.
 node_modules/
 dist/
-
-# Keep local configuration out of Git. The example file is intentionally safe.
 .env
 .env.*
 !.env.example
-*.local
-
-# macOS metadata is unrelated to the project.
 .DS_Store
+
+# Generated series data contains claim secrets. Never commit it.
+deployments/
+.glowpet-demo/
+public/proofs/
+
+# Editor / OS noise
+.idea/
+*.swp
