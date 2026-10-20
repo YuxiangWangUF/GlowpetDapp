@@ -1,0 +1,1886 @@
+/* ------------------------------------------------------------------ */
+/* Farm scene                                                          */
+/* ------------------------------------------------------------------ */
+
+.farm-game {
+  margin: 8px 0 26px;
+  padding: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(224, 205, 255, 0.11);
+  border-radius: 28px;
+  background:
+    radial-gradient(ellipse at 18% 0%, #3a2d5040, transparent 46%),
+    #17131f;
+}
+
+.farm-scene-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 2px 4px 18px;
+}
+
+.farm-scene-heading .garden-eyebrow {
+  margin-bottom: 8px;
+}
+
+.farm-scene-heading h2 {
+  margin: 0;
+  color: #f3e9e3;
+  font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+  font-weight: 560;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+}
+
+.farm-scene-heading h2 > span {
+  color: #c8addf;
+}
+
+.farm-scene-hint {
+  max-width: 300px;
+  margin: 0 0 2px;
+  color: #a99db6;
+  font-size: 0.68rem;
+  line-height: 1.65;
+  text-align: right;
+}
+
+.farm-scene {
+  position: relative;
+  height: clamp(430px, 47vw, 560px);
+  overflow: hidden;
+  overflow: clip;
+  border: 1px solid #f5e1c628;
+  border-radius: 23px;
+  outline: none;
+  background: linear-gradient(180deg, #f6dfbd 0%, #eed9bd 31%, #e2dfb9 46%, #a8c184 47%, #84a568 100%);
+  box-shadow: inset 0 0 70px #4b3a2826, 0 20px 44px -35px #000000e6;
+  cursor: crosshair;
+  isolation: isolate;
+}
+
+.farm-scene:focus-visible {
+  border-color: #f5d79c;
+  box-shadow: 0 0 0 3px #f0c97955, inset 0 0 70px #4b3a2826;
+}
+
+/* Sky --------------------------------------------------------------- */
+
+.farm-sky {
+  position: absolute;
+  z-index: 0;
+  inset: 0 0 50%;
+  pointer-events: none;
+}
+
+.farm-sun {
+  position: absolute;
+  top: 11%;
+  right: 10%;
+  width: clamp(42px, 5vw, 62px);
+  height: clamp(42px, 5vw, 62px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, #fff8d6, #f8dca0 55%, #efc582 78%);
+  box-shadow: 0 0 46px 20px #f8db9c4d;
+}
+
+.farm-cloud {
+  position: absolute;
+  width: 88px;
+  height: 24px;
+  border-radius: 99px;
+  background: #fff9ebc9;
+  filter: blur(0.2px);
+  box-shadow: 0 8px 18px #9f886b21;
+}
+
+.farm-cloud::before,
+.farm-cloud::after {
+  position: absolute;
+  bottom: 7px;
+  border-radius: 50%;
+  background: inherit;
+  content: "";
+}
+
+.farm-cloud::before {
+  left: 13px;
+  width: 35px;
+  height: 35px;
+}
+
+.farm-cloud::after {
+  right: 12px;
+  width: 45px;
+  height: 45px;
+}
+
+.farm-cloud-one {
+  top: 18%;
+  left: 13%;
+  opacity: 0.72;
+}
+
+.farm-cloud-two {
+  top: 33%;
+  left: 42%;
+  width: 66px;
+  height: 19px;
+  opacity: 0.48;
+  transform: scale(0.8);
+}
+
+.farm-cloud-three {
+  top: 9%;
+  left: 66%;
+  width: 58px;
+  height: 17px;
+  opacity: 0.4;
+  transform: scale(0.7);
+}
+
+/* Hills, meadow, path ----------------------------------------------- */
+
+.farm-hills {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+}
+
+.farm-hill {
+  position: absolute;
+  bottom: 44%;
+  border-radius: 50% 50% 0 0;
+}
+
+.farm-hill-back {
+  left: -12%;
+  width: 74%;
+  height: 66%;
+  background: linear-gradient(180deg, #a7bd8d, #8fa978);
+  opacity: 0.78;
+  transform: rotate(2deg);
+}
+
+.farm-hill-front {
+  right: -16%;
+  width: 82%;
+  height: 56%;
+  background: linear-gradient(180deg, #97b37d, #7b985f);
+  opacity: 0.9;
+  transform: rotate(-3deg);
+}
+
+.farm-meadow {
+  position: absolute;
+  z-index: 2;
+  top: 46%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 5%, #b5cb9140, transparent 55%),
+    linear-gradient(180deg, #a1bb7c 0%, #8ca96d 42%, #7c9a5e 100%);
+}
+
+.farm-meadow::before {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, #d9d9a25c 1px, transparent 1.5px),
+    radial-gradient(circle, #6d8c5269 1px, transparent 1.6px);
+  background-position: 0 0, 13px 17px;
+  background-size: 31px 27px, 37px 33px;
+  opacity: 0.55;
+  content: "";
+}
+
+.farm-path {
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  width: 72%;
+  height: 42%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #cbbd86a6, #b9ac7a54 68%, transparent 100%);
+  filter: blur(2px);
+  transform: translateX(-50%) rotate(-1deg);
+}
+
+.farm-flower {
+  position: absolute;
+  color: #f3e8bd;
+  font-size: 8px;
+  opacity: 0.72;
+  text-shadow: 0 1px 0 #7f965b;
+}
+
+.farm-flower-one { top: 30%; left: 9%; }
+.farm-flower-two { top: 19%; left: 73%; color: #f5d7d7; font-size: 7px; }
+.farm-flower-three { top: 44%; left: 33%; color: #e4dcf4; font-size: 6px; }
+.farm-flower-four { top: 26%; right: 18%; color: #f5e3a0; font-size: 9px; }
+.farm-flower-five { bottom: 9%; left: 7%; color: #f2dede; font-size: 7px; }
+
+/* Fence and tree ---------------------------------------------------- */
+
+.farm-fence {
+  position: absolute;
+  z-index: 2;
+  top: 43%;
+  right: 5%;
+  display: flex;
+  width: 33%;
+  justify-content: space-between;
+  pointer-events: none;
+  opacity: 0.78;
+}
+
+.farm-fence::before,
+.farm-fence::after {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  border-radius: 3px;
+  background: #d7bb92;
+  box-shadow: 0 1px 0 #a9906e;
+  content: "";
+}
+
+.farm-fence::before { top: 13px; }
+.farm-fence::after { top: 31px; }
+
+.farm-fence > span {
+  position: relative;
+  width: 7px;
+  height: 43px;
+  border-radius: 3px 3px 1px 1px;
+  background: linear-gradient(90deg, #c8aa7e, #e4cba2 60%, #b5976f);
+  box-shadow: 0 2px 3px #5e4a3021;
+}
+
+.farm-tree {
+  position: absolute;
+  z-index: 2;
+  bottom: 36%;
+  left: 5%;
+  width: 70px;
+  height: 118px;
+  pointer-events: none;
+}
+
+.farm-tree-trunk {
+  position: absolute;
+  bottom: 0;
+  left: 31px;
+  width: 10px;
+  height: 43px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #8e6a4a, #b68d64 60%, #785739);
+  box-shadow: 3px 3px 0 #5e472f26;
+}
+
+.farm-tree-crown {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 30%, #9dbb7a, #74935a 65%, #5e7b4a);
+  box-shadow: inset -6px -6px 0 #4f6b3e33;
+}
+
+.farm-tree-crown-one {
+  top: 5px;
+  left: 4px;
+  width: 46px;
+  height: 46px;
+}
+
+.farm-tree-crown-two {
+  top: 0;
+  right: 1px;
+  width: 38px;
+  height: 38px;
+  background: radial-gradient(circle at 38% 30%, #a9c586, #7b9c60 65%, #64814e);
+}
+
+.farm-tree-crown-three {
+  top: 27px;
+  left: 19px;
+  width: 43px;
+  height: 43px;
+  background: radial-gradient(circle at 38% 30%, #91b06f, #6a8a51 65%, #587342);
+}
+
+/* Seed cabinet in the meadow ---------------------------------------- */
+
+.farm-cabinet-stand {
+  display: flex;
+  position: absolute;
+  z-index: 5;
+  right: 3%;
+  bottom: 7%;
+  width: 96px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.farm-seed-shelf {
+  display: flex;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  padding: 3px 4px 2px;
+  border: 1px solid #5a3f2a;
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, #c09264, #8d6241 70%, #755033);
+  box-shadow: inset 0 1px 0 #f1cfa04a;
+}
+
+.garden-view .farm-seed-model {
+  display: flex;
+  position: relative;
+  width: 28px;
+  min-width: 0;
+  min-height: 0;
+  padding: 2px 1px 1px;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  transition: transform 160ms ease, opacity 200ms ease, background 160ms ease;
+}
+
+.garden-view .farm-seed-model:hover:not(:disabled) {
+  border: 0;
+  background: #fff4dd16;
+  transform: translateY(-3px);
+}
+
+.garden-view .farm-seed-model:focus-visible {
+  outline: 2px solid #fff1c9;
+  outline-offset: 3px;
+}
+
+.farm-seed-model.is-held {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px) scale(0.72);
+}
+
+.farm-seed-model.is-picking {
+  animation: farm-seed-model-wiggle 520ms ease-in-out infinite;
+}
+
+.farm-seed-model-jar {
+  display: grid;
+  position: relative;
+  width: 22px;
+  height: 26px;
+  place-items: center;
+  border: 1px solid #5a3f2a;
+  border-radius: 6px 6px 4px 4px;
+  background: linear-gradient(150deg, var(--seed-a), var(--seed-b));
+  box-shadow:
+    inset 0 2px 1px #fff6e54a,
+    inset 0 -3px 3px #3e28182e,
+    0 3px 3px #3524193d;
+}
+
+.farm-seed-model-jar::before {
+  position: absolute;
+  top: -3px;
+  right: 4px;
+  left: 4px;
+  height: 4px;
+  border-radius: 2px 2px 1px 1px;
+  background: #d8b07b;
+  box-shadow: inset 0 -1px 0 #8e6843;
+  content: "";
+}
+
+.farm-seed-model-jar::after {
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  width: 3px;
+  height: 9px;
+  border-radius: 3px;
+  background: #fff8e53d;
+  content: "";
+  transform: rotate(10deg);
+}
+
+.farm-seed-model[data-crop="carrot"],
+.farm-held-seed[data-crop="carrot"] {
+  --seed-a: #e7a45b;
+  --seed-b: #b96834;
+}
+
+.farm-seed-model[data-crop="glowberry"],
+.farm-held-seed[data-crop="glowberry"] {
+  --seed-a: #9e7ac7;
+  --seed-b: #62458e;
+}
+
+.farm-seed-model[data-crop="moonbloom"],
+.farm-held-seed[data-crop="moonbloom"] {
+  --seed-a: #d7a0b8;
+  --seed-b: #a26582;
+}
+
+.farm-seed-model-emoji {
+  font-size: 12px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 1px #3221164d);
+}
+
+.farm-seed-model-label {
+  overflow: hidden;
+  max-width: 100%;
+  color: #fdf1d6;
+  font-size: 5px;
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px #3e2a1c99;
+  white-space: nowrap;
+}
+
+.farm-seed-model-count {
+  display: grid;
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  right: -1px;
+  min-width: 13px;
+  height: 13px;
+  padding: 0 3px;
+  place-items: center;
+  border: 1px solid #f0d7a83d;
+  border-radius: 999px;
+  color: #f8ead2;
+  background: #3a2a43e6;
+  box-shadow: 0 1px 2px #2c1e1633;
+  font-family: var(--mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 7px;
+  line-height: 1;
+}
+
+.farm-seed-model.is-empty .farm-seed-model-jar {
+  filter: grayscale(1) brightness(0.72);
+  opacity: 0.5;
+}
+
+.farm-seed-model.is-empty .farm-seed-model-label {
+  color: #bbaea1;
+  text-shadow: none;
+}
+
+.farm-seed-model.is-empty .farm-seed-model-count {
+  color: #695b4d;
+  background: #e6d6c1;
+}
+
+.garden-view .farm-cabinet {
+  display: flex;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  flex-direction: column;
+  align-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  filter: drop-shadow(0 7px 6px #4a34233d);
+  transition: filter 160ms ease;
+}
+
+.garden-view .farm-cabinet:hover:not(:disabled) {
+  border: 0;
+  background: transparent;
+  filter: drop-shadow(0 9px 8px #4a342355);
+}
+
+.garden-view .farm-cabinet[aria-expanded="true"] {
+  filter: drop-shadow(0 0 10px #f5d89980);
+}
+
+.farm-cabinet-sign {
+  position: absolute;
+  z-index: 3;
+  top: 2px;
+  left: 50%;
+  padding: 2px 5px;
+  border: 1px solid #4f3624;
+  border-radius: 3px;
+  color: #f8e7c8;
+  background: linear-gradient(#8f6949, #6c4a32);
+  box-shadow: 0 1px 2px #2e1e1333;
+  font-family: var(--mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 5.5px;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  transform: translateX(-50%);
+}
+
+@keyframes farm-seed-model-wiggle {
+  0%, 100% { transform: rotate(-3deg) translateY(0); }
+  50% { transform: rotate(3deg) translateY(-2px); }
+}
+
+.farm-cabinet-body {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 56px;
+  gap: 3px;
+  padding: 5px;
+  border: 2px solid #553b29;
+  border-radius: 5px 5px 3px 3px;
+  background: linear-gradient(90deg, #996a47, #b17f56 45%, #875a3c);
+  box-shadow:
+    inset 0 2px 2px #e5bd8d4d,
+    inset 0 -4px 4px #4b32205c;
+}
+
+.farm-cabinet-body::after {
+  position: absolute;
+  right: 7px;
+  bottom: -6px;
+  left: 7px;
+  height: 7px;
+  border-radius: 0 0 3px 3px;
+  background: #5d402d;
+  box-shadow: 0 2px 2px #3b281b3d;
+  content: "";
+}
+
+.farm-cabinet-door {
+  position: relative;
+  flex: 1;
+  border: 1px solid #5b3f2b;
+  border-radius: 2px;
+  background: linear-gradient(110deg, #a97953, #8a5d3f 70%, #7a5036);
+}
+
+.farm-cabinet-panel {
+  position: absolute;
+  inset: 6px 5px;
+  border: 1px solid #694a33;
+  border-radius: 1px;
+  background:
+    linear-gradient(135deg, #b98a5e33, transparent 48%),
+    linear-gradient(#9b6b48, #855838);
+}
+
+.farm-cabinet-knob {
+  position: absolute;
+  top: 48%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #f1d393;
+  box-shadow: 0 1px 1px #4b301d7a;
+}
+
+.farm-cabinet-door-left .farm-cabinet-knob { right: 3px; }
+.farm-cabinet-door-right .farm-cabinet-knob { left: 3px; }
+
+.farm-cabinet-sachet {
+  position: absolute;
+  z-index: 2;
+  top: -9px;
+  right: 3px;
+  font-size: 15px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 1px #3b281b4d);
+  transform: rotate(7deg);
+}
+
+/* HUD --------------------------------------------------------------- */
+
+.farm-hud {
+  position: absolute;
+  z-index: 7;
+  top: 13px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  pointer-events: none;
+}
+
+.farm-hud-name,
+.farm-hud-level {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid #ffffff3d;
+  border-radius: 999px;
+  color: #3d3029;
+  background: #fff8e9d6;
+  box-shadow: 0 3px 10px #5e4a3024;
+  font-size: 0.67rem;
+  font-weight: 700;
+  line-height: 1.2;
+  backdrop-filter: blur(8px);
+}
+
+.farm-hud-name small {
+  color: #8d7863;
+  font-size: 0.53rem;
+  font-weight: 500;
+}
+
+.farm-hud-level {
+  color: #6a593f;
+  font-size: 0.56rem;
+  font-weight: 600;
+}
+
+/* Plots ------------------------------------------------------------- */
+
+.garden-view .farm-plot {
+  display: flex;
+  position: absolute;
+  z-index: 4;
+  width: clamp(86px, 14.5%, 124px);
+  min-height: 0;
+  padding: 0;
+  flex-direction: column;
+  align-items: center;
+  border: 0;
+  border-radius: 22px;
+  outline: none;
+  color: #3b2f27;
+  background: transparent;
+  transform: translate(-50%, -50%);
+  transition: transform 160ms ease, filter 160ms ease;
+}
+
+.garden-view .farm-plot:hover:not(:disabled) {
+  border: 0;
+  background: transparent;
+  filter: brightness(1.06);
+  transform: translate(-50%, -50%) scale(1.035);
+}
+
+.garden-view .farm-plot:focus-visible {
+  outline: 3px solid #fff3d0;
+  outline-offset: 5px;
+}
+
+.farm-plot-tag {
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: #f8efdc;
+  background: #3b2e2bd4;
+  font-family: var(--mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  box-shadow: 0 2px 5px #33251d33;
+}
+
+.farm-plot-soil {
+  display: grid;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.55;
+  place-items: center;
+  margin-top: 3px;
+  border: 2px solid #7f5d42;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 32% 40%, #b28a6259 1px, transparent 2px),
+    radial-gradient(ellipse at 68% 62%, #6d4d3259 1px, transparent 2px),
+    radial-gradient(ellipse at 50% 40%, #8b6748, #6d4e36 72%);
+  background-size: 13px 11px, 17px 13px, 100% 100%;
+  box-shadow:
+    inset 0 7px 9px #4f372533,
+    inset 0 -4px 4px #c39a7052,
+    0 4px 0 #5b422f,
+    0 9px 13px #3b2a1c4d;
+}
+
+.farm-plot.is-active .farm-plot-soil {
+  border-color: #f3d08d;
+  box-shadow:
+    inset 0 7px 9px #4f372533,
+    inset 0 -4px 4px #c39a7052,
+    0 4px 0 #5b422f,
+    0 0 0 5px #f5d79b52,
+    0 10px 17px #3b2a1c5e;
+}
+
+.farm-plot-plus {
+  color: #e4cba5;
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1;
+  text-shadow: 0 1px 0 #5b422f;
+}
+
+.farm-crop-art,
+.farm-sprout {
+  display: block;
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 2px 1px #3a281b55);
+}
+
+.farm-crop-art {
+  font-size: clamp(1.35rem, 2.5vw, 1.9rem);
+  animation: farm-crop-bob 2.8s ease-in-out infinite;
+}
+
+.farm-sprout {
+  font-size: clamp(1.1rem, 2.1vw, 1.55rem);
+  animation: farm-sprout-sway 4.2s ease-in-out infinite;
+}
+
+.farm-ready-spark {
+  position: absolute;
+  top: 9%;
+  right: 14%;
+  color: #fff2b6;
+  font-size: 0.66rem;
+  text-shadow: 0 0 8px #ffe8a0;
+  animation: farm-spark 2.1s ease-in-out infinite;
+}
+
+.farm-plot-caption {
+  max-width: 100%;
+  margin-top: 7px;
+  overflow: hidden;
+  color: #f7eedb;
+  font-size: 0.56rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px #3c2c1e8f;
+  white-space: nowrap;
+}
+
+.farm-plot-progress {
+  width: 70%;
+  height: 3px;
+  margin-top: 5px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #fff7e03d;
+  box-shadow: 0 1px 2px #3b2a1c2e;
+}
+
+.farm-plot-progress > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #ffe1a0;
+  transition: width 500ms linear;
+}
+
+.farm-plot.is-empty .farm-plot-progress {
+  display: none;
+}
+
+/* Character --------------------------------------------------------- */
+
+.farm-character {
+  position: absolute;
+  z-index: 6;
+  width: clamp(100px, 13.5vw, 158px);
+  aspect-ratio: 1;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+}
+
+.farm-character-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 100%;
+  transform:
+    translateY(calc(-1 * var(--farm-hop, 0px)))
+    scaleX(var(--farm-facing, 1))
+    scaleY(var(--farm-stretch, 1));
+  will-change: transform;
+}
+
+.farm-character .plush-companion {
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+}
+
+/* A single ground shadow stays put while the companion hops. */
+.farm-character .plush-companion-shadow {
+  display: none;
+}
+
+.farm-character-shadow {
+  position: absolute;
+  right: 18%;
+  bottom: 1%;
+  left: 18%;
+  height: 10%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #3c2d2252, transparent 72%);
+}
+
+.farm-pet-svg {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  overflow: visible;
+  filter: drop-shadow(0 10px 12px #3d2c2033);
+}
+
+.farm-pet-svg svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.farm-pet-svg #gp-head {
+  transform-box: view-box;
+  transform-origin: 200px 205px;
+  animation: farm-pet-bob 3.8s ease-in-out infinite;
+}
+
+.farm-pet-svg #gp-eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: farm-pet-blink 5.5s ease-in-out infinite;
+}
+
+.farm-character-fallback {
+  display: grid;
+  width: 70%;
+  height: 70%;
+  place-items: center;
+  margin: 15%;
+  border-radius: 50%;
+  color: #fff2d8;
+  background: #5c4772;
+  font-size: 0.7rem;
+}
+
+.farm-held-seed {
+  display: grid;
+  position: absolute;
+  z-index: 4;
+  right: 1%;
+  bottom: 13%;
+  width: 30px;
+  height: 36px;
+  place-items: center;
+  transform: rotate(7deg);
+  animation: farm-held-pop 380ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  filter: drop-shadow(0 3px 3px #3a281c4d);
+}
+
+.farm-held-seed-jar {
+  display: grid;
+  position: relative;
+  width: 24px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid #5a3f2a;
+  border-radius: 6px 6px 4px 4px;
+  background: linear-gradient(150deg, var(--seed-a), var(--seed-b));
+  box-shadow:
+    inset 0 2px 1px #fff6e54a,
+    inset 0 -3px 3px #3e28182e;
+}
+
+.farm-held-seed-jar::before {
+  position: absolute;
+  top: -3px;
+  right: 4px;
+  left: 4px;
+  height: 4px;
+  border-radius: 2px 2px 1px 1px;
+  background: #d8b07b;
+  box-shadow: inset 0 -1px 0 #8e6843;
+  content: "";
+}
+
+.farm-held-seed-emoji {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.farm-pickup-burst {
+  display: flex;
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 72%;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 3px #33241966);
+  font-size: 18px;
+  animation: farm-pickup-burst 850ms ease-out both;
+}
+
+.farm-pickup-burst small {
+  color: #ffe8a3;
+  font-size: 10px;
+}
+
+.farm-consume-puff {
+  position: absolute;
+  z-index: 5;
+  right: 1%;
+  bottom: 13%;
+  width: 30px;
+  height: 36px;
+  pointer-events: none;
+}
+
+.farm-consume-puff > span {
+  position: absolute;
+  color: #f8e7b6;
+  font-size: 9px;
+  line-height: 1;
+  filter: drop-shadow(0 0 3px #ffe6a066);
+  animation: farm-consume-spark 750ms ease-out both;
+}
+
+.farm-consume-puff > span:nth-child(1) {
+  bottom: 3px;
+  left: 3px;
+  --spark-x: -9px;
+}
+
+.farm-consume-puff > span:nth-child(2) {
+  bottom: 8px;
+  left: 13px;
+  --spark-x: 0px;
+  font-size: 11px;
+  animation-delay: 40ms;
+}
+
+.farm-consume-puff > span:nth-child(3) {
+  right: 3px;
+  bottom: 4px;
+  --spark-x: 9px;
+  animation-delay: 20ms;
+}
+
+@keyframes farm-consume-spark {
+  0% { opacity: 0; transform: translate(0, 4px) scale(0.4) rotate(0); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--spark-x), -20px) scale(1.15) rotate(18deg); }
+}
+
+@keyframes farm-held-pop {
+  from { opacity: 0; transform: translateY(-8px) scale(0.45) rotate(-12deg); }
+  to { opacity: 1; transform: translateY(0) scale(1) rotate(7deg); }
+}
+
+@keyframes farm-pickup-burst {
+  0% { opacity: 0; transform: translate(-50%, 6px) scale(0.7); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -20px) scale(1.05); }
+}
+
+/* Movement controls ------------------------------------------------- */
+
+.farm-dpad {
+  display: grid;
+  position: absolute;
+  z-index: 8;
+  bottom: 13px;
+  left: 14px;
+  grid-template-columns: repeat(3, 34px);
+  grid-template-rows: repeat(3, 32px);
+  gap: 3px;
+  padding: 5px;
+  border: 1px solid #ffffff2e;
+  border-radius: 15px;
+  background: #2c2234b0;
+  box-shadow: 0 8px 20px #30241d33;
+  backdrop-filter: blur(9px);
+}
+
+.garden-view .farm-dpad button {
+  display: grid;
+  min-height: 0;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 9px;
+  color: #f8eddc;
+  background: #fff8e827;
+  font-size: 0.82rem;
+  line-height: 1;
+}
+
+.garden-view .farm-dpad button:hover:not(:disabled) {
+  border: 0;
+  background: #fff8e844;
+}
+
+.farm-dpad-up { grid-area: 1 / 2; }
+.farm-dpad-left { grid-area: 2 / 1; }
+.farm-dpad-right { grid-area: 2 / 3; }
+.farm-dpad-down { grid-area: 3 / 2; }
+
+.farm-walk-note {
+  position: absolute;
+  z-index: 7;
+  bottom: 14px;
+  left: 50%;
+  max-width: 300px;
+  margin: 0;
+  padding: 8px 11px;
+  border: 1px solid #ffffff24;
+  border-radius: 11px;
+  color: #f0e5d6;
+  background: #2c2234ad;
+  font-size: 0.57rem;
+  line-height: 1.55;
+  pointer-events: none;
+  transform: translateX(-50%);
+  backdrop-filter: blur(8px);
+}
+
+.farm-walk-note > span {
+  margin-right: 4px;
+  color: #f0d394;
+}
+
+/* Console ----------------------------------------------------------- */
+
+.farm-console {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr);
+  gap: 14px;
+  margin-top: 15px;
+}
+
+.farm-seed-dock,
+.farm-action {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid rgba(224, 205, 255, 0.1);
+  border-radius: 18px;
+  background: #1c1625;
+}
+
+.farm-console-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 11px;
+}
+
+.farm-console-heading .garden-eyebrow {
+  margin: 0;
+}
+
+.farm-console-heading > span:last-child {
+  color: #978ba5;
+  font-size: 0.55rem;
+}
+
+.garden-view .farm-cabinet-link {
+  min-height: 0;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 999px;
+  color: #cbb390;
+  background: transparent;
+  font-size: 0.55rem;
+  font-weight: 600;
+}
+
+.garden-view .farm-cabinet-link:hover:not(:disabled) {
+  border: 0;
+  color: #efd8ae;
+  background: #e6c88a12;
+}
+
+.farm-seeds {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.garden-view .farm-seed {
+  display: flex;
+  min-width: 0;
+  min-height: 60px;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 8px;
+  border-color: #7f6b9130;
+  border-radius: 12px;
+  background: #241c2f;
+  text-align: left;
+}
+
+.garden-view .farm-seed:hover:not(:disabled) {
+  border-color: #c9b1e15c;
+  background: #2c2239;
+}
+
+.garden-view .farm-seed.is-selected {
+  border-color: #d3b88e7a;
+  background: #312638;
+  box-shadow: inset 0 0 0 1px #e6cda11c;
+}
+
+.farm-seed-icon {
+  display: grid;
+  position: relative;
+  width: 27px;
+  height: 27px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 9px;
+  background: #fff5e30d;
+  font-size: 1.05rem;
+}
+
+.farm-seed-stock {
+  display: grid;
+  position: absolute;
+  top: -5px;
+  right: -6px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  place-items: center;
+  border: 1px solid #e8d5b62e;
+  border-radius: 999px;
+  color: #f6e8d5;
+  background: #382b47;
+  font-family: var(--mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 8px;
+  line-height: 1;
+}
+
+.farm-seed.is-empty .farm-seed-icon {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
+.farm-seed.is-empty .farm-seed-stock {
+  color: #695b4d;
+  background: #ebdcc9;
+}
+
+.farm-seed.is-empty .farm-seed-copy small {
+  color: #b3a290;
+}
+
+.farm-seed-copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.farm-seed-copy strong {
+  overflow: hidden;
+  color: #ebdfe9;
+  font-size: 0.59rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.farm-seed-copy small {
+  color: #9c8fa9;
+  font-size: 0.49rem;
+  line-height: 1.4;
+}
+
+.farm-action {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background:
+    radial-gradient(ellipse at 15% 0%, #6a4f3433, transparent 60%),
+    #211a25;
+}
+
+.farm-action-copy {
+  min-height: 74px;
+}
+
+.farm-action-copy .garden-eyebrow {
+  margin: 0 0 7px;
+}
+
+.farm-action h3 {
+  margin: 0 0 6px;
+  color: #f1e6da;
+  font-size: 1rem;
+  font-weight: 550;
+  letter-spacing: -0.025em;
+}
+
+.farm-action p {
+  margin: 0;
+  color: #a99cae;
+  font-size: 0.59rem;
+  line-height: 1.65;
+}
+
+.garden-view .farm-action-button {
+  width: 100%;
+  margin-top: auto;
+  padding: 11px 14px;
+  border-color: #f0d69e;
+  color: #342818;
+  background: #f0d69e;
+  font-size: 0.68rem;
+}
+
+.garden-view .farm-action-button:hover:not(:disabled) {
+  border-color: #ffe7b8;
+  background: #ffe7b8;
+}
+
+.farm-action.is-ready {
+  background:
+    radial-gradient(ellipse at 15% 0%, #65814836, transparent 60%),
+    #1d211b;
+}
+
+.farm-action.is-ready .farm-action-button {
+  border-color: #c3d9a0;
+  background: #c3d9a0;
+}
+
+.farm-action.is-growing .farm-action-button {
+  color: #a99cae;
+  border-color: #7f6b9130;
+  background: #2a2231;
+}
+
+/* Seed cabinet dialog ----------------------------------------------- */
+
+.seed-cabinet-layer {
+  display: grid;
+  position: fixed;
+  z-index: 120;
+  inset: 0;
+  place-items: center;
+  padding: 20px;
+}
+
+.seed-cabinet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: #09060fd9;
+  backdrop-filter: blur(8px);
+  animation: seed-cabinet-fade 180ms ease both;
+}
+
+.seed-cabinet {
+  position: relative;
+  width: min(720px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  padding: 26px;
+  border: 1px solid #e6d2b33d;
+  border-radius: 26px;
+  outline: none;
+  background:
+    radial-gradient(ellipse at 12% 0%, #6e4f3238, transparent 46%),
+    radial-gradient(ellipse at 96% 100%, #5d3f5f33, transparent 50%),
+    #1a1420;
+  box-shadow:
+    0 36px 90px -28px #000000e6,
+    inset 0 1px 0 #fff4dd18;
+  overscroll-behavior: contain;
+  animation: seed-cabinet-rise 240ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+.seed-cabinet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.seed-cabinet-head .garden-eyebrow {
+  margin-bottom: 8px;
+}
+
+.seed-cabinet-head h2 {
+  margin: 0;
+  color: #f6eadd;
+  font-size: clamp(1.55rem, 3vw, 2rem);
+  font-weight: 560;
+  letter-spacing: -0.045em;
+}
+
+.seed-cabinet-head-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 9px;
+}
+
+.seed-cabinet-balance {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 10px;
+  border: 1px solid #e8cda02e;
+  border-radius: 999px;
+  color: #ead4ad;
+  background: #e8cda00a;
+  font-family: var(--mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.58rem;
+  line-height: 1;
+}
+
+.seed-cabinet-balance > span {
+  color: #f0ce8e;
+}
+
+.garden-view .seed-cabinet-close {
+  display: grid;
+  width: 38px;
+  min-height: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  padding: 0;
+  place-items: center;
+  border-color: #e6d2b32e;
+  border-radius: 50%;
+  color: #cdbca9;
+  background: #ffffff08;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.seed-cabinet-description {
+  max-width: 550px;
+  margin: 14px 0 20px;
+  color: #ada0b2;
+  font-size: 0.68rem;
+  line-height: 1.7;
+}
+
+.seed-cabinet-message {
+  margin: -7px 0 16px;
+  padding: 8px 11px;
+  border: 1px solid #d8c3a32a;
+  border-radius: 9px;
+  color: #cdbba9;
+  background: #ffffff04;
+  font-size: 0.6rem;
+  line-height: 1.6;
+}
+
+.seed-cabinet-message.success {
+  border-color: #bcd49c3d;
+  color: #cddfb3;
+  background: #bcd49c0f;
+}
+
+.seed-cabinet-message.error {
+  border-color: #efb1a03d;
+  color: #f1c0b2;
+  background: #efb1a00d;
+}
+
+.seed-cabinet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.garden-view .seed-packet {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 15px;
+  flex-direction: column;
+  align-items: stretch;
+  border-color: #d9c3a52e;
+  border-radius: 17px;
+  background:
+    linear-gradient(160deg, #291f34, #1c1623);
+  text-align: left;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.garden-view .seed-packet:hover:not(:disabled) {
+  border-color: #e8cda06b;
+  background: linear-gradient(160deg, #32253d, #211a29);
+  transform: translateY(-2px);
+}
+
+.garden-view .seed-packet.is-selected {
+  border-color: #e8cda0a1;
+  background:
+    linear-gradient(160deg, #382b3f, #221a29);
+  box-shadow: inset 0 0 0 1px #f5d99f24, 0 12px 24px -24px #000;
+}
+
+.seed-packet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.seed-packet-icon {
+  display: grid;
+  width: 43px;
+  height: 43px;
+  place-items: center;
+  border: 1px solid #f1dab02e;
+  border-radius: 13px;
+  background: #f6e2ba12;
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.seed-packet-badge {
+  padding: 4px 7px;
+  border: 1px solid #e7cb9466;
+  border-radius: 999px;
+  color: #f1dba9;
+  background: #e6c88a14;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.seed-packet > strong {
+  margin-top: 12px;
+  color: #f1e5d9;
+  font-size: 0.94rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.seed-packet-note {
+  min-height: 36px;
+  margin-top: 5px;
+  color: #a397aa;
+  font-size: 0.6rem;
+  line-height: 1.6;
+}
+
+.seed-packet-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 9px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #e6d2b31c;
+  color: #c9b69f;
+  font-size: 0.56rem;
+  line-height: 1.5;
+}
+
+.seed-packet-reward {
+  margin-top: 4px;
+  color: #a9bb95;
+  font-size: 0.55rem;
+  line-height: 1.5;
+}
+
+.seed-packet-buy {
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid #e6d2b31c;
+  color: #f0d49b;
+  font-size: 0.59rem;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.seed-cabinet-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e6d2b31c;
+}
+
+.seed-cabinet-foot p {
+  margin: 0;
+  color: #95899f;
+  font-size: 0.58rem;
+  line-height: 1.7;
+}
+
+.seed-cabinet-foot p > span {
+  color: #e2c689;
+}
+
+.garden-view .seed-cabinet-done {
+  flex-shrink: 0;
+  min-height: 40px;
+  padding: 9px 15px;
+  border-color: #d9bf952f;
+  border-radius: 999px;
+  color: #ddc9b0;
+  background: #ffffff05;
+  font-size: 0.62rem;
+}
+
+@keyframes seed-cabinet-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes seed-cabinet-rise {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Motion ------------------------------------------------------------ */
+
+@keyframes farm-crop-bob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-3px) rotate(2deg); }
+}
+
+@keyframes farm-sprout-sway {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(5deg); }
+}
+
+@keyframes farm-spark {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes farm-pet-bob {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-7px) rotate(-1.2deg); }
+}
+
+@keyframes farm-pet-blink {
+  0%, 88%, 95%, 100% { transform: scaleY(1); }
+  90%, 93% { transform: scaleY(0.06); }
+}
+
+/* Responsive -------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .farm-game {
+    padding: 17px;
+    border-radius: 23px;
+  }
+
+  .farm-scene {
+    height: clamp(390px, 58vw, 500px);
+  }
+
+  .farm-console {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .farm-action-copy {
+    min-height: 0;
+  }
+
+  .farm-walk-note {
+    max-width: 220px;
+    font-size: 0.54rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .farm-game {
+    padding: 12px;
+    border-radius: 21px;
+  }
+
+  .farm-scene-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px 4px 13px;
+  }
+
+  .farm-scene-hint {
+    max-width: none;
+    font-size: 0.62rem;
+    text-align: left;
+  }
+
+  .farm-scene {
+    height: 450px;
+    border-radius: 18px;
+  }
+
+  .farm-hud-name,
+  .farm-hud-level {
+    padding: 6px 8px;
+    font-size: 0.6rem;
+  }
+
+  .farm-hud-name small {
+    font-size: 0.48rem;
+  }
+
+  .garden-view .farm-plot {
+    width: clamp(72px, 19vw, 92px);
+  }
+
+  .farm-plot-tag {
+    font-size: 6px;
+  }
+
+  .farm-plot-caption {
+    font-size: 0.49rem;
+  }
+
+  .farm-character {
+    width: 84px;
+  }
+
+  .farm-cabinet-stand {
+    right: 2%;
+    bottom: 3%;
+    width: 90px;
+  }
+
+  .farm-seed-shelf {
+    justify-content: space-between;
+    gap: 0;
+    padding: 2px 0;
+  }
+
+  .garden-view .farm-seed-model {
+    width: 30px;
+    padding: 2px 0;
+  }
+
+  .garden-view .farm-cabinet {
+    width: 76px;
+  }
+
+  .farm-seed-model-jar {
+    width: 20px;
+    height: 24px;
+    border-radius: 5px 5px 3px 3px;
+  }
+
+  .farm-seed-model-jar::before {
+    right: 3px;
+    left: 3px;
+  }
+
+  .farm-seed-model-emoji {
+    font-size: 11px;
+  }
+
+  .farm-seed-model-label {
+    font-size: 4.6px;
+  }
+
+  .farm-cabinet-sign {
+    top: 1px;
+    font-size: 4.6px;
+  }
+
+  .farm-cabinet-body {
+    height: 40px;
+    padding: 4px;
+  }
+
+  .seed-cabinet-layer {
+    align-items: end;
+    padding: 0;
+  }
+
+  .seed-cabinet {
+    width: 100%;
+    max-height: 92vh;
+    padding: 20px 16px calc(16px + env(safe-area-inset-bottom));
+    border-radius: 24px 24px 0 0;
+  }
+
+  .seed-cabinet-description {
+    margin: 11px 0 14px;
+  }
+
+  .seed-cabinet-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .garden-view .seed-packet {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto auto;
+    column-gap: 11px;
+    padding: 11px;
+  }
+
+  .seed-packet-head {
+    position: relative;
+    grid-row: 1 / 6;
+    grid-column: 1;
+    align-self: start;
+  }
+
+  .seed-packet-badge {
+    position: absolute;
+    top: -5px;
+    left: -4px;
+    padding: 2px 5px;
+    font-size: 0.42rem;
+  }
+
+  .seed-packet > strong {
+    grid-row: 1;
+    grid-column: 2;
+    margin-top: 0;
+  }
+
+  .seed-packet-note {
+    grid-row: 2;
+    grid-column: 2;
+    min-height: 0;
+    margin-top: 3px;
+  }
+
+  .seed-packet-meta {
+    grid-row: 3;
+    grid-column: 2;
+    margin-top: 6px;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .seed-packet-reward {
+    grid-row: 4;
+    grid-column: 2;
+    margin-top: 3px;
+  }
+
+  .seed-packet-buy {
+    grid-row: 5;
+    grid-column: 2;
+    margin-top: 4px;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .seed-cabinet-foot {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 13px;
+  }
+
+  .garden-view .seed-cabinet-done {
+    width: 100%;
+  }
+
+  .farm-dpad {
+    grid-template-columns: repeat(3, 31px);
+    grid-template-rows: repeat(3, 29px);
+    gap: 2px;
+    padding: 4px;
+  }
+
+  .farm-walk-note {
+    display: none;
+  }
+
+  .farm-dpad {
+    bottom: 10px;
+    left: 10px;
+  }
+
+  .farm-seed-dock,
+  .farm-action {
+    padding: 13px;
+    border-radius: 15px;
+  }
+
+  .garden-view .farm-seed {
+    min-height: 54px;
+    flex-direction: column;
+    gap: 4px;
+    padding: 7px 4px;
+    text-align: center;
+  }
+
+  .farm-seed-icon {
+    width: 23px;
+    height: 23px;
+    font-size: 0.92rem;
+  }
+
+  .farm-seed-copy small {
+    display: none;
+  }
+
+  .farm-seed-copy strong {
+    font-size: 0.53rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .farm-scene {
+    height: 420px;
+  }
+
+  .farm-character {
+    width: 76px;
+  }
+
+  .farm-cabinet-stand {
+    bottom: 2.5%;
+    width: 84px;
+  }
+
+  .garden-view .farm-cabinet {
+    width: 70px;
+  }
+
+  .garden-view .farm-seed-model {
+    width: 28px;
+  }
+
+  .farm-cabinet-body {
+    height: 36px;
+  }
+
+  .farm-walk-note {
+    display: none;
+  }
+
+  .farm-plot-caption {
+    display: none;
+  }
+}

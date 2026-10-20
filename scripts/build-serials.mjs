@@ -5,17 +5,18 @@
  * Produces the Merkle root that is stored on-chain and the per-charm claim
  * credentials that go into the NFC tag / QR code:
  *
- *     leaf   = keccak256(abi.encode(uint32 serial, bytes32 secret))
+ *     signer = computeAddress(secret)              (secp256k1 private key)
+ *     leaf   = keccak256(abi.encode(chainId, seriesId, serial, signer))
  *     pair   = keccak256(min(a,b) || max(a,b))        (OpenZeppelin sorted pair)
  *     odd    = the last node is promoted to the next level unchanged
  *
- * The `secret` is what makes the credential unforgeable. The Merkle root is
- * public, so a leaf built from the serial alone could be recomputed by anyone;
- * the random 256-bit secret lives only on the physical charm.
+ * Protocol v2 commits to the credential's public signer address. The private
+ * `secret` signs a recipient-bound EIP-712 Claim locally and never enters claim
+ * calldata. It is a single-charm credential, not the user's wallet private key.
  *
  * Examples
  *   node scripts/build-serials.mjs --supply 100000 --label "DeltaX"
- *   node scripts/build-serials.mjs --supply 100 --split 1-100 --out public/demo
+ *   node scripts/build-serials.mjs --supply 100 --split 1-100 --out .glowpet-demo
  *   node scripts/build-serials.mjs --supply 500 --proofs all --proof-format csv
  *
  * Outputs (default `deployments/series-<id>/`)
@@ -26,13 +27,17 @@
  *   proofs/<n>.json    optional per-charm QR payload (contains that secret)
  */
 
-import { AbiCoder, Interface, concat, keccak256 } from "ethers";
+import { AbiCoder, Interface, computeAddress, concat, keccak256 } from "ethers";
 import { randomBytes } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
+import { assertPrivateOutput } from "./credential-safety.mjs";
 
+const PROTOCOL_VERSION = 2;
 const SERIES_STRIDE = 1_000_000n;
+const SECP256K1_ORDER = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141n;
 const DEFAULT_CHAIN_ID = 11155111; // Sepolia
 const coder = AbiCoder.defaultAbiCoder();
 
@@ -71,8 +76,9 @@ Options
 Safety
   The output contains claim secrets. private/seed.txt and every proof file are
   bearer credentials: anyone who reads them can claim the matching charm.
-  Never commit them and never serve them for a real series. The --split
-  export exists for demo/test series only.
+  Never commit them and never serve them for a real series. Writing into public/
+  (including through symlinks) is rejected. The --split export exists for
+  demo/test series only. Protocol v2 roots are incompatible with v1 contracts.
 `);
 }
 
@@ -169,16 +175,25 @@ function parseSpec(spec, supply, name) {
 // ---------------------------------------------------------------------------
 
 function secretFor(seed, serial) {
-  return keccak256(coder.encode(["bytes32", "uint32"], [seed, serial]));
+  for (let attempt = 0; ; attempt++) {
+    const secret = keccak256(
+      coder.encode(
+        ["string", "bytes32", "uint32", "uint32"],
+        ["Glowpet credential v2", seed, serial, attempt],
+      ),
+    );
+    const scalar = BigInt(secret);
+    if (scalar > 0n && scalar < SECP256K1_ORDER) return secret;
+  }
 }
 
-function leafFor(chainId, seriesId, serial, secret) {
+function leafFor(chainId, seriesId, serial, credentialSigner) {
   // Must match Glowpet.claim:
-  // keccak256(abi.encode(block.chainid, seriesId, serial, secret))
+  // keccak256(abi.encode(block.chainid, seriesId, serial, credentialSigner))
   return keccak256(
     coder.encode(
-      ["uint256", "uint256", "uint32", "bytes32"],
-      [chainId, seriesId, serial, secret],
+      ["uint256", "uint256", "uint32", "address"],
+      [chainId, seriesId, serial, credentialSigner],
     ),
   );
 }
@@ -257,20 +272,27 @@ function main() {
     throw new Error("--app-url must be an http(s) URL");
   }
 
-  const publicDir = path.resolve("public");
-  const insidePublic = (target) => target === publicDir || target.startsWith(publicDir + path.sep);
-  if (insidePublic(outDir) || insidePublic(splitDir)) {
-    console.warn(
-      "\n  WARNING  output is inside public/. Vite copies public/ into dist/,\n" +
-        "           which would publish claim secrets. Use .glowpet-demo/ for demos.\n",
-    );
-  }
+  const publicDirectories = [
+    path.resolve("public"),
+    fileURLToPath(new URL("../public", import.meta.url)),
+  ];
+  assertPrivateOutput(outDir, publicDirectories);
+  assertPrivateOutput(splitDir, publicDirectories);
   const proofSpec = parseSpec(args.proofs, supply, "proofs");
   const splitSpec = parseSpec(args.split, supply, "split");
   const proofFormat = String(args["proof-format"] ?? "both");
   if (!["json", "csv", "both"].includes(proofFormat)) {
     throw new Error("--proof-format must be json, csv or both");
   }
+  // Validate existing child symlinks too, before creating or writing any files.
+  const outputFiles = [
+    path.join(outDir, "series.json"),
+    path.join(outDir, "deployment.txt"),
+    path.join(outDir, "private", "seed.txt"),
+    ...(proofSpec.length ? ["proofs.json", "proofs.csv"].map((name) => path.join(outDir, name)) : []),
+    ...splitSpec.map((serial) => path.join(splitDir, `${serial}.json`)),
+  ];
+  for (const file of outputFiles) assertPrivateOutput(file, publicDirectories);
 
   if (fs.existsSync(outDir) && fs.readdirSync(outDir).length > 0 && !args.force) {
     throw new Error(`Output directory is not empty: ${outDir}\nUse --force to overwrite.`);
@@ -287,10 +309,12 @@ function main() {
   const credentials = new Array(supply);
   for (let serial = 1; serial <= supply; serial++) {
     const secret = secretFor(seed, serial);
+    const credentialSigner = computeAddress(secret);
     credentials[serial - 1] = {
       serial,
       secret,
-      leaf: leafFor(chainId, seriesId, serial, secret),
+      credentialSigner,
+      leaf: leafFor(chainId, seriesId, serial, credentialSigner),
     };
   }
 
@@ -317,6 +341,7 @@ function main() {
 
   // --- public metadata -----------------------------------------------------
   const seriesInfo = {
+    protocolVersion: PROTOCOL_VERSION,
     seriesId,
     label,
     maxSupply: supply,
@@ -325,7 +350,8 @@ function main() {
     serialRoot: root,
     tokenIdBase: (BigInt(seriesId) * SERIES_STRIDE).toString(),
     leafCount: supply,
-    leaf: "keccak256(abi.encode(uint256 chainId, uint256 seriesId, uint32 serial, bytes32 secret))",
+    leaf: "keccak256(abi.encode(uint256 chainId, uint256 seriesId, uint32 serial, address credentialSigner))",
+    claimDomainVersion: String(PROTOCOL_VERSION),
     tree: "sorted-pair keccak256; an odd trailing node is promoted unchanged",
     chainId,
     createdAt: new Date().toISOString(),
@@ -337,6 +363,8 @@ function main() {
     path.join(outDir, "deployment.txt"),
     [
       "Glowpet.createSeries",
+      `Claim protocol: ${PROTOCOL_VERSION} (requires claimProtocolVersion() == ${PROTOCOL_VERSION})`,
+      "Protocol v1 contracts, Merkle roots and proofs are not compatible.",
       "",
       `  seriesId   : ${seriesId}`,
       `  maxSupply  : ${supply}`,
@@ -365,6 +393,7 @@ function main() {
     seedPath,
     [
       "Glowpet credential seed",
+      `protocolVersion: ${PROTOCOL_VERSION}`,
       "",
       "KEEP THIS FILE SECRET.",
       "Anyone with this seed can derive every claim secret for the series and",
@@ -388,7 +417,11 @@ function main() {
     serials.map((serial) => {
       const c = credentials[serial - 1];
       return {
+        protocolVersion: PROTOCOL_VERSION,
+        chainId,
+        seriesId,
         serial,
+        credentialSigner: c.credentialSigner,
         secret: c.secret,
         proof: proofAt(levels, indexBySerial.get(serial)),
         tokenId: tokenIdFor(serial),
@@ -405,20 +438,24 @@ function main() {
 
     if (proofFormat === "json" || proofFormat === "both") {
       writeJson(path.join(outDir, "proofs.json"), {
+        protocolVersion: PROTOCOL_VERSION,
+        chainId,
         seriesId,
         serialRoot: root,
         count: exported.length,
         warning: "Contains claim secrets. Treat as bearer credentials.",
         items: exported,
-      });
+      }, true);
     }
 
     if (proofFormat === "csv" || proofFormat === "both") {
-      const lines = ["serial,secret,proof,tokenId"];
+      const lines = ["protocolVersion,chainId,seriesId,serial,credentialSigner,secret,proof,tokenId"];
       for (const row of exported) {
-        lines.push(`${row.serial},${row.secret},${row.proof.join(" ")},${row.tokenId}`);
+        lines.push(`${row.protocolVersion},${row.chainId},${row.seriesId},${row.serial},${row.credentialSigner},${row.secret},${row.proof.join(" ")},${row.tokenId}`);
       }
-      fs.writeFileSync(path.join(outDir, "proofs.csv"), lines.join("\n") + "\n");
+      const csvFile = path.join(outDir, "proofs.csv");
+      fs.writeFileSync(csvFile, lines.join("\n") + "\n", { mode: 0o600 });
+      fs.chmodSync(csvFile, 0o600);
     }
     console.log(`  proofs   ${exported.length.toLocaleString("en-US")} exported (${proofFormat})`);
   }
@@ -438,24 +475,29 @@ function main() {
       }
 
       const params = new URLSearchParams({
+        protocolVersion: String(PROTOCOL_VERSION),
+        chainId: String(chainId),
         series: String(seriesId),
         serial: String(serial),
+        credentialSigner: c.credentialSigner,
         secret: c.secret,
         proof: proof.join(","),
       });
       const claimUrl = `${appUrl.replace(/\/$/, "")}/?${params.toString()}`;
 
       writeJson(path.join(splitDir, `${serial}.json`), {
-        v: 1,
+        v: PROTOCOL_VERSION,
+        protocolVersion: PROTOCOL_VERSION,
         chainId,
         seriesId,
         serial,
         tokenId: tokenIdFor(serial),
         secret: c.secret,
+        credentialSigner: c.credentialSigner,
         proof,
         claimUrl,
         warning: "Bearer credential. Anyone who scans this can claim the charm.",
-      });
+      }, true);
     }
     console.log(`  split    ${splitSpec.length.toLocaleString("en-US")} files -> ${splitDir}`);
   }
@@ -469,8 +511,9 @@ function main() {
   console.log(`with the arguments in ${path.join(outDir, "deployment.txt")}.`);
 }
 
-function writeJson(file, value) {
-  fs.writeFileSync(file, JSON.stringify(value, null, 2) + "\n");
+function writeJson(file, value, privateFile = false) {
+  fs.writeFileSync(file, JSON.stringify(value, null, 2) + "\n", privateFile ? { mode: 0o600 } : {});
+  if (privateFile) fs.chmodSync(file, 0o600);
 }
 
 try {

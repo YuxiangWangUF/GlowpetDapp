@@ -1,0 +1,238 @@
+.plush-companion {
+  --plush-breath-duration: 4.8s;
+  --plush-sway-duration: 3.4s;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100%;
+  max-width: 360px;
+  min-height: 160px;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.plush-companion-atmosphere,
+.plush-companion-reaction,
+.plush-companion-sway,
+.plush-companion-breath {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.plush-companion-atmosphere {
+  z-index: -1;
+}
+
+.plush-companion-reaction,
+.plush-companion-sway,
+.plush-companion-breath {
+  transform-origin: 50% 90%;
+}
+
+.plush-companion-sway {
+  animation: plush-companion-sway var(--plush-sway-duration) ease-in-out infinite;
+}
+
+.plush-companion-breath {
+  animation: plush-companion-breathe var(--plush-breath-duration) ease-in-out infinite;
+}
+
+.plush-companion-image {
+  position: absolute;
+  display: block;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
+  -webkit-user-drag: none;
+}
+
+.plush-companion-shadow {
+  position: absolute;
+  left: 23%;
+  bottom: 6.4%;
+  width: 54%;
+  height: 7%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #09061063 0%, #09061024 48%, transparent 73%);
+  transform-origin: center;
+  animation: plush-companion-shadow var(--plush-breath-duration) ease-in-out infinite;
+}
+
+.plush-companion-spark {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  color: #f4d39d;
+  opacity: 0.3;
+  filter: drop-shadow(0 0 5px #e8ae6759);
+  animation: plush-companion-twinkle 5.8s ease-in-out infinite;
+}
+
+.plush-companion-spark::before,
+.plush-companion-spark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.plush-companion-spark::before {
+  transform: scaleX(0.23);
+}
+
+.plush-companion-spark::after {
+  transform: scaleY(0.23);
+}
+
+.plush-companion-spark-one {
+  top: 27%;
+  left: 11%;
+}
+
+.plush-companion-spark-two {
+  top: 39%;
+  right: 9%;
+  width: 5px;
+  height: 5px;
+  animation-delay: -2.2s;
+}
+
+.plush-companion-spark-three {
+  bottom: 23%;
+  left: 12%;
+  width: 4px;
+  height: 4px;
+  color: #ddc5f1;
+  animation-delay: -4.1s;
+}
+
+.plush-companion[data-reaction="play"] .plush-companion-reaction,
+.plush-companion[data-reaction="tap"] .plush-companion-reaction {
+  animation: plush-companion-greet 900ms ease-in-out both;
+}
+
+.plush-companion[data-reaction="feed"] .plush-companion-reaction,
+.plush-companion[data-reaction="plant"] .plush-companion-reaction {
+  animation: plush-companion-content 1.2s ease-in-out both;
+}
+
+.plush-companion[data-reaction="harvest"] .plush-companion-reaction {
+  animation: plush-companion-greet 900ms ease-in-out both;
+}
+
+.plush-companion-fallback {
+  display: flex;
+  height: 100%;
+  min-height: inherit;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #e9ddf1;
+}
+
+.plush-companion-fallback > span {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.plush-companion-fallback > small {
+  color: #b5a5c4;
+  font-size: 0.7rem;
+}
+
+.plush-companion.is-compact {
+  min-height: 0;
+  max-width: 96px;
+}
+
+.plush-companion.is-compact .plush-companion-spark {
+  display: none;
+}
+
+.plush-companion.is-compact .plush-companion-fallback > span {
+  font-size: 0.7rem;
+}
+
+.plush-companion.is-compact .plush-companion-fallback > small {
+  display: none;
+}
+
+@keyframes plush-companion-breathe {
+  0%, 100% { transform: scale(1.006, 0.995); }
+  48% { transform: scale(0.995, 1.016); }
+}
+
+@keyframes plush-companion-sway {
+  0%, 100% { transform: translateX(-1.4px) rotate(-1.6deg); }
+  50% { transform: translateX(1.4px) rotate(1.6deg); }
+}
+
+@keyframes plush-companion-shadow {
+  0%, 100% { transform: scaleX(1.035); opacity: 0.85; }
+  48% { transform: scaleX(0.975); opacity: 0.7; }
+}
+
+@keyframes plush-companion-twinkle {
+  0%, 100% { transform: scale(0.75); opacity: 0.2; }
+  45% { transform: scale(1.1); opacity: 0.7; }
+  70% { transform: scale(0.9); opacity: 0.32; }
+}
+
+@keyframes plush-companion-greet {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  30% { transform: translateY(-5px) rotate(-1.2deg); }
+  65% { transform: translateY(-2px) rotate(1deg); }
+}
+
+@keyframes plush-companion-content {
+  0%, 100% { transform: scale(1); }
+  35% { transform: scale(1.015, 0.985); }
+  70% { transform: scale(0.995, 1.01); }
+}
+
+.plush-companion[data-force-motion="true"][data-motion="on"] .plush-companion-breath,
+.plush-companion[data-force-motion="true"][data-motion="on"] .plush-companion-shadow {
+  animation-duration: var(--plush-breath-duration) !important;
+  animation-iteration-count: infinite !important;
+}
+
+.plush-companion[data-force-motion="true"][data-motion="on"] .plush-companion-sway {
+  animation-duration: var(--plush-sway-duration) !important;
+  animation-iteration-count: infinite !important;
+}
+
+.plush-companion[data-force-motion="true"][data-motion="on"] .plush-companion-spark {
+  animation-duration: 5.8s !important;
+  animation-iteration-count: infinite !important;
+}
+
+.plush-companion[data-force-motion="true"][data-motion="on"][data-reaction="play"] .plush-companion-reaction,
+.plush-companion[data-force-motion="true"][data-motion="on"][data-reaction="tap"] .plush-companion-reaction {
+  animation-duration: 900ms !important;
+  animation-iteration-count: 1 !important;
+}
+
+.plush-companion[data-force-motion="true"][data-motion="on"][data-reaction="feed"] .plush-companion-reaction {
+  animation-duration: 1.2s !important;
+  animation-iteration-count: 1 !important;
+}
+
+.plush-companion[data-motion="off"] *,
+.plush-companion[data-motion="off"] *::before,
+.plush-companion[data-motion="off"] *::after {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plush-companion:not([data-force-motion="true"]) *,
+  .plush-companion:not([data-force-motion="true"]) *::before,
+  .plush-companion:not([data-force-motion="true"]) *::after {
+    animation: none !important;
+  }
+}

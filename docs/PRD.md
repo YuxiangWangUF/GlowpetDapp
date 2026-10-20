@@ -2,11 +2,23 @@
 
 | 项目 | 内容 |
 | --- | --- |
-| 文档版本 | v0.1（Draft） |
-| 更新日期 | 2026-10-18 |
+| 文档版本 | v0.3（Draft，领取协议 v2 + 本地养成） |
+| 更新日期 | 2026-10-20 |
 | 作者 | Yuxiang Wang |
 | 状态 | 待评审 |
 | 适用范围 | 本文档同时服务于**课程交付**与**后续产品化评估**。第 6 章的 P0 为课程范围，P1/P2 为产品路线图。 |
+
+**当前实现与目标的区别**
+
+当前仓库实现的是 Sepolia 浏览器 MVP：MetaMask 连接、领取、链上宠物展示与动画、编号/凭证生成、每 5 秒同步状态的浏览器挂饰模式，以及本地种植/收获/喂食/陪玩循环。已加入凭证、防发布、浏览器授权回归测试和 Hardhat 本地合约测试。本文中的内嵌钱包、免 gas、真实 BLE 与服务端里程碑结算属于后续交付目标。领取协议已改为 v2，新的 Sepolia 部署、Etherscan 源码验证及真实钱包端到端领取仍须单独验收。
+
+本轮按用户要求只生成新的 v2 凭证，不部署：Sepolia（11155111）、系列 1、100 件，输出目录 `deployments/series-1-v2-20261020/`，100 份 proof 已逐一验证。公开参数见 `docs/v2-series.json`；旧凭证、旧本地链均保留。
+
+2026-10-20 视觉定稿：用户选定 A「奶油软糯」方向，并确认小兔、小猫、小狐狸、小鼠、小羊为 **DeltaX 系列基础模型**。登记见 [`deltax-base-models.json`](deltax-base-models.json)，形象基准见[家族稿](../output/glowpet-concepts/A-family-v1.png)。此处“基础模型”指已确认的角色视觉基准；现已从概念稿制作五款透明角色素材，接入访客花园和无已铸造宠物时的首页预览；提供轻呼吸、慢摇、星点明暗起伏、不均匀短眨眼（含轻双眨）、左右耳错峰轻动、主动播放/暂停及喂食/陪玩动作反馈。眼耳按各物种位置局部变形，保留原始透明素材；页面隐藏时暂停表情动画。形象选择只改变预览，不重置养成存档。链上渲染及按 token 组合部件尚未更新。新增特征方案见 9.3.1。
+
+2026-10-20 验证记录：生产构建通过；29 项 Node 回归测试通过（包含 18 项养成规则与存档测试），前轮 16 项本地 EVM 测试通过。FaceArt / Art / Glowpet 部署字节码分别为 20,189 / 24,053 / 11,844 字节，均低于 24,576 字节上限。浏览器已验证旧版凭证提示、宠物详情、挂饰自动同步和深链刷新恢复；本轮完成访客花园的种植、成熟收获、喂食、陪玩、刷新存档及手机布局检查。此记录不代表 v2 已部署到 Sepolia，也不代表第三方安全审计完成。
+
+v2 将挂饰 `secret` 作为单个凭证的 secp256k1 私钥，仅在领取时进入浏览器内存，用来签署指定收款人的授权；它不是用户钱包私钥。应用不读取钱包私钥，也不将挂饰私钥写入 calldata、日志或浏览器持久存储。凭证文件和链接标记 `protocolVersion=2`，应用要求合约 `claimProtocolVersion() == 2`。**旧合约、旧 root 与旧 proof 不兼容，必须重新生成 v2 凭证、部署新合约并创建系列；现有 NFT 不会自动迁移。**
 
 **一句话定位**
 
@@ -155,10 +167,12 @@ flowchart LR
 | Web App | 领取、宠物展示与 SVG 动画、凭证链接解析、交易记录（内嵌钱包为下一步） |
 | 挂饰模拟 | 浏览器"挂饰模式"窗口，实时反映链上状态变化 |
 | 链下游戏 | 1 个完整循环（种植 → 等待 → 收获），数据存本地/服务端 |
-| 测试 | Hardhat 行为测试：系列上限、重复领取、特质唯一性、进化、转让 |
+| 测试 | 自动化行为测试：系列上限、重复领取、签名篡改/抢跑、进化、转让；生成器与构建防泄露回归测试 |
 | 文档 | 本 PRD + README（架构、部署步骤、链上/链下边界） |
 
-**课程验收标准**：评委可在不安装 MetaMask 的情况下，通过邮箱/访客模式完成"领取 → 看到宠物 → 进化 → 挂饰模拟屏变化"，并能在 Etherscan 上核对所有权与事件。
+**当前 MVP 验收路径**：使用 MetaMask 领取，展示链上宠物，再由合约管理员进化；挂饰模拟屏自动更新。只读宠物与挂饰预览无需钱包。v2 的公开测试网部署与这条完整路径仍需实际验收。
+
+**后续课程目标**：评委无需安装 MetaMask，通过邮箱/访客模式完成"领取 → 看到宠物 → 进化 → 挂饰模拟屏变化"，并能在 Etherscan 上核对所有权与事件。内嵌钱包与免 gas 目前尚未实现。
 
 ### 6.2 P1 — 试点（首批发售，500–2,000 件）
 
@@ -182,6 +196,8 @@ flowchart LR
 
 ### 7.1 首次激活（关键路径，目标 < 60 秒）
 
+以下为包含内嵌钱包与真实硬件的目标流程；当前版本使用 MetaMask 和浏览器挂饰模拟。
+
 ```mermaid
 sequenceDiagram
   participant U as 用户
@@ -193,7 +209,8 @@ sequenceDiagram
   P->>P: 显示待激活动画
   U->>A: 扫描挂饰 NFC / 二维码
   A->>A: 静默创建内嵌钱包
-  A->>C: claim(seriesId, serial, secret, proof, recipient, deadline, signature)
+  A->>A: secret 在内存中签署 EIP-712 Claim（v2）
+  A->>C: claim(seriesId, serial, credentialSigner, proof, recipient, deadline, signature)
   C-->>C: 铸造 tokenId，记录所有权
   C-->>A: 交易确认 + tokenId
   A->>C: 读取 petState(tokenId)
@@ -202,13 +219,15 @@ sequenceDiagram
   A->>U: 显示宠物，引导命名
 ```
 
-**关键设计**：钱包创建对用户不可见；用户不需要任何 ETH。
+**目标设计**：钱包创建对用户不可见；用户不需要任何 ETH。当前浏览器 MVP 使用 MetaMask，用户需要 Sepolia 测试 ETH 提交交易；挂饰凭证签名由应用在内存中完成。
 
 ### 7.2 日常养成
 
 打开 App → 查看宠物状态 → 喂食/收菜（链下，即时）→ 累计经验 → 达到里程碑 → 触发链上 `evolve` → 事件确认 → 挂饰屏幕形态变化。
 
 **注意**：进化上链、喂食不上链。这是 gas 与"惊艳时刻"的平衡点（见 9.1）。
+
+当前可玩流程：Garden → 三块田地种植 → 30/60/120 秒后收获 → 获取食物、花园金币与羁绊经验 → 喂食/陪玩 → 提升本地养成等级。免费胡萝卜确保金币耗尽也能继续。游客无需钱包，真实宠物可从详情进入独立养成记录；记录按链、合约、token 与链上所有者隔离，保存在本机。刷新或离开页面后，作物仍按经过时间成熟。150/400/900 XP 里程碑仅标记本地达标，不调用 `evolve`，也不会改变链上阶段。花园金币不可兑换、不可转移，清理浏览器数据会丢失养成记录。当前是网页模块，未发布微信小程序。
 
 ### 7.3 转让
 
@@ -225,8 +244,8 @@ sequenceDiagram
 | 编号 | 需求 | 验收标准 | 优先级 |
 | --- | --- | --- | --- |
 | FR-C-01 | **系列建模**：每个系列有 `maxSupply`、`minted`、`open`、`salt`、`label` | `minted` 永远 ≤ `maxSupply`；`open=false` 后任何领取均 revert `SeriesNotOpen` | P0 |
-| FR-C-02 | **编号领取**：用户凭 `serial` + 挂饰私有 `secret` + Merkle proof 领取，一个 serial 仅一次 | 叶子为 `keccak256(abi.encode(block.chainid, seriesId, serial, secret))`，不可跨系列/跨链重放；重复领取 revert `AlreadyClaimed`；无效 proof revert `InvalidProof`；空 secret revert `InvalidSecret`；未开放 revert `SeriesNotOpen` | P0 |
-| FR-C-12 | **防抢跑签名**：claim 需收款人对 `(chainId, contract, seriesId, serial, recipient, deadline)` 的 EIP-712 签名 | 复制 calldata 或签名的第三方最多替签名者提交，无法把 token 改铸给自己；过期签名 revert `SignatureExpired` | P0 |
+| FR-C-02 | **编号领取 v2**：用户凭 `serial` + 挂饰私有 `secret` + Merkle proof 领取，一个 serial 仅一次 | `credentialSigner = computeAddress(secret)`；叶子为 `keccak256(abi.encode(block.chainid, seriesId, serial, credentialSigner))`；旧 proof 不可跨系列/跨链复用；重复领取 revert `AlreadyClaimed`；无效 proof revert `InvalidProof`；未开放 revert `SeriesNotOpen` | P0 |
+| FR-C-12 | **防抢跑签名 v2**：由挂饰凭证私钥签署 EIP-712 Claim，字段为 `seriesId / serial / recipient / deadline`，domain 为 `Glowpet / 2 / chainId / verifyingContract` | calldata 仅含公开 signer、proof 与签名，不含 secret；复制交易只能向已授权 recipient 铸造；篡改 recipient、series、serial 或 domain 均失败；过期签名 revert `SignatureExpired` | P0 |
 | FR-C-03 | **tokenId 编码**：`tokenId = seriesId * 1_000_000 + serial` | 可从 tokenId 还原 seriesId 与 serial；不同系列/编号不冲突 | P0 |
 | FR-C-04 | **特质推导**：特质由 `keccak256(abi.encode(tokenId))` 确定性生成 | 同 tokenId 永远得到同一组特质；不同 tokenId 的视觉签名碰撞率 < 0.01% | P0 |
 | FR-C-05 | **链上元数据**：`tokenURI()` 返回 base64 JSON，内嵌 base64 SVG | 在 OpenSea/钱包中可直接显示；无外部 URL 依赖 | P0 |
@@ -241,8 +260,8 @@ sequenceDiagram
 
 | 编号 | 需求 | 验收标准 | 优先级 |
 | --- | --- | --- | --- |
-| FR-B-01 | 每件挂饰携带唯一 `serial`、随机 `secret` 与领取凭证（NFC/二维码） | 扫描即可读取；root 公开但缺少 secret 无法伪造其他编号的 proof | P0（模拟）/P1（硬件） |
-| FR-B-02 | 凭证以 Merkle 树批量上链，仅存 root；secret 不上链、不入事件 | 链上不保存十万条明文；`scripts/build-serials.mjs` 可复现 root | P0 |
+| FR-B-01 | 每件挂饰携带唯一 `serial`、有效 secp256k1 私钥 `secret` 与领取凭证（NFC/二维码） | 扫描即可读取；root、signer、proof 可公开，缺少 secret 无法签署其他 recipient；凭证含 `protocolVersion=2` | P0（模拟）/P1（硬件） |
+| FR-B-02 | 凭证以 Merkle 树批量上链，仅存 root；secret 不上链、不入事件 | `scripts/build-serials.mjs` 从随机主 seed 确定性派生凭证并可复现 v2 root；拒绝向 `public/` 或其符号链接写入；构建拦截 JSON/CSV/seed 等凭证导出 | P0 |
 | FR-B-03 | 一个 `serial` 只能领取一次 | 重复领取被合约拒绝 | P0 |
 | FR-B-04 | 领取后凭证失效 | 再次扫描提示"已激活"，并展示当前所有者 | P1 |
 
@@ -255,9 +274,9 @@ sequenceDiagram
 | FR-W-03 | **免 gas**：用户无需持有原生代币 | 新用户 0 余额仍可完成领取/进化 | P0（运营方代付）/P1（Paymaster） |
 | FR-W-04 | **会话授权**：一次授权后可连续操作 | 不逐次弹窗 | P2 |
 | FR-W-05 | **恢复机制**：换机可找回 | 邮箱/社交恢复流程可用 | P2 |
-| FR-W-06 | **安全边界**：不在前端暴露任何私钥/API 密钥 | 代码与构建产物中无明文密钥 | P0 |
+| FR-W-06 | **安全边界**：不读取用户钱包私钥，不发布主 seed、批量凭证或 API 密钥；单个挂饰私钥仅在领取时进入内存 | 代码、构建产物、calldata、日志与浏览器持久存储均无领取私钥；钱包交易通过 MetaMask 授权 | P0 |
 
-> P0 实现说明：课程版本使用"简化内嵌钱包"——浏览器生成密钥、WebCrypto 加密后本地存储、由运营方在 Sepolia 代付 gas、提供导出按钮。**文档与界面必须标注 demo-only**，生产环境改用 MPC/TEE 方案。
+> 后续钱包目标：可评估 demo-only 的内嵌钱包与运营方代付方案，但当前没有实现钱包生成、密钥导出或 gas 代付。它们与 v2 挂饰凭证私钥是不同功能，不能将扫码凭证当作资产钱包使用。
 
 ### 8.4 移动 App（FR-A）
 
@@ -327,13 +346,15 @@ function createSeries(
 ) external;
 function closeSeries(uint256 seriesId) external;
 
-// 领取：secret 来自挂饰 NFC/二维码，永不上链；
-// signature 是 recipient 对 (chainId, contract, seriesId, serial, recipient, deadline)
-// 的 EIP-712 授权，用来防止抢跑改收款地址。
+// 领取 v2：secret 来自挂饰 NFC/二维码，仅在内存中签名，不进 calldata。
+// credentialSigner = computeAddress(secret)，其地址写入 Merkle leaf。
+// Claim 字段：uint256 seriesId, uint32 serial, address recipient, uint256 deadline。
+// EIP-712 domain：name="Glowpet", version="2", chainId, verifyingContract。
+function claimProtocolVersion() external pure returns (uint256); // 2
 function claim(
     uint256 seriesId,
     uint32 serial,
-    bytes32 secret,
+    address credentialSigner,
     bytes32[] calldata proof,
     address recipient,
     uint256 deadline,
@@ -355,7 +376,9 @@ function evolve(uint256 tokenId, uint8 newStage) external;
 // 标准 ERC-721 转让能力保留
 ```
 
-### 9.3 特质生成规范
+v1 曾将 `secret` 放进 calldata，再由收款人签名；观察者取得 secret 后可以给自己的地址重新签名，因此不能提供防抢跑保证。v2 用挂饰私钥签署收款授权，链上只验证其公开地址及签名。迁移时必须保留旧输出、在新私有目录生成 v2 凭证并部署新合约；更换前端版本不会升级旧合约或使旧 root 兼容。
+
+### 9.3 当前 14 物种渲染器的特质生成规范
 
 **输入**：`tokenId = seriesId * 1_000_000 + serial`
 
@@ -391,6 +414,30 @@ function evolve(uint256 tokenId, uint8 newStage) external;
 3. 14 物种原型验证：100,000 个 tokenId 在量化后的视觉签名层面 **0 碰撞**（100,000/100,000 唯一）。
 
 **取舍说明（必须写进答辩）**：特质由 tokenId 确定性推导，意味着**铸造前即可算出**，没有"抽卡"随机性。这是刻意选择——宠物属于挂饰编号，而不是赌博机制；也避免了随机数被 grind 的安全问题。若未来需要随机稀有度，应引入 VRF 或 commit-reveal。
+
+### 9.3.1 DeltaX 软糯系列：已确认的基础模型与拟议特征
+
+**已确认范围**：设计版本 `deltax-soft-v1`，以 [A 家族稿](../output/glowpet-concepts/A-family-v1.png)、[兔子稿](../output/glowpet-concepts/A-soft-sweet.png)与[小鼠细化稿](../output/glowpet-concepts/A-mouse-detail-v1.png)为视觉基准。小鼠参考了用户提供的麦小鼠的大圆耳、银灰色、额前体积和害羞眼神；家族稿中的动物化小鼠为本系列基准。
+
+| 基础模型 | 沿用的物种编码 | 必须保留的识别特征 | 可按 tokenId 变化的方向（提案） |
+| --- | --- | --- | --- |
+| 小兔 | 2 | 圆厚耳朵、一侧折耳、奶油色宽圆脸 | 折耳弧度、耳心颜色、浅色局部毛斑 |
+| 小猫 | 0 | 短圆三角耳、饱满脸颊、极小猫鼻猫嘴 | 奶油/浅饼干配色、额纹与尾尖 |
+| 小狐狸 | 4 | 较高三角耳、奶白面罩、奶白尾尖 | 杏桃色深浅、面罩边缘、尾尖范围 |
+| 小鼠 | 9 | 大圆耳、粉色耳心、银灰软毛簇、害羞眼睛 | 银灰/暖米灰配色、额毛弧度、耳心与眼睛色调 |
+| 小羊 | 7 | 大块云朵羊毛、横向垂耳、光滑小脸 | 奶白/浅燕麦配色、羊毛大块轮廓、耳尖颜色 |
+
+**保持可爱感的组合原则**：固定宽圆头团、低位五官、两只小爪子和画面右侧脸颊的小暖光星；毛色、轮廓微调和局部花纹只在经过审美筛选的范围内变化。星斑不遮五官。减少大面积深色花纹、强饱和色及遮脸配饰。权重、稀有款数量和各部件枚举尚未定稿。
+
+**实现提案**：`tokenId → 确定性种子 → 物种专属参数/部件 → 同一角色渲染`。同一系列身份、tokenId 与冻结后的规则版本，始终得到相同的固有外观；刷新、转让或换设备不改变固有特征。开心、困倦、互动动作属于独立状态层，成长阶段仍由对应的成长记录控制。普通展示不重新请求 AI 生成角色。
+
+**现状与实施边界**：
+
+- 当前合约对所有系列使用同一套 14 物种规则；仅将系列标签改为 DeltaX 不会启用这五个模型。上表保留既有物种编码，避免前端把新物种序号误读为旧物种；五物种选择规则须单独实现并冻结。
+- 不直接把现有规则的 `% 14` 改成 `% 5` 来重新解释已存在的 NFT。既有部署的 `art` / `faceArt` 地址不可修改；新规则与新画风需要独立版本及新的部署安排。本轮没有修改运行中的生成规则、凭证或部署状态。
+- 批准的图片提供风格与比例基准，还需制作可组合图层或参数化绘图部件。若继续保留“链上直接生成 SVG、无外部图片依赖”的目标，须实现相应的 SVG 渲染器；精细绒感到小屏的还原程度以实测为准。
+- tokenId 唯一不代表离散特征组合或肉眼观感自动唯一。发布前须按计划发行量批量生成，检查组合碰撞、各物种分布和缩小后的可辨认差异；编号不同不计作角色外观差异。旧 14 物种原型的碰撞记录不能作为新五物种系列的验证结果。
+- 固定规则发布前需要验证重复渲染一致、前端与合约参数一致、240×240 小屏辨识度、动画分组兼容和合约体积限制。
 
 ### 9.4 BLE 协议
 
@@ -442,7 +489,7 @@ function evolve(uint256 tokenId, uint8 newStage) external;
 | **性能** | 领取到挂饰显示 < 5 秒（含链上确认）；BLE 同步 < 1 秒；链下操作 < 200ms |
 | **成本** | 单次链上操作 ≤ $0.01（L2）；单用户全生命周期链上成本 ≤ $0.05 |
 | **可靠性** | 合约交互成功率 ≥ 99%；领取失败可重试且不重复扣费 |
-| **安全** | Paymaster 仅允许目标合约 + 白名单方法；按账户限流；前端无任何密钥 |
+| **安全** | 未来 Paymaster 仅允许目标合约 + 白名单方法并按账户限流；当前应用不接触钱包私钥，挂饰私钥仅在内存中签名，不进入发布产物或 calldata |
 | **隐私** | 链上地址与行为公开可见；App 不收集非必要个人信息；首次引导需说明 |
 | **合规** | 不做收益承诺、不做代币发行；不同司法辖区监管不同，**上线前须法务评估**（尤其涉及数字藏品/虚拟货币的地区） |
 | **可访问性** | 关键按钮支持大字号；颜色对比度达标 |
@@ -511,6 +558,8 @@ function evolve(uint256 tokenId, uint8 newStage) external;
 | M5 硬件（可选） | 样品 + BLE 联调 | 真实屏幕在 1 秒内更新 |
 | M6 交付 | 演示 + 文档 | 第 12.3 节全部达成 |
 
+2026-10-20 实现状态：M1 已补 v2 领取、抢跑/篡改/跨域、上限、转让及进化边界测试，十万特质视觉碰撞指标仍需独立验收；M2 已有链上 SVG 与状态读取；M3 已有 MetaMask 领取和展示，内嵌钱包、免 gas 和进化操作界面未完成；M4 已实现浏览器挂饰模拟、本地种植/收获/喂食/陪玩及养成存档，里程碑链上结算仍未实现；M5 真实硬件未联调。当前进化仍为合约管理员 `onlyOwner` 操作，不能将完整 M3/M4 验收目标标记为达成。
+
 ---
 
 ## 15. 待决问题
@@ -573,4 +622,4 @@ function evolve(uint256 tokenId, uint8 newStage) external;
 
 ---
 
-*本文档为 v0.1 草案，随实现与试点反馈迭代。所有"目标值"均为假设，需实测校准。*
+*本文档为 v0.2 草案，随实现与试点反馈迭代。所有"目标值"均为假设，需实测校准。*

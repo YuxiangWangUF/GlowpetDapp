@@ -8,7 +8,11 @@
     "build": "vite build",
     "preview": "vite preview",
     "serials": "node scripts/build-serials.mjs",
-    "serials:demo": "node scripts/build-serials.mjs --supply 100 --out .glowpet-demo --split 1-100 --split-dir .glowpet-demo/proofs --force"
+    "serials:demo": "node scripts/build-serials.mjs --supply 100 --out .glowpet-demo --split 1-100 --split-dir .glowpet-demo/proofs",
+    "contracts:compile": "node scripts/compile-contracts.mjs",
+    "test:unit": "node --test test/*.test.mjs tests/*.test.mjs",
+    "test:contracts": "npm run contracts:compile && hardhat test --no-compile test/contracts.cjs",
+    "test": "npm run test:unit && npm run test:contracts"
   },
   "dependencies": {
     "dompurify": "^3.4.17",
@@ -18,6 +22,9 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.7.0",
-    "vite": "^6.4.4"
+    "vite": "^6.4.4",
+    "@openzeppelin/contracts": "5.6.1",
+    "hardhat": "2.29.1",
+    "solc": "0.8.30"
   }
 }

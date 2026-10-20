@@ -1,0 +1,12 @@
+{
+  "protocolVersion": 2,
+  "seriesId": 1,
+  "chainId": 11155111,
+  "label": "DeltaX",
+  "maxSupply": 100,
+  "serialRoot": "0x78c2afb345852355ea5d255137a9ebd20b55b961f75419634d9f759c1e57a563",
+  "generatedOn": "2026-10-20",
+  "status": "generated_not_deployed",
+  "privateOutputDirectory": "deployments/series-1-v2-20261020",
+  "contractAddress": null
+}

@@ -1,0 +1,136 @@
+{
+  "seriesLabel": "DeltaX",
+  "designVersion": "deltax-soft-v1",
+  "approvedOn": "2026-10-20",
+  "approvalScope": "base_character_visuals",
+  "visualDirection": "A / Soft & Sweet",
+  "runtimeStatus": "web_preview_with_idle_animation",
+  "tokenAssignmentRulesFrozen": false,
+  "assetPathsRelativeTo": "repository_root",
+  "references": {
+    "family": "output/glowpet-concepts/A-family-v1.png",
+    "rabbit": "output/glowpet-concepts/A-soft-sweet.png",
+    "mouse": "output/glowpet-concepts/A-mouse-detail-v1.png"
+  },
+  "sharedVisualIdentity": [
+    "奶油软糯配色与细短绒感",
+    "宽圆头团、低位五官和两只小爪子",
+    "柔和腮红",
+    "画面右侧脸颊的小暖光四角星"
+  ],
+  "models": [
+    {
+      "id": "rabbit",
+      "displayName": "小兔",
+      "existingSpeciesCode": 2,
+      "reference": "rabbit",
+      "landmarks": [
+        "圆厚长耳",
+        "一侧折耳",
+        "奶油色宽圆脸"
+      ],
+      "runtimeAsset": "public/pets/deltax-soft-v1/rabbit.png"
+    },
+    {
+      "id": "cat",
+      "displayName": "小猫",
+      "existingSpeciesCode": 0,
+      "reference": "family",
+      "landmarks": [
+        "短圆三角耳",
+        "饱满脸颊",
+        "极小猫鼻与猫嘴"
+      ],
+      "runtimeAsset": "public/pets/deltax-soft-v1/cat.png"
+    },
+    {
+      "id": "fox",
+      "displayName": "小狐狸",
+      "existingSpeciesCode": 4,
+      "reference": "family",
+      "landmarks": [
+        "较高三角耳",
+        "杏桃色与奶白面罩",
+        "奶白尾尖"
+      ],
+      "runtimeAsset": "public/pets/deltax-soft-v1/fox.png"
+    },
+    {
+      "id": "mouse",
+      "displayName": "小鼠",
+      "existingSpeciesCode": 9,
+      "reference": "mouse",
+      "landmarks": [
+        "大圆耳与粉色耳心",
+        "银灰额前软毛簇",
+        "稍大的害羞眼睛",
+        "细卷尾"
+      ],
+      "runtimeAsset": "public/pets/deltax-soft-v1/mouse.png"
+    },
+    {
+      "id": "sheep",
+      "displayName": "小羊",
+      "existingSpeciesCode": 7,
+      "reference": "family",
+      "landmarks": [
+        "大块云朵羊毛轮廓",
+        "横向垂耳",
+        "光滑奶油色小脸"
+      ],
+      "runtimeAsset": "public/pets/deltax-soft-v1/sheep.png"
+    }
+  ],
+  "proposedTraitPlan": {
+    "status": "proposal_not_runtime",
+    "fixedByTokenAndRulesVersion": [
+      "基础物种",
+      "物种专属柔和毛色",
+      "受限耳姿或额毛形态",
+      "局部浅色花纹及其位置",
+      "眼睛色调与轻微比例差异",
+      "星斑大小与暖光色调"
+    ],
+    "careDrivenState": [
+      "即时表情",
+      "互动动作",
+      "可记录的成长阶段"
+    ],
+    "guardrails": [
+      "物种识别轮廓与主要脸部比例保持在批准范围内",
+      "星斑不遮挡眼睛、鼻子或嘴巴",
+      "限制高饱和毛色、大面积深色斑块与遮脸配饰",
+      "固定外观不使用浏览器随机数、当前时间、钱包地址或刷新次数",
+      "确定性只在同一规则版本及系列身份范围内承诺",
+      "新增规则不可重新解释已有 NFT 的物种或固有特质",
+      "肉眼差异与视觉碰撞率需批量生成和缩略图验收",
+      "稀有权重及限量数量尚未确定"
+    ]
+  },
+  "runtimeAssets": {
+    "directory": "public/pets/deltax-soft-v1",
+    "format": "transparent_rgba_png",
+    "component": "src/PlushCompanion.jsx",
+    "surfaces": [
+      "guest_garden",
+      "home_without_minted_pet"
+    ],
+    "selectionIsCosmetic": true,
+    "onChainRendererUpdated": false,
+    "idleAnimation": {
+      "breathingSeconds": 4.8,
+      "swaySeconds": 9.6,
+      "twinkleSeconds": 5.8,
+      "respectsReducedMotionByDefault": true,
+      "manualPlayAndPause": true,
+      "blinkAndEarCycleSeconds": 17,
+      "blinksPerCycle": 4,
+      "occasionalSoftDoubleBlink": true,
+      "separateEarPivots": true,
+      "faceRenderer": "src/plush-face-renderer.js",
+      "faceLandmarks": "src/plush-rigs.js",
+      "sourceImagesUnchanged": true,
+      "pauseWhenPageHidden": true
+    }
+  }
+}

@@ -1,4 +1,6 @@
 import { isHexString } from "ethers";
+import { assertClaimProtocol } from "./claim-authorization.js";
+export { CLAIM_DOMAIN_NAME, CLAIM_DOMAIN_VERSION, CLAIM_TYPES } from "./claim-authorization.js";
 
 /**
  * Public configuration and the small ABI the browser needs.
@@ -9,7 +11,7 @@ import { isHexString } from "ethers";
  * from the QR link or the manual form.
  */
 
-const env = import.meta.env;
+const env = import.meta.env ?? {};
 
 export const GLOWPET_ADDRESS = String(env.VITE_GLOWPET_ADDRESS ?? "").trim();
 export const SERIES_ID = toBigInt(env.VITE_GLOWPET_SERIES_ID, 1n);
@@ -32,18 +34,20 @@ export const SERIES_STRIDE = 1_000_000n;
  * the custom errors so ethers can decode reverts into readable messages.
  */
 export const GLOWPET_ABI = [
-  "function claim(uint256 seriesId, uint32 serial, bytes32 secret, bytes32[] proof, address recipient, uint256 deadline, bytes signature) returns (uint256 tokenId)",
+  "function claimProtocolVersion() pure returns (uint256)",
+  "function claim(uint256 seriesId, uint32 serial, address credentialSigner, bytes32[] proof, address recipient, uint256 deadline, bytes signature) returns (uint256 tokenId)",
   "function seriesInfo(uint256 seriesId) view returns (uint64 maxSupply, uint64 minted, bool open, uint32 salt, bytes32 serialRoot, string label)",
   "function petState(uint256 tokenId) view returns (uint8 species, uint8 palette, uint8 eyeStyle, uint8 mouthStyle, uint8 accessory, uint8 eyewear, uint8 frameColor, uint8 stage, uint8 bodyShape, int8 tilt, uint16 level, uint32 serial, uint256 seriesId)",
   "function tokenURI(uint256 tokenId) view returns (string)",
   "function ownerOf(uint256 tokenId) view returns (address)",
   "function balanceOf(address owner) view returns (uint256)",
   "function serialClaimed(uint256 tokenId) view returns (bool)",
+  "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
   "event Claimed(address indexed owner, uint256 indexed tokenId, uint256 seriesId, uint32 serial)",
   "event Evolved(uint256 indexed tokenId, uint8 stage)",
   "error InvalidConfig()",
   "error InvalidSerial()",
-  "error InvalidSecret()",
+  "error InvalidCredentialSigner()",
   "error InvalidRecipient()",
   "error InvalidProof()",
   "error InvalidSignature()",
@@ -70,23 +74,6 @@ export const ACCESSORY_NAMES = ["None", "Bow", "Star", "Sprout", "Crown", "Headp
 export const EYEWEAR_NAMES = ["None", "Round", "Square", "Shades", "Cat-eye", "Monocle"];
 export const FRAME_NAMES = ["Ink", "Gold", "Silver", "Walnut", "Rose", "Slate"];
 export const STAGE_NAMES = ["Newborn", "Growing", "Evolved", "Radiant"];
-
-/**
- * EIP-712 type used to authorise a claim. The signature binds the recipient,
- * so a front-runner who copies the secret and proof can only submit the claim
- * *for* the signer. Keep this in sync with Glowpet.CLAIM_TYPEHASH.
- */
-export const CLAIM_TYPES = {
-  Claim: [
-    { name: "seriesId", type: "uint256" },
-    { name: "serial", type: "uint32" },
-    { name: "recipient", type: "address" },
-    { name: "deadline", type: "uint256" },
-  ],
-};
-
-export const CLAIM_DOMAIN_NAME = "Glowpet";
-export const CLAIM_DOMAIN_VERSION = "1";
 
 export function stageName(stage) {
   return STAGE_NAMES[stage] ?? `Stage ${stage}`;
@@ -186,6 +173,7 @@ export function parseClaimCode(input) {
 
   if (text.startsWith("{")) {
     const value = JSON.parse(text);
+    assertClaimProtocol(value.protocolVersion);
     return {
       seriesId: toBigInt(value.seriesId ?? value.series, undefined),
       serial: toInteger(value.serial, undefined),
@@ -213,6 +201,7 @@ export function parseClaimCode(input) {
 
   // A URL with only `?token=…` (or unrelated query params) is not a claim code.
   if (serial === undefined && secret === undefined && proof.length === 0) return {};
+  assertClaimProtocol(params.get("protocolVersion") ?? undefined);
 
   return {
     seriesId: toBigInt(params.get("series") ?? params.get("seriesId") ?? params.get("s"), undefined),
@@ -285,6 +274,7 @@ export async function loadClaimFile(serial) {
   if (!contentType.includes("application/json")) return null;
 
   const data = await response.json();
+  assertClaimProtocol(data.protocolVersion);
   return {
     ...data,
     proof: Array.isArray(data.proof) ? data.proof.map(normalizeHash) : parseProof(data.proof),
@@ -298,10 +288,10 @@ export async function loadClaimFile(serial) {
 const ERROR_TEXT = {
   InvalidConfig: "This series is not configured correctly on the contract.",
   InvalidSerial: "That serial does not exist in this series.",
-  InvalidSecret: "The claim secret is missing or invalid.",
+  InvalidCredentialSigner: "The charm's signing credential is missing or invalid.",
   InvalidRecipient: "The recipient address is missing or invalid.",
   InvalidProof: "This claim credential is not valid for that serial.",
-  InvalidSignature: "The claim signature does not match this wallet and serial.",
+  InvalidSignature: "The claim authorization does not match this charm and recipient.",
   SignatureExpired: "The claim signature expired. Sign again to continue.",
   SeriesExists: "This series already exists.",
   SeriesNotOpen: "This series is closed and no longer accepting claims.",

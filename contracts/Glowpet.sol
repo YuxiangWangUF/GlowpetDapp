@@ -7,7 +7,7 @@ import {Base64} from "@openzeppelin/contracts@5.6.1/utils/Base64.sol";
 import {Strings} from "@openzeppelin/contracts@5.6.1/utils/Strings.sol";
 import {MerkleProof} from "@openzeppelin/contracts@5.6.1/utils/cryptography/MerkleProof.sol";
 import {EIP712} from "@openzeppelin/contracts@5.6.1/utils/cryptography/EIP712.sol";
-import {SignatureChecker} from "@openzeppelin/contracts@5.6.1/utils/cryptography/SignatureChecker.sol";
+import {ECDSA} from "@openzeppelin/contracts@5.6.1/utils/cryptography/ECDSA.sol";
 import {Traits, IGlowpetArt} from "./GlowpetTypes.sol";
 
 /**
@@ -27,9 +27,9 @@ contract Glowpet is ERC721, EIP712, Ownable {
     uint256 public constant SERIES_STRIDE = 1_000_000;
     uint256 public constant MAX_LABEL_BYTES = 64;
 
-    /// @dev EIP-712 claim authorisation. The signature binds the recipient, so
-    ///      a mempool observer who copies the secret and proof can only submit
-    ///      the claim *for the signer* - they cannot redirect the token.
+    /// @dev The physical credential's private key signs this authorisation.
+    ///      Its public signer address is committed in the Merkle tree. The key
+    ///      never enters calldata, so observers cannot authorise another recipient.
     bytes32 private constant CLAIM_TYPEHASH =
         keccak256("Claim(uint256 seriesId,uint32 serial,address recipient,uint256 deadline)");
 
@@ -73,7 +73,7 @@ contract Glowpet is ERC721, EIP712, Ownable {
 
     error InvalidConfig();
     error InvalidSerial();
-    error InvalidSecret();
+    error InvalidCredentialSigner();
     error InvalidRecipient();
     error InvalidProof();
     error InvalidSignature();
@@ -86,7 +86,7 @@ contract Glowpet is ERC721, EIP712, Ownable {
 
     constructor(address art_)
         ERC721("Glowpet", "GLOW")
-        EIP712("Glowpet", "1")
+        EIP712("Glowpet", "2")
         Ownable(msg.sender)
     {
         // The renderer is immutable, so fail the deployment instead of minting
@@ -106,9 +106,11 @@ contract Glowpet is ERC721, EIP712, Ownable {
         bytes32 serialRoot,
         string calldata label
     ) external onlyOwner {
-        if (seriesId == 0) revert InvalidConfig();
-        if (_series[seriesId].maxSupply != 0) revert SeriesExists();
         if (maxSupply == 0 || maxSupply >= SERIES_STRIDE) revert InvalidConfig();
+        if (seriesId == 0 || seriesId > (type(uint256).max - maxSupply) / SERIES_STRIDE) {
+            revert InvalidConfig();
+        }
+        if (_series[seriesId].maxSupply != 0) revert SeriesExists();
         if (serialRoot == bytes32(0)) revert InvalidConfig();
         if (bytes(label).length > MAX_LABEL_BYTES) revert InvalidConfig();
 
@@ -136,18 +138,20 @@ contract Glowpet is ERC721, EIP712, Ownable {
     // Claim (physical -> digital)
     // ------------------------------------------------------------------
 
+    function claimProtocolVersion() external pure returns (uint256) {
+        return 2;
+    }
+
     /// @notice Claim the pet bound to one physical charm.
-    /// @dev `secret` is printed on the charm's NFC tag / QR code and is never
-    ///      stored on-chain. The leaf commits to `block.chainid`, `seriesId`,
-    ///      `serial` and `secret`, so a credential cannot be replayed on another
-    ///      series or chain. `signature` is an EIP-712 authorisation from
-    ///      `recipient` over the same series/serial and a deadline; it makes the
-    ///      transaction safe to submit through a public mempool, because a
-    ///      front-runner can only deliver the token to the signer.
+    /// @dev The NFC / QR credential contains a private key. The app signs the
+    ///      recipient and deadline locally; only the public credentialSigner,
+    ///      proof and signature are submitted. The leaf commits to the chain,
+    ///      series and serial. The EIP-712 domain also binds this deployment.
+    ///      Any relayer can submit an authorisation, but cannot redirect it.
     function claim(
         uint256 seriesId,
         uint32 serial,
-        bytes32 secret,
+        address credentialSigner,
         bytes32[] calldata proof,
         address recipient,
         uint256 deadline,
@@ -156,7 +160,7 @@ contract Glowpet is ERC721, EIP712, Ownable {
         Series storage s = _series[seriesId];
         if (!s.open) revert SeriesNotOpen();
         if (serial == 0 || serial > s.maxSupply) revert InvalidSerial();
-        if (secret == bytes32(0)) revert InvalidSecret();
+        if (credentialSigner == address(0)) revert InvalidCredentialSigner();
         if (recipient == address(0)) revert InvalidRecipient();
         if (deadline < block.timestamp) revert SignatureExpired();
         if (s.minted >= s.maxSupply) revert MaxSupplyReached();
@@ -164,13 +168,15 @@ contract Glowpet is ERC721, EIP712, Ownable {
         tokenId = seriesId * SERIES_STRIDE + serial;
         if (serialClaimed[tokenId]) revert AlreadyClaimed();
 
-        bytes32 leaf = keccak256(abi.encode(block.chainid, seriesId, serial, secret));
+        bytes32 leaf = keccak256(abi.encode(block.chainid, seriesId, serial, credentialSigner));
         if (!MerkleProof.verify(proof, s.serialRoot, leaf)) revert InvalidProof();
 
         bytes32 structHash = keccak256(
             abi.encode(CLAIM_TYPEHASH, seriesId, serial, recipient, deadline)
         );
-        if (!SignatureChecker.isValidSignatureNow(recipient, _hashTypedDataV4(structHash), signature)) {
+        (address recovered, ECDSA.RecoverError signatureError,) =
+            ECDSA.tryRecover(_hashTypedDataV4(structHash), signature);
+        if (signatureError != ECDSA.RecoverError.NoError || recovered != credentialSigner) {
             revert InvalidSignature();
         }
 
@@ -214,7 +220,7 @@ contract Glowpet is ERC721, EIP712, Ownable {
             stage: stage,
             bodyShape: t.bodyShape,
             tilt: t.tilt,
-            level: uint16(stage + 1),
+            level: uint16(stage) + 1,
             serial: tokenSerial[tokenId],
             seriesId: tokenSeries[tokenId]
         });

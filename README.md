@@ -32,11 +32,13 @@ Glowpet.
 ```text
 physical charm
   │  NFC / QR: serial + secret + Merkle proof
+  │  credentialSigner = computeAddress(secret)
+  │  secret signs a recipient-bound EIP-712 Claim locally (domain version "2")
   ▼
-Glowpet.claim(seriesId, serial, secret, proof, recipient, deadline, signature)
-  │  leaf = keccak256(abi.encode(block.chainid, seriesId, serial, secret))
+Glowpet.claim(seriesId, serial, credentialSigner, proof, recipient, deadline, signature)
+  │  leaf = keccak256(abi.encode(block.chainid, seriesId, serial, credentialSigner))
   │  MerkleProof.verify(proof, seriesRoot, leaf)
-  │  EIP-712 signature binds (chainId, contract, seriesId, serial, recipient, deadline)
+  │  recover the credential signer from the Claim signature
   ▼
 tokenId = seriesId * 1_000_000 + serial
   │
@@ -45,15 +47,39 @@ tokenId = seriesId * 1_000_000 + serial
   └─ tokenURI(tokenId)     → base64 JSON with an inline base64 SVG
 ```
 
-The Merkle root is public. The **secret is not**. Without it, nobody can
-recompute the leaf for another serial, so publishing the root does not let
-anyone claim unopened charms. The contract never stores the secret.
+The Merkle root, signer addresses and proofs are public information. Each
+**secret is a secp256k1 private key for one charm**, derived from a random master
+seed. Possessing it authorizes a claim for that charm. The app uses it only in
+memory to sign a Claim and never sends it in calldata. It is unrelated to the
+user's wallet private key, which remains inside MetaMask.
 
 The leaf is bound to the deployment chain and series, so a credential cannot be
-replayed on another chain or in a second series. The claim also requires an
-EIP-712 signature from the recipient. A front-runner who copies the secret,
-proof and signature can submit the transaction, but the token can only be minted
-to the signer — copying cannot steal the charm.
+replayed on another chain or in a second series unless the same credential is
+deliberately enrolled there. The EIP-712 domain uses name `Glowpet`, version `"2"`,
+chain id and the contract address. Its `Claim` fields are `seriesId` (`uint256`),
+`serial` (`uint32`), `recipient` (`address`) and `deadline` (`uint256`). A copied
+transaction can only mint to the authorized recipient: changing that address
+invalidates the credential signature. Public calldata does not reveal the
+credential private key needed to sign a different recipient.
+
+### Protocol v2 migration
+
+The app requires `claimProtocolVersion() == 2`. **Old contracts, roots and proofs
+are incompatible with v2.** The v1 claim exposed its secret in calldata; a
+recipient's own signature did not prevent someone from re-signing a stolen
+credential for another address. Do not use that flow for new claims.
+
+Generate fresh v2 credentials in a new private directory, deploy the updated
+contracts, create the series with the new root, and update
+`VITE_GLOWPET_ADDRESS`. For example:
+
+```bash
+npm run serials -- --series 1 --supply 100 --split all --out deployments/series-1-v2
+```
+
+Keep old outputs separate for reference. Existing NFTs remain in their original
+contract; this migration does not transfer them. Do not overwrite an existing
+`.glowpet-demo/` just to make its old root work with v2.
 
 ## Quick start
 
@@ -125,9 +151,14 @@ deployments/series-1/
 > **Treat `private/seed.txt` and every proof file as bearer credentials.**
 > Anyone who reads one can claim that charm. `deployments/` and
 > `.glowpet-demo/` are in `.gitignore`. Never put proofs in `public/`: Vite
-> copies that directory into `dist/`, and the build fails if `public/proofs/`
-> contains JSON files. The demo command writes to `.glowpet-demo/proofs/`,
-> which only the Vite dev server serves.
+> copies that directory into `dist/`. The generator rejects output or split
+> directories inside `public/`, including symlink targets. The production build
+> rejects nested JSON credentials, CSV credential exports and seed text files
+> anywhere under `public/`, including linked directories. The demo command writes
+> to `.glowpet-demo/proofs/`, which only the Vite dev server serves.
+
+Every generated credential and claim URL includes `protocolVersion=2`. The
+master seed and proof exports are written with owner-only file permissions.
 
 ### Regenerating without exposing the seed
 
@@ -148,6 +179,9 @@ The builder self-checks every exported proof against the root before writing.
    `GlowpetArt.sol`, `Glowpet.sol`. Keep them in the same folder so the relative
    imports resolve.
 3. Compiler: **0.8.30** (or a compatible 0.8.x).
+   Match the local validation settings: optimizer enabled, **200 runs**,
+   **`viaIR: true`**. `npm run contracts:compile` uses the pinned local compiler
+   and checks the deployed bytecode size of all three contracts.
 4. **EVM version: `cancun`.** OpenZeppelin 5.6.1 uses the `mcopy` opcode; a
    `shanghai` build fails. In Remix the compiler setting is under
    *Advanced configuration → EVM Version*.
@@ -200,21 +234,29 @@ Restart `npm run dev` after changing `.env`.
 A charm's QR code contains a link shaped like:
 
 ```text
-https://your-app/?series=1&serial=7&secret=0x…&proof=0x…,0x…
+https://your-app/?protocolVersion=2&chainId=11155111&series=1&serial=7&credentialSigner=0x…&secret=0x…&proof=0x…,0x…
 ```
 
 Opening it pre-fills the form. You can also paste the link or the JSON payload
 under **Have a claim link or QR payload?**, or type the serial, secret and proof
 manually.
 
-Clicking **Activate Glowpet** asks the wallet for two things: an EIP-712
-signature that binds the serial to your address, then the claim transaction.
-The signature can be relayed by anyone; it can only mint to you. After the claim
-confirms, the app reads `tokenURI` and `petState` and shows the portrait. The
-transaction link points to Sepolia Etherscan.
+Clicking **Activate Glowpet** creates an EIP-712 signature in memory using the
+charm credential and asks MetaMask to submit the claim transaction. The
+signature binds the claim to the connected recipient address; a relayer cannot
+change that recipient. The app does not request or read your wallet private key.
+After confirmation, it reads `tokenURI` and `petState` and shows the portrait.
+The transaction link points to Sepolia Etherscan.
 
 `?token=1000001` opens any pet in read-only mode, without connecting a wallet.
 That is also the URL to share a pet.
+
+Select **Pendant mode** on a pet, or open
+`?token=1000001&view=pendant`, for a 240 × 240 browser pendant preview.
+It checks the chain every five seconds and updates the portrait, stage and
+current owner. Failed reads keep the last portrait visible with an offline
+status and retry automatically. This preview requires no wallet; physical BLE
+pairing is still a later milestone.
 
 ### Demo without a pendant
 
@@ -223,6 +265,8 @@ npm run serials:demo
 ```
 
 This builds a 100-charm series and writes `.glowpet-demo/proofs/1.json … 100.json`.
+The command refuses to overwrite a non-empty demo directory. Preserve existing
+credentials; for a v1 migration, use the new-directory command above instead.
 Create the series on-chain with the root from `.glowpet-demo/series.json`, set
 `VITE_GLOWPET_ADDRESS`, then open the `claimUrl` inside one of the proof files.
 It includes the serial, secret and proof, so the form fills itself. Click
@@ -236,7 +280,76 @@ for local demos; a real deployment writes credentials into NFC tags/QR codes.
 If you deploy the demo to a local Hardhat node instead of Sepolia, generate a
 matching series with `--chain-id 31337`; the leaf commits to `block.chainid`.
 
+## The garden
+
+Open **Garden**, or `?view=garden`, to try the care game without a wallet or a
+deployed contract. The guest companion is a practice character, not an NFT.
+Choose **Care & garden** on a real pet for its own local care journal;
+`?view=garden&token=1000001` reopens that pet's garden.
+
+- Plant one of three crops across three plots. Sun carrots take 30 seconds and
+  are always free to plant; Glowberries take 60 seconds and Moon blooms take
+  120 seconds.
+- Return when a crop is ready and harvest food, garden coins and bond XP.
+  Elapsed growth survives page reloads and time away.
+- Feed your companion with food, or play with it after the 30-second cooldown.
+  Fullness and happiness change over time; care levels rise with bond XP.
+- At 150, 400 and 900 XP the journal records a local growth milestone.
+  This does **not** send a transaction or change the NFT's on-chain stage.
+
+Progress stays in this browser. Guest progress and each chain/contract/token/
+owner combination are kept separately. Clearing browser data or changing
+devices does not recover a journal; blocked/full storage shows a temporary
+session warning. Garden coins are game-only points and cannot be redeemed or
+transferred. This is a local prototype; server-verified milestones and
+anti-cheat are later work.
+Where supported, browser locks serialize actions across tabs. In browsers that
+disable this feature, use one garden tab at a time to avoid conflicting saves.
+
+### DeltaX character preview and idle animation
+
+The guest garden now uses the approved Soft & Sweet bunny, kitty, fox, mouse and
+lamb. Switch between the five looks below the portrait; this changes only the
+preview and keeps the same practice garden. The selected look is remembered on
+this device. The homepage also shows the bunny when there is no minted pet to feature.
+
+Transparent PNG assets live in `public/pets/deltax-soft-v1/`. The reusable
+`PlushCompanion` component adds a 4.8-second breathing loop, a 3.4-second gentle
+sway, subtle star twinkles and brief feed/play reactions. A lightweight mesh
+deforms only the eyes and ears of the original texture: short, unevenly spaced
+blinks include an occasional softer double blink, while each ear makes small,
+staggered movements. Folded rabbit ears and floppy lamb ears use their own pivots
+and smaller angles. The source PNGs are unchanged.
+
+Facial animation pauses when the page is hidden and falls back to the original
+portrait if graphics acceleration is unavailable. Garden companions automatically
+play their idle animation on entry, refresh and selection, including when the
+device requests reduced motion. There is no playback button or saved pause state.
+The original on-chain artwork,
+NFT species and credentials are unchanged. This visual update is not a deployment.
+
+For local visual checks, `output/glowpet-concepts/idle-study.html` can be opened
+through the development server. It shows all five characters with controls for
+open eyes, closed eyes, ear movement and the full idle loop.
+
+### Prepared v2 series (not deployed)
+
+On 2026-10-20 a fresh Sepolia series with 100 credentials was generated under
+`deployments/series-1-v2-20261020/`. All 100 individual proofs were independently
+verified. Its public parameters and undeployed status are recorded in
+[`docs/v2-series.json`](docs/v2-series.json). The seed and per-charm credentials
+remain in the ignored private output directory. The existing local deployment
+and older credentials were preserved; these new credentials are not usable
+against the old root.
+
 ## The art
+
+On 2026-10-20 the user approved the soft A direction for **DeltaX**: rabbit,
+cat, fox, mouse and sheep. The approved visual references and model catalog
+are recorded in [`docs/deltax-base-models.json`](docs/deltax-base-models.json);
+the proposed token-derived variation plan is in PRD §9.3.1. These are concept
+art references, not yet composable runtime assets. The current renderer below
+still uses the original 14-species design; no deployed NFT artwork was changed.
 
 - 14 species: cat, dog, rabbit, bear, fox, panda, frog, sheep, pig, mouse,
   penguin, cow, tiger, lion.
@@ -262,8 +375,9 @@ moves it behind a signed milestone or a game server.
 - The claim secret is a bearer credential. It is never emitted in the `Claimed`
   event and never stored in contract storage; only the leaf is committed via the
   root.
-- The frontend never asks for a private key, and it does not custody funds. It
-  talks to MetaMask and a read-only Sepolia RPC.
+- The frontend never asks for a wallet private key and does not custody funds.
+  It handles the scanned single-charm private key in memory for the claim
+  signature, and uses MetaMask to submit the transaction.
 - The claim secret is stripped from the address bar as soon as the app reads it;
   do not log claim URLs, and keep third-party scripts off the page.
 - `tokenURI` art is generated by our contract; before inlining it, the app runs
@@ -280,12 +394,11 @@ moves it behind a signed milestone or a game server.
 
 ### Known risks that need a design decision
 
-1. **Claim transaction visibility.** A claim transaction contains the secret and
-   proof in calldata. The EIP-712 signature prevents a copier from redirecting
-   the token, so the theft risk is fixed. The remaining exposure is privacy: an
-   observer learns the secret once the claim is broadcast (the serial is then
-   burned). If unclaimed credentials must not appear in a public mempool, send
-   claims through a private/MEV-protected RPC.
+1. **Claim transaction visibility.** A v2 transaction exposes the credential's
+   public address, proof, recipient and signature. The credential private key
+   stays off-chain. Copying the signed request can submit the same recipient's
+   claim, but cannot authorize a different recipient. Anyone who obtains the
+   original QR/NFC secret before the claim can still sign their own request.
 2. **Physical credential exposure.** Anyone who photographs the QR/NFC tag
    before the sale can claim the charm. Use tamper-evident or scratch-off
    packaging and activate at the point of sale.
@@ -293,8 +406,9 @@ moves it behind a signed milestone or a game server.
    Keep `private/seed.txt` off shared drives, use `--seed-file` rather than
    `--seed`, and consider per-batch seeds or an HSM for production.
 4. **Cross-series replay (fixed).** The leaf commits to `block.chainid`,
-   `seriesId`, `serial` and `secret`, so the same credential cannot be replayed
-   in another series or on another chain. The builder must be given the
+   `seriesId`, `serial` and `credentialSigner`; an existing proof fails for
+   another series or chain. The signature additionally binds the contract
+   address. The builder must be given the
    deployment chain (`--chain-id`) so its root matches the contract.
 5. **Owner centralization.** The owner can create series, close claims, and
    evolve any token. The claim root is immutable once created, and there is no
@@ -310,7 +424,7 @@ These are deliberately left for later milestones (see `docs/PRD.md`):
 
 - embedded wallet / ERC-4337 smart account + paymaster (no MetaMask);
 - BLE sync to the physical pendant's screen;
-- the game loop (harvest, mahjong) and the off-chain pet state it drives;
+- server-verified care progress, milestone settlement and additional games such as mahjong;
 - secondary-market royalties and transfer UI;
 - a production proof delivery service (the factory writes NFC tags, not public
   files).
@@ -324,15 +438,26 @@ These are deliberately left for later milestones (see `docs/PRD.md`):
 | `npm run preview` | Serve the production build locally |
 | `npm run serials -- …` | Build a series, root and credentials |
 | `npm run serials:demo` | 100-charm demo; dev-only proof files in `.glowpet-demo/` |
+| `npm test` | Credential/browser helper regressions and local EVM contract tests |
+| `npm run contracts:compile` | Compile with local solc 0.8.30 and check contract bytecode limits |
+| `npm run test:unit` | Credential generation, public-output guard and browser authorization tests |
+| `npm run test:contracts` | Compile, then run Hardhat tests on a disposable in-memory chain |
+| `node --test tests/credentials.test.mjs` | Credential v2 and public-output regression tests using temporary fixtures |
+
+The contract tests use OpenZeppelin 5.6.1, Hardhat 2.29.1 and local solc 0.8.30
+from `package-lock.json`; they do not download a compiler or touch a running
+local node. Use Node 22 LTS for the complete toolchain. Run `npm ci` after
+checking out these changes to install the locked dependencies.
 
 ## Contract interface
 
 ```solidity
 function createSeries(uint256 seriesId, uint64 maxSupply, uint32 salt, bytes32 serialRoot, string label);
 function claim(
-    uint256 seriesId, uint32 serial, bytes32 secret, bytes32[] calldata proof,
+    uint256 seriesId, uint32 serial, address credentialSigner, bytes32[] calldata proof,
     address recipient, uint256 deadline, bytes calldata signature
 ) returns (uint256 tokenId);
+function claimProtocolVersion() pure returns (uint256); // 2
 function evolve(uint256 tokenId, uint8 newStage);          // onlyOwner in this MVP
 function petState(uint256 tokenId) view returns (PetState);
 function tokenURI(uint256 tokenId) view returns (string);

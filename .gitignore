@@ -13,3 +13,8 @@ public/proofs/
 # Editor / OS noise
 .idea/
 *.swp
+
+# Local contract build output and disposable demo deployments.
+artifacts/
+cache/
+.glowpet-local-demo/

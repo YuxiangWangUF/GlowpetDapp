@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { findPublishedCredentials } from "./scripts/credential-safety.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const demoProofs = path.resolve(root, ".glowpet-demo/proofs");
@@ -38,39 +39,13 @@ function demoProofServer() {
   };
 }
 
-function findJsonFiles(dir, found = []) {
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) findJsonFiles(full, found);
-    else if (entry.isFile() && entry.name.endsWith(".json")) found.push(full);
-  }
-  return found;
-}
-
-function forbidPublishedProofs() {
+export function forbidPublishedProofs(projectRoot = root) {
   return {
     name: "glowpet-forbid-published-proofs",
     apply: "build",
     buildStart() {
-      const publicDir = path.resolve(root, "public");
-      if (!fs.existsSync(publicDir)) return;
-
-      const legacyDir = path.join(publicDir, "proofs");
-      if (fs.existsSync(legacyDir) && fs.readdirSync(legacyDir).some((file) => file.endsWith(".json"))) {
-        this.error(
-          "public/proofs contains claim secrets. Delete it before building; " +
-            "demo proofs belong in .glowpet-demo/proofs (served only by the dev server).",
-        );
-      }
-
-      const suspicious = findJsonFiles(publicDir).filter((file) => {
-        try {
-          const data = JSON.parse(fs.readFileSync(file, "utf8"));
-          return Boolean(data && (data.secret || data.proof || data.proofs));
-        } catch {
-          return false;
-        }
-      });
+      const publicDir = path.resolve(projectRoot, "public");
+      const suspicious = findPublishedCredentials(publicDir);
       if (suspicious.length > 0) {
         this.error(
           `Claim credentials found in public/: ${suspicious.join(", ")}. ` +
