@@ -1,6 +1,7 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { BrowserProvider, Contract, JsonRpcProvider, isAddress, isHexString } from "ethers";
-import DOMPurify from "dompurify";
+import { sanitizePortrait } from "./portrait-svg.js";
+import { observeWallet } from "./wallet-state.js";
 import { authorizeClaim, CLAIM_PROTOCOL_VERSION, scrubClaimParameters } from "./claim-authorization.js";
 import PendantView from "./PendantView.jsx";
 import PlushCompanion from "./PlushCompanion.jsx";
@@ -43,6 +44,7 @@ const CONFIGURED = isAddress(GLOWPET_ADDRESS) && !/^0x0{40}$/i.test(GLOWPET_ADDR
 const GardenView = lazy(() => import("./GardenView.jsx"));
 
 export default function App() {
+  const portraitScope = useId();
   // Claim data can arrive pre-filled from the charm's QR link.
   const initialClaim = useMemo(() => {
     try {
@@ -82,6 +84,7 @@ export default function App() {
   const [collectionReady, setCollectionReady] = useState(false);
   const [collectionError, setCollectionError] = useState("");
   const [collectionNonce, setCollectionNonce] = useState(0);
+  const [collectionLimit, setCollectionLimit] = useState(12);
 
   const [serialInput, setSerialInput] = useState(
     initialClaim.serial !== undefined ? String(initialClaim.serial) : "",
@@ -166,34 +169,7 @@ export default function App() {
     const eth = window.ethereum;
     if (!eth) return undefined;
 
-    let cancelled = false;
-
-    (async () => {
-      try {
-        const accounts = await eth.request({ method: "eth_accounts" });
-        if (cancelled || !accounts?.length) return;
-        const chainIdHex = await eth.request({ method: "eth_chainId" });
-        setWallet({ address: accounts[0], chainId: Number(chainIdHex) });
-      } catch {
-        // A locked wallet is not an error; the user can still connect manually.
-      }
-    })();
-
-    const onAccountsChanged = (accounts) => {
-      setWallet((previous) => ({ ...previous, address: accounts?.[0] ?? "" }));
-    };
-    const onChainChanged = (chainIdHex) => {
-      setWallet((previous) => ({ ...previous, chainId: Number(chainIdHex) }));
-    };
-
-    eth.on?.("accountsChanged", onAccountsChanged);
-    eth.on?.("chainChanged", onChainChanged);
-
-    return () => {
-      cancelled = true;
-      eth.removeListener?.("accountsChanged", onAccountsChanged);
-      eth.removeListener?.("chainChanged", onChainChanged);
-    };
+    return observeWallet(eth, setWallet);
   }, []);
 
   const connectWallet = useCallback(async () => {
@@ -530,6 +506,10 @@ export default function App() {
   // series or demo chain changes. On a local demo it shows the series claims
   // read-only; on a real deployment it shows only the connected wallet's pets.
   useEffect(() => {
+    setCollectionLimit(12);
+  }, [wallet.address, seriesId, isDemoChain]);
+
+  useEffect(() => {
     if (view !== "pets") return undefined;
     if (!readContract) {
       setCollectionLoading(false);
@@ -551,7 +531,9 @@ export default function App() {
     setCollectionReady(false);
     setCollectionError("");
 
-    discoverPets({ owner })
+    // Read one extra pet to show a continuation instead of silently hiding
+    // everything after the first twelve owned tokens.
+    discoverPets({ owner, limit: collectionLimit + 1 })
       .then((pets) => {
         if (!cancelled) setCollection(pets);
       })
@@ -575,6 +557,7 @@ export default function App() {
     readContract,
     discoverPets,
     collectionNonce,
+    collectionLimit,
   ]);
 
   async function findMyPet() {
@@ -960,7 +943,7 @@ export default function App() {
     }
   }, [proofInput]);
 
-  const safeSvg = useMemo(() => (pet ? sanitizeSvg(pet.svg) : ""), [pet]);
+  const safeSvg = useMemo(() => (pet ? sanitizePortrait(pet.svg, `${portraitScope}-detail`) : ""), [pet, portraitScope]);
 
   const traitRows = useMemo(() => {
     if (!pet) return [];
@@ -990,7 +973,7 @@ export default function App() {
         : "Activate Glowpet";
 
   const homePet = pet ?? featuredPet;
-  const homeSvg = useMemo(() => (homePet ? sanitizeSvg(homePet.svg) : ""), [homePet]);
+  const homeSvg = useMemo(() => (homePet ? sanitizePortrait(homePet.svg, `${portraitScope}-home`) : ""), [homePet, portraitScope]);
 
   function navigate(next) {
     findRequest.current += 1;
@@ -1217,6 +1200,8 @@ export default function App() {
 
   function renderPets() {
     const canBrowse = isDemoChain || Boolean(wallet.address);
+    const visiblePets = collection.slice(0, collectionLimit);
+    const hasMorePets = collection.length > collectionLimit;
 
     return (
       <>
@@ -1292,10 +1277,10 @@ export default function App() {
         ) : (
           <>
             <p className="collection-meta">
-              {collection.length} pet{collection.length === 1 ? "" : "s"} · newest first
+              Showing {visiblePets.length} pet{visiblePets.length === 1 ? "" : "s"} · newest first
             </p>
             <div className="pet-grid">
-              {collection.map((p) => (
+              {visiblePets.map((p) => (
                 <button
                   type="button"
                   className="pet-tile"
@@ -1304,7 +1289,7 @@ export default function App() {
                 >
                   <div
                     className="pet-tile-thumb"
-                    dangerouslySetInnerHTML={{ __html: sanitizeSvg(p.svg) }}
+                    dangerouslySetInnerHTML={{ __html: sanitizePortrait(p.svg, `${portraitScope}-collection-${p.tokenId}`) }}
                   />
                   <div className="pet-tile-body">
                     <div className="pet-tile-name">
@@ -1319,6 +1304,13 @@ export default function App() {
                 </button>
               ))}
             </div>
+            {hasMorePets && (
+              <div className="page-actions">
+                <button type="button" className="ghost" onClick={() => setCollectionLimit((limit) => limit + 12)}>
+                  Show more pets
+                </button>
+              </div>
+            )}
           </>
         )}
       </>
@@ -1866,29 +1858,6 @@ function SetupNotice() {
       <p className="hint">The full walkthrough is in README.md.</p>
     </div>
   );
-}
-
-/**
- * The SVG comes from the Glowpet contract, but the browser still deserves a
- * defence-in-depth pass before inlining it into the DOM. DOMPurify's SVG
- * profile is maintained against parser and mutation-XSS bypasses; a regex
- * sanitizer is not a security boundary.
- */
-function sanitizeSvg(svg) {
-  if (!svg) return "";
-
-  // Older deployments name the head gradient "head". DOMPurify's
-  // DOM-clobbering protection removes that id because `head` is a document
-  // property, which leaves fill="url(#head)" pointing at nothing and makes the
-  // head transparent. Rename it to a non-clobbering id before sanitizing.
-  const normalized = String(svg)
-    .replace(/id="head"/g, 'id="gp-head-fill"')
-    .replace(/url\(#head\)/g, "url(#gp-head-fill)");
-
-  return DOMPurify.sanitize(normalized, {
-    USE_PROFILES: { svg: true, svgFilters: true },
-    FORBID_TAGS: ["script", "foreignObject", "iframe", "object", "embed", "style"],
-  });
 }
 
 // Storage is a convenience only. Disabled/full storage must never turn a mined

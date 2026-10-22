@@ -856,13 +856,13 @@
   overflow: visible;
 }
 
-.farm-pet-svg #gp-head {
+.farm-pet-svg [data-glowpet-part="gp-head"] {
   transform-box: view-box;
   transform-origin: 200px 205px;
   animation: farm-pet-bob 3.8s ease-in-out infinite;
 }
 
-.farm-pet-svg #gp-eyes {
+.farm-pet-svg [data-glowpet-part="gp-eyes"] {
   transform-box: fill-box;
   transform-origin: center;
   animation: farm-pet-blink 5.5s ease-in-out infinite;

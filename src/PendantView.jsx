@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import DOMPurify from "dompurify";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { sanitizePortrait } from "./portrait-svg.js";
 import { describeError, padSerial, SPECIES_NAMES, stageName } from "./contract.js";
 import "./pendant.css";
 
@@ -8,19 +8,6 @@ const READ_TIMEOUT_MS = 12_000;
 
 function matchesToken(pet, tokenKey) {
   return Boolean(pet && String(pet.tokenId) === tokenKey);
-}
-
-function sanitizePortrait(svg) {
-  if (!svg) return "";
-  // Preserve the gradient from older deployments without disabling
-  // DOMPurify's protection against IDs that shadow document properties.
-  const normalized = String(svg)
-    .replace(/id="head"/g, 'id="gp-pendant-head-fill"')
-    .replace(/url\(#head\)/g, "url(#gp-pendant-head-fill)");
-  return DOMPurify.sanitize(normalized, {
-    USE_PROFILES: { svg: true, svgFilters: true },
-    FORBID_TAGS: ["script", "foreignObject", "iframe", "object", "embed", "style"],
-  });
 }
 
 /**
@@ -34,6 +21,7 @@ export default function PendantView({
   allowMotion = true,
   onClose,
 }) {
+  const portraitScope = useId();
   const tokenKey = tokenId == null ? "" : String(tokenId);
   const initialPetRef = useRef(initialPet);
   initialPetRef.current = initialPet;
@@ -143,7 +131,10 @@ export default function PendantView({
   // A token change must hide the old portrait even before the effect resets
   // its state. Late requests are also ignored by the effect's version guard.
   const pet = matchesToken(snapshot, tokenKey) ? snapshot : null;
-  const safeSvg = useMemo(() => sanitizePortrait(pet?.svg), [pet?.svg]);
+  const safeSvg = useMemo(
+    () => sanitizePortrait(pet?.svg, `pendant-${portraitScope}`),
+    [pet?.svg, portraitScope],
+  );
   const species = pet ? SPECIES_NAMES[pet.traits.species] ?? "Glowpet" : "Glowpet";
   const isReading = ["connecting", "syncing", "retrying"].includes(syncState);
   const isOffline = syncState === "offline" || syncState === "retrying";

@@ -23,11 +23,11 @@ function workspace(t) {
   return directory;
 }
 
-function runBuilder(cwd, extra = []) {
+function runBuilder(cwd, extra = [], options = {}) {
   return spawnSync(process.execPath, [
     builder, "--supply", "5", "--series", "23", "--chain-id", "31337",
     "--seed", TEST_SEED, ...extra,
-  ], { cwd, encoding: "utf8" });
+  ], { cwd, encoding: "utf8", ...options });
 }
 
 function readJson(file) {
@@ -98,8 +98,12 @@ test("v2 exports use credential signer leaves, valid proofs and versioned URLs",
   );
   const csv = fs.readFileSync(path.join(output, "proofs.csv"), "utf8");
   assert.match(csv, /^protocolVersion,chainId,seriesId,serial,credentialSigner,secret,proof,tokenId\n/);
-  for (const file of ["private/seed.txt", "proofs.json", "proofs.csv", "proofs/1.json"]) {
-    assert.equal(fs.statSync(path.join(output, file)).mode & 0o777, 0o600);
+  // Windows chmod only controls the read-only bit; ACLs are inherited from the
+  // output directory. Only POSIX reports and enforces owner-only permission bits.
+  if (process.platform !== "win32") {
+    for (const file of ["private/seed.txt", "proofs.json", "proofs.csv", "proofs/1.json"]) {
+      assert.equal(fs.statSync(path.join(output, file)).mode & 0o777, 0o600);
+    }
   }
 });
 
@@ -117,6 +121,62 @@ test("v2 root is reproducible and bound to chain and series", (t) => {
   assert.equal(roots[0], roots[1]);
   assert.notEqual(roots[0], roots[2]);
   assert.notEqual(roots[0], roots[3]);
+});
+
+test("CLI protects existing split credentials before writing a fresh output directory", (t) => {
+  const cwd = workspace(t);
+  const output = path.join(cwd, "new-series");
+  const splitDir = path.join(cwd, "existing-credentials");
+  fs.mkdirSync(splitDir);
+  const existing = path.join(splitDir, "1.json");
+  const original = JSON.stringify({ existingCredential: "do not replace" });
+  fs.writeFileSync(existing, original);
+
+  const args = ["--out", output, "--split", "1-2", "--split-dir", splitDir];
+  const rejected = runBuilder(cwd, args);
+  assert.notEqual(rejected.status, 0);
+  assert.match(rejected.stderr, /Claim credential already exists/);
+  assert.match(rejected.stderr, /Use --force to overwrite/);
+  assert.equal(fs.readFileSync(existing, "utf8"), original);
+  assert.equal(fs.existsSync(output), false);
+  assert.equal(fs.existsSync(path.join(splitDir, "2.json")), false);
+
+  const forced = runBuilder(cwd, [...args, "--force"]);
+  assert.equal(forced.status, 0, forced.stderr);
+  assert.equal(readJson(existing).serial, 1);
+  assert.equal(readJson(path.join(splitDir, "2.json")).serial, 2);
+});
+
+test("CLI validates the contract label limit in UTF-8 bytes before creating output", (t) => {
+  const cwd = workspace(t);
+  for (const label of ["a".repeat(65), "宠".repeat(22)]) {
+    const output = path.join(cwd, "rejected");
+    const result = runBuilder(cwd, ["--out", output, "--label", label]);
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /--label must be at most 64 UTF-8 bytes/);
+    assert.equal(fs.existsSync(output), false);
+  }
+  for (const [name, label] of [["ascii", "a".repeat(64)], ["utf8", "宠".repeat(21)]]) {
+    const output = path.join(cwd, name);
+    const result = runBuilder(cwd, ["--out", output, "--label", label]);
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(readJson(path.join(output, "series.json")).label, label);
+  }
+});
+
+test("CLI rejects huge and unsafe proof ranges before iterating or writing", (t) => {
+  const cwd = workspace(t);
+  for (const [option, range] of [
+    ["--proofs", "1-1000000000"],
+    ["--split", "9007199254740992-9007199254740992"],
+  ]) {
+    const output = path.join(cwd, "rejected");
+    const result = runBuilder(cwd, ["--out", output, option, range], { timeout: 5000 });
+    assert.equal(result.error, undefined, result.error?.message);
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /must be an integer between 1 and 5/);
+    assert.equal(fs.existsSync(output), false);
+  }
 });
 
 test("CLI rejects both public root and nested output or split directories before writing", (t) => {
@@ -192,6 +252,6 @@ test("build guard catches CSV credentials, seed exports and linked directories w
   fs.symlinkSync(publicDir, path.join(linkedDir, "cycle"));
   assert.deepEqual(
     findPublishedCredentials(publicDir).map((file) => path.relative(publicDir, file)).sort(),
-    ["credentials.csv", "linked/bundle.json", "renamed.txt", "seed.txt"],
+    ["credentials.csv", path.join("linked", "bundle.json"), "renamed.txt", "seed.txt"],
   );
 });

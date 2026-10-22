@@ -101,6 +101,7 @@ export default function FarmScene({
   const [shopMessage, setShopMessage] = useState(null);
   const cabinetTrigger = useRef(null);
   const cabinetClose = useRef(null);
+  const cabinetDialog = useRef(null);
 
   useEffect(() => () => {
     walkRun.current += 1;
@@ -109,8 +110,10 @@ export default function FarmScene({
     if (consumeTimer.current) window.clearTimeout(consumeTimer.current);
   }, []);
 
-  function consumeHeldSeed() {
-    setHeldSeedId(null);
+  function consumeHeldSeed(plantedSeedId) {
+    // A queued save may finish after another packet has been picked up. Only
+    // consume the packet that was carried when this planting action started.
+    setHeldSeedId((current) => current === plantedSeedId ? null : current);
     setConsumeMoment({ id: Date.now() });
     if (consumeTimer.current) window.clearTimeout(consumeTimer.current);
     consumeTimer.current = window.setTimeout(() => setConsumeMoment(null), 750);
@@ -125,6 +128,18 @@ export default function FarmScene({
       if (event.key === "Escape") {
         event.preventDefault();
         closeCabinet();
+      } else if (event.key === "Tab") {
+        const controls = Array.from(cabinetDialog.current?.querySelectorAll("button:not(:disabled)") ?? []);
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        const current = document.activeElement;
+        if (event.shiftKey && (current === first || !cabinetDialog.current?.contains(current))) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && (current === last || !cabinetDialog.current?.contains(current))) {
+          event.preventDefault();
+          first?.focus();
+        }
       }
     };
     document.addEventListener("keydown", onKeyDown);
@@ -307,7 +322,7 @@ export default function FarmScene({
     const outcome = onPlant(plotIndex);
     if (outcome && typeof outcome.then === "function") {
       outcome.then((ok) => {
-        if (ok && heldSeedId) consumeHeldSeed();
+        if (ok && heldSeedId) consumeHeldSeed(heldSeedId);
       }).catch(() => {});
     }
   }
@@ -321,7 +336,7 @@ export default function FarmScene({
       ? (index === 2 ? -26 : 26)
       : (index === 0 ? 13 : index === 2 ? -13 : 15);
     // With a seed in hand, walking onto an empty patch plants it immediately.
-    const autoPlant = plots[index] === null
+    const autoPlant = !pending && plots[index] === null
       && heldSeedId === selectedCrop.id
       && (seeds?.[selectedCrop.id] ?? 0) > 0;
     walkTo(spot.x + offset, spot.y + (compact ? 12 : 15), {
@@ -434,7 +449,7 @@ export default function FarmScene({
                     if (empty) openCabinet(event);
                     else if (!held) pickUpSeed(crop.id);
                   }}
-                  disabled={held}
+                  disabled={held || Boolean(pending)}
                   aria-busy={pickingSeed === crop.id}
                   aria-label={empty
                     ? `Buy ${crop.name} seeds. Out of stock.`
@@ -688,6 +703,7 @@ export default function FarmScene({
           <div className="seed-cabinet-backdrop" aria-hidden="true" onClick={closeCabinet} />
           <div
             className="seed-cabinet"
+            ref={cabinetDialog}
             role="dialog"
             aria-modal="true"
             aria-labelledby="seed-cabinet-title"

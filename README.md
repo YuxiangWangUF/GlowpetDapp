@@ -158,7 +158,9 @@ deployments/series-1/
 > to `.glowpet-demo/proofs/`, which only the Vite dev server serves.
 
 Every generated credential and claim URL includes `protocolVersion=2`. The
-master seed and proof exports are written with owner-only file permissions.
+master seed and proof exports use owner-only file permissions on POSIX.
+On Windows, files inherit the output directory's ACLs; `chmod 0600` does not
+restrict access to the current user. Generate credentials in a private directory.
 
 ### Regenerating without exposing the seed
 
@@ -414,7 +416,7 @@ moves it behind a signed milestone or a game server.
    evolve any token. The claim root is immutable once created, and there is no
    withdrawal or arbitrary-mint function.
 6. **Immutable renderer.** `Glowpet.art` and `GlowpetArt.faceArt` have no
-   setters. Both constructors reject `address(0)`; verify the deployment
+setters. Both constructors reject addresses without deployed code; verify the deployment
    arguments, because a wrong renderer cannot be replaced.
 
 ## Not built yet

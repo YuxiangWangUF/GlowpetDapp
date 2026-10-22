@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import DOMPurify from "dompurify";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { sanitizePortrait } from "./portrait-svg.js";
 import useGardenGame from "./useGardenGame.js";
 import FarmScene from "./FarmScene.jsx";
 import { DELTAX_COMPANIONS, getCompanionImageStyle } from "./PlushCompanion.jsx";
@@ -23,17 +23,6 @@ function duration(milliseconds) {
   const seconds = Math.max(0, Math.ceil(milliseconds / 1_000));
   if (seconds < 60) return `${seconds}s`;
   return `${Math.floor(seconds / 60)}m ${String(seconds % 60).padStart(2, "0")}s`;
-}
-
-function sanitizePortrait(svg) {
-  if (!svg) return "";
-  const normalized = String(svg)
-    .replace(/id="head"/g, 'id="gp-garden-head-fill"')
-    .replace(/url\(#head\)/g, "url(#gp-garden-head-fill)");
-  return DOMPurify.sanitize(normalized, {
-    USE_PROFILES: { svg: true, svgFilters: true },
-    FORBID_TAGS: ["script", "foreignObject", "iframe", "object", "embed", "style"],
-  });
 }
 
 function NeedMeter({ label, value, tone, detail }) {
@@ -76,7 +65,8 @@ export default function GardenView({
   const actionVersion = useRef(0);
   const selectedCrop = CROPS.find((crop) => crop.id === selectedCropId) ?? CROPS[0];
   const care = getCareProgress(state);
-  const safeSvg = useMemo(() => sanitizePortrait(pet?.svg), [pet?.svg]);
+  const portraitScope = useId();
+  const safeSvg = useMemo(() => sanitizePortrait(pet?.svg, `${portraitScope}-garden`), [pet?.svg, portraitScope]);
   const species = pet ? SPECIES_NAMES[pet.traits.species] ?? "Glowpet" : guest.name;
   const playRemaining = state.plays > 0
     ? Math.max(0, state.lastPlayAt + PLAY_COOLDOWN_MS - now)

@@ -510,7 +510,7 @@ button:disabled {
 }
 
 /* The contract emits stable group ids precisely so the app can animate them. */
-.pet-stage #gp-head {
+.pet-stage [data-glowpet-part="gp-head"] {
   transform-box: view-box;
   transform-origin: 200px 205px;
   animation: glowpet-bob 3.6s ease-in-out infinite;
@@ -518,20 +518,20 @@ button:disabled {
 
 /* Blink: the eye group has its own bounding box, so scaleY collapses both
    eyes around their shared centre without touching the muzzle or glasses. */
-.pet-stage #gp-eyes {
+.pet-stage [data-glowpet-part="gp-eyes"] {
   transform-box: fill-box;
   transform-origin: center;
   animation: glowpet-blink 5.2s ease-in-out infinite;
 }
 
 /* Small accessories (star, sprout, bow) get a gentle sway. */
-.pet-stage #gp-accessory-front {
+.pet-stage [data-glowpet-part="gp-accessory-front"] {
   transform-box: fill-box;
   transform-origin: center top;
   animation: glowpet-accessory 4.4s ease-in-out infinite;
 }
 
-.pet-stage:hover #gp-head {
+.pet-stage:hover [data-glowpet-part="gp-head"] {
   animation-duration: 2.4s;
 }
 
@@ -1282,25 +1282,25 @@ footer {
 
 /* Explicit demo override: `?motion=1` re-enables the idle loop even when the
    OS asks for reduced motion. It only runs when the user opts in. */
-.pet-stage.force-motion #gp-head {
+.pet-stage.force-motion [data-glowpet-part="gp-head"] {
   animation-duration: 3.6s !important;
   animation-iteration-count: infinite !important;
 }
 
-.pet-stage.force-motion #gp-eyes {
+.pet-stage.force-motion [data-glowpet-part="gp-eyes"] {
   animation-duration: 5.2s !important;
   animation-iteration-count: infinite !important;
 }
 
-.pet-stage.force-motion #gp-accessory-front {
+.pet-stage.force-motion [data-glowpet-part="gp-accessory-front"] {
   animation-duration: 4.4s !important;
   animation-iteration-count: infinite !important;
 }
 
 /* User-controlled pause, also reachable without changing an OS setting. */
-.pet-stage.motion-off #gp-head,
-.pet-stage.motion-off #gp-eyes,
-.pet-stage.motion-off #gp-accessory-front {
+.pet-stage.motion-off [data-glowpet-part="gp-head"],
+.pet-stage.motion-off [data-glowpet-part="gp-eyes"],
+.pet-stage.motion-off [data-glowpet-part="gp-accessory-front"] {
   animation: none !important;
 }
 

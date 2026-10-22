@@ -91,7 +91,7 @@ contract Glowpet is ERC721, EIP712, Ownable {
     {
         // The renderer is immutable, so fail the deployment instead of minting
         // tokens whose tokenURI can never be read.
-        if (art_ == address(0)) revert InvalidConfig();
+        if (art_.code.length == 0) revert InvalidConfig();
         art = art_;
     }
 

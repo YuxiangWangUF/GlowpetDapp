@@ -1123,24 +1123,24 @@
   line-height: 1.8;
 }
 
-.garden-pet-svg #gp-head {
+.garden-pet-svg [data-glowpet-part="gp-head"] {
   transform-box: view-box;
   transform-origin: 200px 205px;
   animation: garden-pet-bob 4s ease-in-out infinite;
 }
 
-.garden-pet-svg #gp-eyes {
+.garden-pet-svg [data-glowpet-part="gp-eyes"] {
   transform-box: fill-box;
   transform-origin: center;
   animation: garden-blink 5.5s ease-in-out infinite;
 }
 
-.garden-force-motion .garden-pet-svg #gp-head {
+.garden-force-motion .garden-pet-svg [data-glowpet-part="gp-head"] {
   animation-duration: 4s !important;
   animation-iteration-count: infinite !important;
 }
 
-.garden-force-motion .garden-pet-svg #gp-eyes {
+.garden-force-motion .garden-pet-svg [data-glowpet-part="gp-eyes"] {
   animation-duration: 5.5s !important;
   animation-iteration-count: infinite !important;
 }

@@ -25,8 +25,8 @@ contract GlowpetArt is IGlowpetArt {
     error InvalidConfig();
 
     constructor(address faceArt_) {
-        // A zero renderer would make every tokenURI revert with no way to fix it.
-        if (faceArt_ == address(0)) revert InvalidConfig();
+        // A renderer without deployed code would permanently break tokenURI.
+        if (faceArt_.code.length == 0) revert InvalidConfig();
         faceArt = faceArt_;
     }
 

@@ -308,27 +308,27 @@
   line-height: 1.7;
 }
 
-.pendant-motion-on #gp-head {
+.pendant-motion-on [data-glowpet-part="gp-head"] {
   transform-box: view-box;
   transform-origin: 200px 205px;
   animation: pendant-bob 3.6s ease-in-out infinite !important;
 }
 
-.pendant-motion-on #gp-eyes {
+.pendant-motion-on [data-glowpet-part="gp-eyes"] {
   transform-box: fill-box;
   transform-origin: center;
   animation: pendant-blink 5.2s ease-in-out infinite !important;
 }
 
-.pendant-motion-on #gp-accessory-front {
+.pendant-motion-on [data-glowpet-part="gp-accessory-front"] {
   transform-box: fill-box;
   transform-origin: center top;
   animation: pendant-accessory 4.4s ease-in-out infinite !important;
 }
 
-.pendant-motion-off #gp-head,
-.pendant-motion-off #gp-eyes,
-.pendant-motion-off #gp-accessory-front {
+.pendant-motion-off [data-glowpet-part="gp-head"],
+.pendant-motion-off [data-glowpet-part="gp-eyes"],
+.pendant-motion-off [data-glowpet-part="gp-accessory-front"] {
   animation: none !important;
 }
 

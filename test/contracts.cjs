@@ -111,6 +111,13 @@ describe("Glowpet v2: physical credential authorisations", function () {
     await (await glow.createSeries(1n, series.entries.length, 0, series.root, "测试 <Glow & Pet>")).wait();
   });
 
+  it("rejects zero and externally owned addresses for immutable renderers", async function () {
+    for (const address of [ethers.ZeroAddress, recipientAddress]) {
+      await rejectsWith(() => deploy("Glowpet", [address]), glow, "InvalidConfig");
+      await rejectsWith(() => deploy("GlowpetArt", [address]), art, "InvalidConfig");
+    }
+  });
+
   it("advertises v2 and accepts a relayer without exposing the private key in calldata", async function () {
     assert.equal(await glow.claimProtocolVersion(), 2n);
     const auth = await claim();
@@ -203,7 +210,9 @@ describe("Glowpet v2: physical credential authorisations", function () {
     const before = await glow.petState(1_000_001n);
     await (await glow.connect(recipient).transferFrom(recipientAddress, attackerAddress, 1_000_001n)).wait();
     assert.equal(await glow.ownerOf(1_000_001n), attackerAddress);
-    assert.deepEqual(await glow.petState(1_000_001n), before);
+    // Compare the returned values; ethers Result wraps them in a Proxy whose
+    // internal state is not a portable deepStrictEqual target across Node versions.
+    assert.deepEqual(Array.from(await glow.petState(1_000_001n)), Array.from(before));
     await rejectsWith(() => glow.connect(recipient).transferFrom(attackerAddress, recipientAddress, 1_000_001n), glow, "ERC721InsufficientApproval");
   });
 

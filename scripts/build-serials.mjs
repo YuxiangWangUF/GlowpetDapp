@@ -37,6 +37,7 @@ import { assertPrivateOutput } from "./credential-safety.mjs";
 
 const PROTOCOL_VERSION = 2;
 const SERIES_STRIDE = 1_000_000n;
+const MAX_LABEL_BYTES = 64; // Glowpet.MAX_LABEL_BYTES
 const SECP256K1_ORDER = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141n;
 const DEFAULT_CHAIN_ID = 11155111; // Sepolia
 const coder = AbiCoder.defaultAbiCoder();
@@ -79,6 +80,8 @@ Safety
   Never commit them and never serve them for a real series. Writing into public/
   (including through symlinks) is rejected. The --split export exists for
   demo/test series only. Protocol v2 roots are incompatible with v1 contracts.
+  On Windows, private files inherit the output directory's ACLs; chmod 0600
+  does not limit which Windows users can read them. Use a private directory.
 `);
 }
 
@@ -151,8 +154,10 @@ function parseSpec(spec, supply, name) {
     if (!piece) continue;
     const range = piece.match(/^(\d+)-(\d+)$/);
     if (range) {
-      const from = Number(range[1]);
-      const to = Number(range[2]);
+      // Validate before iterating: out-of-supply ranges can otherwise allocate
+      // enormous sets, and unsafe integers may never advance with n++.
+      const from = intArg(range[1], name, 1, supply);
+      const to = intArg(range[2], name, 1, supply);
       if (from > to) throw new Error(`--${name}: bad range "${piece}"`);
       for (let n = from; n <= to; n++) out.add(n);
       continue;
@@ -249,6 +254,9 @@ function main() {
   const chainId = intArg(args["chain-id"] ?? DEFAULT_CHAIN_ID, "chain-id", 1, Number.MAX_SAFE_INTEGER);
   const salt = intArg(args.salt ?? 0, "salt", 0, 0xffffffff);
   const label = args.label === undefined || args.label === true ? "DeltaX" : String(args.label);
+  if (Buffer.byteLength(label, "utf8") > MAX_LABEL_BYTES) {
+    throw new Error(`--label must be at most ${MAX_LABEL_BYTES} UTF-8 bytes (the contract limit)`);
+  }
   if (args.seed && args["seed-file"]) {
     throw new Error("Use either --seed or --seed-file, not both");
   }
@@ -296,6 +304,13 @@ function main() {
 
   if (fs.existsSync(outDir) && fs.readdirSync(outDir).length > 0 && !args.force) {
     throw new Error(`Output directory is not empty: ${outDir}\nUse --force to overwrite.`);
+  }
+  if (!args.force) {
+    const existingSplit = splitSpec.map((serial) => path.join(splitDir, `${serial}.json`))
+      .find((file) => fs.existsSync(file));
+    if (existingSplit) {
+      throw new Error(`Claim credential already exists: ${existingSplit}\nUse --force to overwrite.`);
+    }
   }
   fs.mkdirSync(outDir, { recursive: true });
 
