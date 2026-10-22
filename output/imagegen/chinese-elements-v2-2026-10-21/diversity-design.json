@@ -1,0 +1,148 @@
+{
+  "status": "design_proposal_not_implemented",
+  "purpose": "Increase perceptually distinct Glowpet appearances using Chinese-inspired accessories",
+  "existing_concepts": [
+    "jade_hairpin",
+    "silk_stole"
+  ],
+  "new_concepts": [
+    "chinese_knot",
+    "ronghua_flower",
+    "blue_white_porcelain_bell",
+    "embroidered_sachet",
+    "cloud_collar",
+    "lion_dance_cap"
+  ],
+  "future_candidates": [
+    "jade_peace_disc",
+    "silver_longevity_lock",
+    "jade_lotus_seedpod",
+    "bamboo_leaf_silk_scarf",
+    "lotus_leaf_cap",
+    "ruyi_button",
+    "embroidered_round_fan",
+    "paper_kite_charm"
+  ],
+  "identity_invariants": [
+    "rounded plush proportions",
+    "recognizable species silhouette",
+    "clear glossy eyes and expression",
+    "tiny front paws",
+    "golden cheek star"
+  ],
+  "composition_rules": {
+    "primary_accessories_per_pet": 1,
+    "optional_minor_charms_max": 1,
+    "dominant_colors_max": 2,
+    "accent_colors_max": 1,
+    "keep_clear": [
+      "eyes",
+      "mouth",
+      "cheek star",
+      "front paws",
+      "species-defining ears"
+    ],
+    "material_compatibility": {
+      "jade_hairpin": [
+        "white jade",
+        "celadon jade",
+        "brushed gold"
+      ],
+      "ronghua_flower": [
+        "brushed silk fibers",
+        "silk cord"
+      ],
+      "chinese_knot": [
+        "silk cord",
+        "optional jade bead"
+      ],
+      "blue_white_porcelain_bell": [
+        "glazed porcelain",
+        "indigo silk cord"
+      ],
+      "embroidered_sachet": [
+        "silk",
+        "embroidery thread"
+      ],
+      "cloud_collar": [
+        "silk",
+        "subtle embroidered edging"
+      ],
+      "lion_dance_cap": [
+        "velvet",
+        "plush trim",
+        "embroidered applique"
+      ]
+    },
+    "palette_examples": [
+      {
+        "name": "朱红玉白",
+        "colors": [
+          "cinnabar red",
+          "ivory",
+          "pale jade"
+        ]
+      },
+      {
+        "name": "桃粉青叶",
+        "colors": [
+          "peach pink",
+          "sage green",
+          "muted gold"
+        ]
+      },
+      {
+        "name": "青花",
+        "colors": [
+          "porcelain white",
+          "cobalt blue"
+        ]
+      },
+      {
+        "name": "丹桂",
+        "colors": [
+          "moss green",
+          "osmanthus yellow",
+          "pale gold"
+        ]
+      },
+      {
+        "name": "丁香云锦",
+        "colors": [
+          "dusty lilac",
+          "ivory",
+          "muted gold"
+        ]
+      },
+      {
+        "name": "醒狮",
+        "colors": [
+          "golden yellow",
+          "vermilion",
+          "ivory"
+        ]
+      }
+    ]
+  },
+  "uniqueness_proposal": {
+    "visual_identity_fields": [
+      "species",
+      "fur_palette",
+      "fur_pattern",
+      "primary_accessory_shape",
+      "accessory_palette",
+      "visible_motif",
+      "minor_charm"
+    ],
+    "exclude_from_deduplication_identity": [
+      "token_id",
+      "serial_number",
+      "random_seed",
+      "growth_timestamp"
+    ],
+    "exact_duplicates": "Canonicalize visible trait values in a fixed order; enforce a unique combination fingerprint at allocation. Retry sampling or use an unused compatible combination; explicitly handle pool exhaustion. Token ID or seed uniqueness is not visual uniqueness.",
+    "near_duplicates": "Also inspect whether large visible traits differ. Review thumbnails at 64 and 96 pixels, group by species/fur pattern/main accessory silhouette, and use image similarity plus manual review for close matches. Small embroidery or tassel changes alone do not establish perceptual uniqueness.",
+    "deterministic_assignment": "After a combination is allocated, persist it so the pet looks stable across refreshes and devices.",
+    "current_limit": "These PNGs are concept samples. No trait allocator, collision rejection or animation integration has been implemented."
+  }
+}

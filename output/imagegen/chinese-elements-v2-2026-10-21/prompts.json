@@ -1,0 +1,78 @@
+{
+  "generator": "built-in image_gen",
+  "purpose": "Chinese accessory concept previews, not yet installed as game assets",
+  "variants": [
+    {
+      "key": "01-red-knot-cat",
+      "name": "红结猫",
+      "reference": "../../../public/pets/deltax-soft-v1/cat.png",
+      "direction": "A small cinnabar-red Chinese decorative cord knot hangs on the lower side of the round kitten, attached to a thin red silk collar mostly hidden in its fur. Give the knot a recognizable symmetrical diamond-shaped interlaced cord center, rounded side loops, one small pale jade bead, and two short red tassels. It is a Chinese woven knot, not a bow tie. Position it beside the front paw on the viewer-left lower cheek edge, without obscuring the face or lengthening the neck. The red knot is clearly visible at about 20 percent of head width. Only red cord, jade and one tiny gold fastening.",
+      "prompt": "Use case: precise-object-edit. Create ONE Chinese-inspired accessory concept for the supplied Glowpet plush pet. The reference image is the edit target. Preserve the original species, face shape, glossy eyes, expression, extremely round body proportions, tiny front paws, ears, tail, fuzzy cream/peach fur and golden four-point star on its viewer-right cheek. Keep the exact original frontal pose and premium soft 3D plush rendering, with warm soft studio light. Add only the specified accessories, with believable texture and attachment. Leave eyes, nose, mouth, paws, cheek star and the species-defining ears clearly visible. No human torso, no human hair, no full garment, no other characters, no text, no logos. Show the entire character with all accessory tips and generous margins, on a genuinely transparent background. A small cinnabar-red Chinese decorative cord knot hangs on the lower side of the round kitten, attached to a thin red silk collar mostly hidden in its fur. Give the knot a recognizable symmetrical diamond-shaped interlaced cord center, rounded side loops, one small pale jade bead, and two short red tassels. It is a Chinese woven knot, not a bow tie. Position it beside the front paw on the viewer-left lower cheek edge, without obscuring the face or lengthening the neck. The red knot is clearly visible at about 20 percent of head width. Only red cord, jade and one tiny gold fastening.",
+      "status": "generated",
+      "file": "01-red-knot-cat.png",
+      "width": 1254,
+      "height": 1254,
+      "pngColorType": 6
+    },
+    {
+      "key": "02-ronghua-rabbit",
+      "name": "绒花兔",
+      "reference": "../../../public/pets/deltax-soft-v1/rabbit.png",
+      "direction": "Add a delicate Chinese ronghua silk-velvet floral ornament at the base of the upright ear. One peach-pink blossom made from densely brushed soft silk fibers, two narrow sage-green silk leaves, tiny golden stamens and a short thread-wrapped stem. It has the distinctive fuzzy sculpted material of a Chinese velvet flower craft accessory, clearly different from a hard jade flower. Secure with a tiny matching silk tie. A compact asymmetrical cluster about 20 percent of the head width; keep the upright and folded ears unchanged. No giant bouquet, no hat, no long ribbons.",
+      "prompt": "Use case: precise-object-edit. Create ONE Chinese-inspired accessory concept for the supplied Glowpet plush pet. The reference image is the edit target. Preserve the original species, face shape, glossy eyes, expression, extremely round body proportions, tiny front paws, ears, tail, fuzzy cream/peach fur and golden four-point star on its viewer-right cheek. Keep the exact original frontal pose and premium soft 3D plush rendering, with warm soft studio light. Add only the specified accessories, with believable texture and attachment. Leave eyes, nose, mouth, paws, cheek star and the species-defining ears clearly visible. No human torso, no human hair, no full garment, no other characters, no text, no logos. Show the entire character with all accessory tips and generous margins, on a genuinely transparent background. Add a delicate Chinese ronghua silk-velvet floral ornament at the base of the upright ear. One peach-pink blossom made from densely brushed soft silk fibers, two narrow sage-green silk leaves, tiny golden stamens and a short thread-wrapped stem. It has the distinctive fuzzy sculpted material of a Chinese velvet flower craft accessory, clearly different from a hard jade flower. Secure with a tiny matching silk tie. A compact asymmetrical cluster about 20 percent of the head width; keep the upright and folded ears unchanged. No giant bouquet, no hat, no long ribbons.",
+      "status": "generated",
+      "file": "02-ronghua-rabbit.png",
+      "width": 1254,
+      "height": 1254,
+      "pngColorType": 6
+    },
+    {
+      "key": "03-blue-porcelain-mouse",
+      "name": "青花铃鼠",
+      "reference": "../../../public/pets/deltax-soft-v1/mouse.png",
+      "direction": "Add a small glossy white porcelain bell charm hanging from a thin indigo silk cord tucked into the lower cheek fur. Position the charm on the viewer-left side next to the paw so the face remains untouched. The rounded ceramic bell has a flared rim, tiny visible clapper, and only two broad cobalt-blue painted curling lotus leaves plus a thin blue border. One simple small cord knot above it, no metal bell shine: it must look like blue-and-white glazed Chinese porcelain. Bell diameter about 18 percent of head width, readable at thumbnail size. Preserve the large round mouse ears, forehead tuft, smoky gray eyes and pink curled tail.",
+      "prompt": "Use case: precise-object-edit. Create ONE Chinese-inspired accessory concept for the supplied Glowpet plush pet. The reference image is the edit target. Preserve the original species, face shape, glossy eyes, expression, extremely round body proportions, tiny front paws, ears, tail, fuzzy cream/peach fur and golden four-point star on its viewer-right cheek. Keep the exact original frontal pose and premium soft 3D plush rendering, with warm soft studio light. Add only the specified accessories, with believable texture and attachment. Leave eyes, nose, mouth, paws, cheek star and the species-defining ears clearly visible. No human torso, no human hair, no full garment, no other characters, no text, no logos. Show the entire character with all accessory tips and generous margins, on a genuinely transparent background. Add a small glossy white porcelain bell charm hanging from a thin indigo silk cord tucked into the lower cheek fur. Position the charm on the viewer-left side next to the paw so the face remains untouched. The rounded ceramic bell has a flared rim, tiny visible clapper, and only two broad cobalt-blue painted curling lotus leaves plus a thin blue border. One simple small cord knot above it, no metal bell shine: it must look like blue-and-white glazed Chinese porcelain. Bell diameter about 18 percent of head width, readable at thumbnail size. Preserve the large round mouse ears, forehead tuft, smoky gray eyes and pink curled tail.",
+      "status": "generated",
+      "file": "03-blue-porcelain-mouse.png",
+      "width": 1254,
+      "height": 1254,
+      "pngColorType": 6
+    },
+    {
+      "key": "04-osmanthus-sachet-sheep",
+      "name": "桂花香囊羊",
+      "reference": "../../../public/pets/deltax-soft-v1/sheep.png",
+      "direction": "Add one small Chinese embroidered fragrance sachet hanging at the viewer-left side of the round lamb, just above and beside a front paw. The soft moss-green silk pouch is pear-shaped, cinched at the top with fine golden drawcord, embroidered with ONE clear cluster of warm pale-yellow osmanthus flowers and two tiny leaves, finished with a single short pale-gold tassel. Make the pouch visibly padded silk with small creases and convincing satin sheen, distinct from the plush fleece. The whole sachet is about 22 percent of head width and hangs from a fine matching cord mostly hidden in the wool. Keep all the original fluffy fleece lobes and droopy ears.",
+      "prompt": "Use case: precise-object-edit. Create ONE Chinese-inspired accessory concept for the supplied Glowpet plush pet. The reference image is the edit target. Preserve the original species, face shape, glossy eyes, expression, extremely round body proportions, tiny front paws, ears, tail, fuzzy cream/peach fur and golden four-point star on its viewer-right cheek. Keep the exact original frontal pose and premium soft 3D plush rendering, with warm soft studio light. Add only the specified accessories, with believable texture and attachment. Leave eyes, nose, mouth, paws, cheek star and the species-defining ears clearly visible. No human torso, no human hair, no full garment, no other characters, no text, no logos. Show the entire character with all accessory tips and generous margins, on a genuinely transparent background. Add one small Chinese embroidered fragrance sachet hanging at the viewer-left side of the round lamb, just above and beside a front paw. The soft moss-green silk pouch is pear-shaped, cinched at the top with fine golden drawcord, embroidered with ONE clear cluster of warm pale-yellow osmanthus flowers and two tiny leaves, finished with a single short pale-gold tassel. Make the pouch visibly padded silk with small creases and convincing satin sheen, distinct from the plush fleece. The whole sachet is about 22 percent of head width and hangs from a fine matching cord mostly hidden in the wool. Keep all the original fluffy fleece lobes and droopy ears.",
+      "status": "generated",
+      "file": "04-osmanthus-sachet-sheep.png",
+      "width": 1254,
+      "height": 1254,
+      "pngColorType": 6
+    },
+    {
+      "key": "05-cloud-collar-fox",
+      "name": "如意云肩狐",
+      "reference": "../../../public/pets/deltax-soft-v1/fox.png",
+      "direction": "Add a miniature Chinese yunjian-inspired shoulder collar made of four rounded cloud-petal lobes in dusty lilac silk, lined with warm ivory and a very thin muted-gold embroidered edge. It rests LOW around the base of the round fox body and peeks out as short symmetrical cloud scallops to either side, leaving the entire white face and front paws exposed. Include just one small simple gold cloud-scroll stitch on each visible lobe, no dense patterns. Tiny ivory knot closure at the outer side. This is a compact four-lobed cloud collar with no long trailing scarf ends, no cape, no sleeves, no human shoulders. Preserve the peach fox ears and curled tail.",
+      "prompt": "Use case: precise-object-edit. Create ONE Chinese-inspired accessory concept for the supplied Glowpet plush pet. The reference image is the edit target. Preserve the original species, face shape, glossy eyes, expression, extremely round body proportions, tiny front paws, ears, tail, fuzzy cream/peach fur and golden four-point star on its viewer-right cheek. Keep the exact original frontal pose and premium soft 3D plush rendering, with warm soft studio light. Add only the specified accessories, with believable texture and attachment. Leave eyes, nose, mouth, paws, cheek star and the species-defining ears clearly visible. No human torso, no human hair, no full garment, no other characters, no text, no logos. Show the entire character with all accessory tips and generous margins, on a genuinely transparent background. Add a miniature Chinese yunjian-inspired shoulder collar made of four rounded cloud-petal lobes in dusty lilac silk, lined with warm ivory and a very thin muted-gold embroidered edge. It rests LOW around the base of the round fox body and peeks out as short symmetrical cloud scallops to either side, leaving the entire white face and front paws exposed. Include just one small simple gold cloud-scroll stitch on each visible lobe, no dense patterns. Tiny ivory knot closure at the outer side. This is a compact four-lobed cloud collar with no long trailing scarf ends, no cape, no sleeves, no human shoulders. Preserve the peach fox ears and curled tail.",
+      "status": "generated",
+      "file": "05-cloud-collar-fox.png",
+      "width": 1254,
+      "height": 1254,
+      "pngColorType": 6
+    },
+    {
+      "key": "06-lion-cap-cat",
+      "name": "醒狮帽猫",
+      "reference": "../../../public/pets/deltax-soft-v1/cat.png",
+      "direction": "Add a playful small Chinese lion-dance-inspired soft cap perched between the kitten's ears and high above its eyebrows. The cap is about 42 percent of the head width, distinctly separate from the real cat face. Rounded warm golden-yellow miniature lion head with small vermilion spiral eyebrow appliques, ivory fluffy trim, soft rounded ears, and two stylized little black-and-ivory ornamental eyes. Cheerful toy-like festival lion, not frightening. No horns, no open fangs, no long beard, no human mask. Both actual kitten ears and actual eyes must remain completely visible. One tiny red fabric knot secures the cap. The cap should be the sole statement accessory.",
+      "prompt": "Use case: precise-object-edit. Create ONE Chinese-inspired accessory concept for the supplied Glowpet plush pet. The reference image is the edit target. Preserve the original species, face shape, glossy eyes, expression, extremely round body proportions, tiny front paws, ears, tail, fuzzy cream/peach fur and golden four-point star on its viewer-right cheek. Keep the exact original frontal pose and premium soft 3D plush rendering, with warm soft studio light. Add only the specified accessories, with believable texture and attachment. Leave eyes, nose, mouth, paws, cheek star and the species-defining ears clearly visible. No human torso, no human hair, no full garment, no other characters, no text, no logos. Show the entire character with all accessory tips and generous margins, on a genuinely transparent background. Add a playful small Chinese lion-dance-inspired soft cap perched between the kitten's ears and high above its eyebrows. The cap is about 42 percent of the head width, distinctly separate from the real cat face. Rounded warm golden-yellow miniature lion head with small vermilion spiral eyebrow appliques, ivory fluffy trim, soft rounded ears, and two stylized little black-and-ivory ornamental eyes. Cheerful toy-like festival lion, not frightening. No horns, no open fangs, no long beard, no human mask. Both actual kitten ears and actual eyes must remain completely visible. One tiny red fabric knot secures the cap. The cap should be the sole statement accessory.",
+      "status": "generated",
+      "file": "06-lion-cap-cat.png",
+      "width": 1254,
+      "height": 1254,
+      "pngColorType": 6
+    }
+  ]
+}

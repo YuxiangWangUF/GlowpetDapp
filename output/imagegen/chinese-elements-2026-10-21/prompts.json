@@ -1,0 +1,31 @@
+{
+  "generator": "built-in image_gen",
+  "purpose": "Glowpet Chinese accessory concept previews",
+  "date": "2026-10-21",
+  "variants": [
+    {
+      "name": "玉簪兔",
+      "status": "generated",
+      "file": "jade-rabbit.png",
+      "reference": "../../../public/pets/deltax-soft-v1/rabbit.png",
+      "transparent_background": true,
+      "prompt": "Use case: precise-object-edit. Asset type: Glowpet Chinese accessory design sample, one single character on a genuinely transparent background. Input image 1 is the edit target, the existing cream plush rabbit game character. Preserve its identity very closely: the extremely round body with no visible human neck or torso, one upright ear and one floppy ear, exact warm ivory-peach plush fur, large glossy brown eyes, tiny smiling mouth, pink cheeks, tiny front paws, and the little golden four-point star on the viewer-right cheek. Preserve frontal pose and camera angle. Change only by adding a tasteful Chinese-inspired white-jade floral hairpin secured in a tiny pale celadon silk ribbon at the base of the upright ear; clearly visible short antique-gold pin shaft with a rounded end, carved translucent white-jade magnolia blossom, two tiny jade leaves, and one very short pearl drop. The pale green silk tie has two short, softly curved tails against the upper side of the head. Elegant and simple, one compact accessory cluster about 15 percent of the head width, distinguishable at game thumbnail scale. It sits on top of the fur and looks attached by ribbon, not puncturing the ear. The hairpin is the main accent. Keep both eyes, both paws, cheek star and ear silhouettes unobscured. Same premium soft 3D plush rendering and gentle warm lighting as reference, with convincing satin, jade and brushed-gold materials. Entire character including ears and accessories visible with generous transparent margins. No text, no lettering, no border, no checkerboard, no background scene, no extra characters, no clothing, no human hair, no crown, no oversized headdress."
+    },
+    {
+      "name": "中国结猫",
+      "status": "generation_did_not_complete_after_retry",
+      "file": null,
+      "reference": "../../../public/pets/deltax-soft-v1/cat.png",
+      "transparent_background": true,
+      "prompt": "Edit the supplied Glowpet plush kitten reference into one Chinese-knot accessory concept. Preserve the original cream-peach fuzzy round kitten EXACTLY: same face, eyes, ears, chubby proportions, front paws, curled tail, and golden star on its right cheek. Add one compact Chinese decorative red cord knot at the lower front of its round body, just above its paws, suspended from a narrow red silk collar tucked into the fur. The knot has a recognizable flat interlaced diamond center, rounded side loops, one small pale jade bead and two SHORT red tassels. It should be a Chinese knot, not a bow tie. Keep the knot about one fifth of the face width, mouth and paws fully visible. Same premium soft 3D plush rendering. Whole character with ample margins on a genuinely transparent background. No clothing, no text, no extra objects."
+    },
+    {
+      "name": "云纹丝绸狐",
+      "status": "generated",
+      "file": "silk-fox.png",
+      "reference": "../../../public/pets/deltax-soft-v1/fox.png",
+      "transparent_background": true,
+      "prompt": "Use case: precise-object-edit. Asset type: Glowpet Chinese accessory design sample, one single character on a genuinely transparent background. Input image 1 is the edit target, the existing peach and white plush fox game character. Preserve its identity very closely: extremely round body, large triangular fox ears, peach-orange fur, white muzzle and cheeks, large glossy brown eyes, tiny brown nose and smile, pink blush, tiny white front paws, fluffy curled orange and white tail at viewer right, and the golden four-point star on viewer-right cheek. Preserve frontal pose, body proportions, expression and camera angle. Change only by adding one lightweight Chinese pibo-inspired silk stole in soft celadon blue-green. The silk band sits low behind the base of the head and falls down the outer two sides of the round plush body, forming two broad but SHORT gently curling ribbon ends. Subtle pale-gold embroidered curling cloud motifs along the hem, only two or three large simple motifs, readable as Chinese-inspired cloud scrolls. A single very small white-jade ring clasp at the lower side secures the silk. Make this recognizably a flowing silk accessory, with broad satin highlights and soft folds that contrast with fuzzy fur. Keep at least 85 percent of the original fur visible; no human torso, no kimono, no full dress, no robe, no sleeves, no giant bow. Silk stays below the mouth, entirely clear of eyes, face star, ears and front paws, does not cover the fox tail. Elegant, light, airy, cute rather than elaborate. Same premium soft 3D plush rendering and warm lighting as reference. Entire character and ribbon tips visible with generous transparent margins. No text, no lettering, no border, no background scene, no checkerboard, no extra characters."
+    }
+  ]
+}
