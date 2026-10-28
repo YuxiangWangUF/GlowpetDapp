@@ -17,7 +17,7 @@ const types = {
   ],
 };
 const artifact = (name) => JSON.parse(fs.readFileSync(
-  path.join(__dirname, "..", "artifacts", "contracts", `${name}.sol`, `${name}.json`), "utf8",
+  path.join(__dirname, "..", "artifacts", "contracts", `${name === "DeltaXPortraits" ? "DeltaXGlowpet" : name}.sol`, `${name}.json`), "utf8",
 ));
 const hashPair = (a, b) => ethers.keccak256(ethers.concat(a < b ? [a, b] : [b, a]));
 const leafFor = (chainId, seriesId, serial, signer) => ethers.keccak256(
@@ -312,6 +312,148 @@ describe("Glowpet v2: physical credential authorisations", function () {
       assert.equal((await glow.seriesInfo(3n)).minted, 5n);
     } finally {
       fs.rmSync(temp, { recursive: true, force: true });
+    }
+  });
+
+  const fixtureCID = "bafy" + "a".repeat(55); // Syntax fixture, not an uploaded collection.
+  const decodeMetadata = (uri) => JSON.parse(Buffer.from(uri.split(",")[1], "base64").toString("utf8"));
+  const appearanceObject = (tuple) => Object.fromEntries(
+    ["appearanceId", "speciesIndex", "headwear", "neckwear", "palette", "motif"].map((key) => [key, Number(tuple[key])]),
+  );
+
+  it("claims all five unique DeltaX species with truthful stable metadata through transfer and evolution", async function () {
+    const rules = await import("../shared/deltax-traits.js");
+    const seed = ethers.ZeroHash; // First allocations cover all five species.
+    glow = await deploy("DeltaXGlowpet", [fixtureCID, 10, seed]);
+    assert.equal(await glow.artworkVersion(), rules.ARTWORK_VERSION);
+    assert.equal(await glow.claimProtocolVersion(), 2n);
+    assert.equal(await glow.editionSize(), 10n);
+    assert.equal(await glow.artworkSeed(), seed);
+    const all = credentials(chainId, 5n, 10);
+    await (await glow.createSeries(5n, 10, 0, all.root, "DeltaX")).wait();
+    const species = new Set(), images = new Set();
+    // Mint out of serial order and to one wallet: neither can affect the assignment.
+    for (const entry of all.entries.slice(0, 5).reverse()) {
+      const tokenId = 5n * STRIDE + BigInt(entry.serial);
+      const expected = rules.appearanceTraits(entry.serial - 1, seed);
+      await claim(entry, { seriesId: 5n });
+      const original = decodeMetadata(await glow.tokenURI(tokenId));
+      assert.equal(original.image, `ipfs://${fixtureCID}/portraits/${expected.appearanceId}.png`);
+      assert.equal(await glow.appearanceOf(tokenId), BigInt(expected.appearanceId));
+      assert.deepEqual(appearanceObject(await glow.appearanceTraits(tokenId)), expected);
+      for (const attribute of rules.artworkAttributes(expected)) {
+        assert.deepEqual(original.attributes.find((a) => a.trait_type === attribute.trait_type), attribute);
+      }
+      assert.equal(original.attributes.find((a) => a.trait_type === "Stage").value, "0");
+      const state = await glow.petState(tokenId);
+      assert.equal(state.species, BigInt(rules.SPECIES[expected.speciesIndex].code));
+      species.add(Number(state.species)); images.add(original.image);
+      await (await glow.connect(recipient).transferFrom(recipientAddress, attackerAddress, tokenId)).wait();
+      await (await glow.evolve(tokenId, 2)).wait();
+      const evolved = decodeMetadata(await glow.tokenURI(tokenId));
+      assert.equal(evolved.image, original.image);
+      assert.deepEqual(appearanceObject(await glow.appearanceTraits(tokenId)), expected);
+      assert.deepEqual(evolved.attributes.filter((a) => a.trait_type !== "Stage"), original.attributes.filter((a) => a.trait_type !== "Stage"));
+      assert.equal(evolved.attributes.find((a) => a.trait_type === "Stage").value, "2");
+      assert.equal(await glow.ownerOf(tokenId), attackerAddress);
+    }
+    assert.equal(species.size, 5); assert.equal(images.size, 5);
+    for (const method of ["tokenURI", "appearanceOf", "appearanceTraits", "petState"]) {
+      await assert.rejects(() => glow[method](5_000_011n));
+    }
+    for (const address of [await glow.getAddress(), await glow.art()]) {
+      assert.ok(((await provider.getCode(address)).length - 2) / 2 <= 24_576);
+    }
+  });
+
+  it("reserves disjoint DeltaX series artwork and never recycles closed or failed reservations", async function () {
+    glow = await deploy("DeltaXGlowpet", [fixtureCID, 10, ethers.ZeroHash]);
+    const first = credentials(chainId, 11n, 5);
+    const second = credentials(chainId, 12n, 5);
+    await rejectsWith(() => glow.createSeries(11n, 5, 0, ethers.ZeroHash, "Invalid"), glow, "InvalidConfig");
+    await rejectsWith(() => glow.createSeries(11n, 5, 0, first.root, "宠".repeat(22)), glow, "InvalidConfig");
+    await rejectsWith(() => glow.connect(attacker).createSeries(11n, 5, 0, first.root, "Denied"), glow, "OwnableUnauthorizedAccount");
+    assert.equal(await glow.allocatedArtwork(), 0n);
+    await (await glow.createSeries(11n, 5, 0, first.root, "First")).wait();
+    assert.equal(await glow.seriesArtworkOffset(11n), 0n);
+    await rejectsWith(() => glow.createSeries(11n, 1, 0, first.root, "Duplicate"), glow, "SeriesExists");
+    await rejectsWith(() => glow.createSeries(12n, 6, 0, second.root, "Too many"), glow, "ArtworkSupplyExhausted");
+    assert.equal(await glow.allocatedArtwork(), 5n);
+    assert.equal((await glow.seriesInfo(12n)).maxSupply, 0n);
+    await (await glow.createSeries(12n, 5, 0, second.root, "Second")).wait();
+    assert.equal(await glow.seriesArtworkOffset(12n), 5n);
+    assert.equal(await glow.allocatedArtwork(), 10n);
+    const ids = new Set();
+    for (let i = 0; i < 5; i++) {
+      // Interleave two series, with the second series minted in reverse order.
+      for (const [seriesId, entry] of [[12n, second.entries[4 - i]], [11n, first.entries[i]]]) {
+        await claim(entry, { seriesId });
+        ids.add((await glow.appearanceOf(seriesId * STRIDE + BigInt(entry.serial))).toString());
+      }
+    }
+    assert.equal(ids.size, 10);
+    await (await glow.closeSeries(11n)).wait();
+    await (await glow.closeSeries(12n)).wait();
+    assert.equal(await glow.allocatedArtwork(), 10n);
+    await rejectsWith(() => glow.createSeries(13n, 1, 0, first.root, "Cannot recycle"), glow, "ArtworkSupplyExhausted");
+    assert.equal(await glow.allocatedArtwork(), 10n);
+  });
+
+  it("keeps the final reserved artwork valid for the largest legal series id", async function () {
+    const rules = await import("../shared/deltax-traits.js");
+    glow = await deploy("DeltaXGlowpet", [fixtureCID, rules.APPEARANCE_CAPACITY, rules.DEFAULT_ARTWORK_SEED]);
+    const largestSeries = (ethers.MaxUint256 - 1n) / STRIDE;
+    await rejectsWith(() => glow.createSeries(largestSeries + 1n, 1, 0, series.root, "Overflow"), glow, "InvalidConfig");
+    assert.equal(await glow.allocatedArtwork(), 0n);
+    await (await glow.createSeries(1n, rules.APPEARANCE_CAPACITY - 1, 0, series.root, "Reserved")).wait();
+    await (await glow.closeSeries(1n)).wait();
+    const boundary = credentials(chainId, largestSeries, 1);
+    await (await glow.createSeries(largestSeries, 1, 0, boundary.root, "Boundary")).wait();
+    assert.equal(await glow.seriesArtworkOffset(largestSeries), BigInt(rules.APPEARANCE_CAPACITY - 1));
+    assert.equal(await glow.allocatedArtwork(), BigInt(rules.APPEARANCE_CAPACITY));
+    await claim(boundary.entries[0], { seriesId: largestSeries });
+    const tokenId = largestSeries * STRIDE + 1n;
+    const expected = rules.appearanceTraits(rules.APPEARANCE_CAPACITY - 1, rules.DEFAULT_ARTWORK_SEED);
+    assert.equal(await glow.ownerOf(tokenId), recipientAddress);
+    assert.equal(await glow.appearanceOf(tokenId), BigInt(expected.appearanceId));
+    assert.deepEqual(appearanceObject(await glow.appearanceTraits(tokenId)), expected);
+    assert.equal(decodeMetadata(await glow.tokenURI(tokenId)).image, `ipfs://${fixtureCID}/portraits/${expected.appearanceId}.png`);
+    await rejectsWith(() => glow.createSeries(2n, 1, 0, series.root, "Full"), glow, "ArtworkSupplyExhausted");
+  });
+
+  it("matches the exporter's permutation and trait decoding across seeds and radix boundaries", async function () {
+    const rules = await import("../shared/deltax-traits.js");
+    const indexes = [...new Set([0, 1, 4, 5, 6, 34, 35, 36, 39, 40, 319, 320, 2559, 2560, rules.APPEARANCE_CAPACITY - 2, rules.APPEARANCE_CAPACITY - 1,
+      ...Array.from({ length: 40 }, (_, n) => (n * 7919) % rules.APPEARANCE_CAPACITY)])];
+    for (const seed of [ethers.ZeroHash, ethers.MaxUint256.toString(16).padStart(64, "0").replace(/^/, "0x"),
+      rules.DEFAULT_ARTWORK_SEED, ethers.toBeHex(3n << 128n, 32), ethers.toBeHex(18429n << 128n, 32)]) {
+      const renderer = await deploy("DeltaXPortraits", [fixtureCID, rules.APPEARANCE_CAPACITY, seed]);
+      const parameters = rules.permutationParameters(seed);
+      assert.equal(await renderer.multiplier(), BigInt(parameters.multiplier));
+      assert.equal(await renderer.permutationOffset(), BigInt(parameters.offset));
+      assert.equal(parameters.multiplier % 2, 1);
+      assert.notEqual(parameters.multiplier % 3, 0);
+      for (const index of indexes) {
+        const expected = rules.appearanceTraits(index, seed);
+        if (expected.headwear === 7) assert.equal(expected.speciesIndex, 1);
+        assert.equal(await renderer.appearanceId(index), BigInt(expected.appearanceId));
+        assert.deepEqual(appearanceObject(await renderer.appearanceTraits(index)), expected);
+      }
+      await rejectsWith(() => renderer.appearanceId(rules.APPEARANCE_CAPACITY), renderer, "InvalidArtworkIndex");
+      await rejectsWith(() => renderer.appearanceId(ethers.MaxUint256), renderer, "InvalidArtworkIndex");
+    }
+  });
+
+  it("rejects invalid DeltaX editions and restricts partial editions to exported indexes", async function () {
+    const renderer = await deploy("DeltaXPortraits", [fixtureCID, 1, ethers.ZeroHash]);
+    assert.equal(await renderer.appearanceId(0), 0n);
+    assert.equal(await renderer.imageURI(0), `ipfs://${fixtureCID}/portraits/0.png`);
+    await rejectsWith(() => renderer.appearanceId(1), renderer, "InvalidArtworkIndex");
+    for (const size of [0, 18_433]) {
+      await rejectsWith(() => deploy("DeltaXGlowpet", [fixtureCID, size, ethers.ZeroHash]), renderer, "InvalidEditionSize");
+    }
+    for (const invalid of ["", "https://example.com", "bafy" + "a".repeat(54) + '"', `ipfs://${fixtureCID}`]) {
+      await rejectsWith(() => deploy("DeltaXGlowpet", [invalid, 1, ethers.ZeroHash]), renderer, "InvalidDirectoryCID");
     }
   });
 });

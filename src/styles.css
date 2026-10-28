@@ -1494,3 +1494,301 @@ footer {
     align-items: flex-start;
   }
 }
+
+/* ------------------------------------------------------------------------- */
+/* Account, sign-in and sponsored-claim surfaces                              */
+/* ------------------------------------------------------------------------- */
+
+.account-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 190px;
+  padding: 8px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-chip:hover {
+  border-color: rgba(196, 181, 253, 0.55);
+  background: rgba(196, 181, 253, 0.1);
+}
+
+.account-chip.is-loading {
+  color: var(--muted);
+  cursor: default;
+}
+
+.account-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 4px rgba(134, 239, 172, 0.1);
+}
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(4, 3, 8, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.dialog {
+  position: relative;
+  width: min(460px, 100%);
+  max-height: min(86vh, 760px);
+  overflow: auto;
+  padding: 28px;
+  border: 1px solid var(--line-strong);
+  border-radius: 26px;
+  background: #15131e;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+}
+
+.dialog h2 {
+  margin: 4px 0 10px;
+  font-size: 1.45rem;
+}
+
+.dialog-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.35rem;
+  cursor: pointer;
+}
+
+.dialog-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+.dialog-copy {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.dialog-form {
+  display: grid;
+  gap: 10px;
+}
+
+.dialog-form .primary,
+.dialog > .primary {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.dialog-footnote {
+  margin: 18px 0 0;
+  color: var(--faint);
+  font-size: 0.76rem;
+  line-height: 1.55;
+}
+
+.account-secondary {
+  width: 100%;
+  margin-top: 12px;
+  padding: 9px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.84rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.account-secondary:hover {
+  color: var(--text);
+}
+
+.account-details {
+  display: grid;
+  gap: 1px;
+  margin: 18px 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.account-details > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 14px;
+  background: #121019;
+}
+
+.account-details dt {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.account-details dd {
+  margin: 0;
+  max-width: 62%;
+  text-align: right;
+  font-size: 0.84rem;
+  overflow-wrap: anywhere;
+}
+
+.account-address {
+  margin: 8px 0 14px;
+  padding: 10px 12px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  overflow-wrap: anywhere;
+}
+
+.account-wallet-wait {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(251, 191, 36, 0.28);
+  border-radius: 14px;
+  background: rgba(251, 191, 36, 0.07);
+  font-size: 0.82rem;
+}
+
+.account-wallet-wait p {
+  margin: 0 0 8px;
+}
+
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.account-warning {
+  margin: 16px 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.account-warning strong {
+  font-size: 0.84rem;
+}
+
+.account-warning p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.account-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.danger-link {
+  border: 0;
+  background: transparent;
+  color: var(--danger);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.danger-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.claim-progress {
+  margin: 16px 0;
+  padding: 14px 16px;
+  border: 1px solid rgba(196, 181, 253, 0.25);
+  border-radius: 16px;
+  background: rgba(196, 181, 253, 0.07);
+}
+
+.claim-progress.is-done {
+  border-color: rgba(134, 239, 172, 0.35);
+  background: rgba(134, 239, 172, 0.07);
+}
+
+.claim-progress-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.claim-progress-head strong {
+  color: var(--violet);
+}
+
+.claim-progress-head span:last-child {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.claim-progress p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.claim-progress .spinner.small {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}
+
+@media (max-width: 620px) {
+  .dialog {
+    padding: 22px 18px;
+    border-radius: 20px;
+  }
+
+  .account-chip {
+    max-width: 132px;
+  }
+
+  .wallet-area {
+    gap: 6px;
+  }
+}

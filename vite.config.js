@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import { findPublishedCredentials } from "./scripts/credential-safety.mjs";
 
@@ -56,6 +56,21 @@ export function forbidPublishedProofs(projectRoot = root) {
   };
 }
 
-export default defineConfig({
-  plugins: [react(), demoProofServer(), forbidPublishedProofs()],
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, root, "");
+  if (mode === "production" && String(env.VITE_AUTH_MODE ?? "").toLowerCase() === "mock") {
+    throw new Error("VITE_AUTH_MODE=mock is a development-only identity provider and cannot be built for production.");
+  }
+
+  return {
+    plugins: [react(), demoProofServer(), forbidPublishedProofs()],
+    server: {
+      proxy: {
+        "/api": {
+          target: "http://127.0.0.1:3001",
+          changeOrigin: false,
+        },
+      },
+    },
+  };
 });

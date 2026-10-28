@@ -52,8 +52,11 @@ export default function GardenView({
   storageKey,
   onBack,
   onOpenPet,
+  cloud = null,
 }) {
-  const { state, now, dispatch, storageError, storageStatus } = useGardenGame(storageKey);
+  const {
+    state, now, dispatch, storageError, storageStatus, source,
+  } = useGardenGame(storageKey, { cloud });
   const [stage, setStage] = useState(pet ? "farm" : "select");
   const [selectedCropId, setSelectedCropId] = useState(CROPS[0].id);
   const [companionId, setCompanionId] = useState(readCompanionPreference);
@@ -79,6 +82,20 @@ export default function GardenView({
   const canFeed = state.food >= 1 && state.fullness < FEED_FULLNESS_LIMIT;
   const nextMilestone = MILESTONES.find((target) => state.xp < target);
   const isSessionOnly = storageStatus === "memory";
+  const isCloud = source === "cloud";
+  const isOffline = isCloud
+    && (storageStatus === "offline" || storageStatus === "error" || storageStatus === "loading");
+  const saveLabel = isCloud
+    ? storageStatus === "loading"
+      ? "Connecting…"
+      : isOffline
+        ? "Offline · cached"
+        : storageStatus === "saving"
+          ? "Syncing…"
+          : "Synced to your account"
+    : isSessionOnly
+      ? "Session only"
+      : storageStatus === "saving" ? "Saving…" : "Saved on this device";
 
   useEffect(() => {
     actionVersion.current += 1;
@@ -115,6 +132,15 @@ export default function GardenView({
 
   async function act(action, successMessage) {
     if (actionLock.current) return false;
+    if (isOffline) {
+      setFeedback({
+        tone: "error",
+        text: storageStatus === "loading"
+          ? "Connecting to the cloud garden. Try again in a moment."
+          : "The cloud garden is offline. Reconnect before spending or earning rewards.",
+      });
+      return false;
+    }
     actionLock.current = true;
     const version = actionVersion.current;
     setPending(action.type);
@@ -247,8 +273,8 @@ export default function GardenView({
           <div><strong>{state.xp.toLocaleString("en-US")}</strong><span>Bond XP</span></div>
         </div>
         <div className="garden-save-note">
-          <span className={isSessionOnly ? "garden-save-dot is-warning" : "garden-save-dot"} aria-hidden="true" />
-          {isSessionOnly ? "Session only" : storageStatus === "saving" ? "Saving…" : "Saved on this device"}
+          <span className={isSessionOnly || isOffline ? "garden-save-dot is-warning" : "garden-save-dot"} aria-hidden="true" />
+          {saveLabel}
         </div>
       </div>
 
@@ -256,6 +282,7 @@ export default function GardenView({
         <p className="garden-storage-error" role="status">
           {typeof storageError === "string" ? storageError : "Device storage is unavailable."}{" "}
           {isSessionOnly && "Progress may not survive a refresh."}
+          {isOffline && " Spending and reward actions are paused until the cloud garden reconnects."}
         </p>
       )}
 
@@ -272,6 +299,7 @@ export default function GardenView({
         seeds={state.seeds}
         selectedCrop={selectedCrop}
         pending={pending}
+        locked={isOffline}
         reaction={reaction}
         onSelectCrop={setSelectedCropId}
         onBuy={(cropId) => {
@@ -300,7 +328,9 @@ export default function GardenView({
         <section className="garden-companion-panel" aria-labelledby="garden-companion-title">
           <div className="garden-panel-heading">
             <span className="garden-eyebrow">Your companion</span>
-            <span className="garden-mode-pill">{pet ? "On-chain companion" : "Guest practice"}</span>
+            <span className="garden-mode-pill">
+              {pet ? (isCloud ? "Cloud companion" : "On-chain companion") : "Guest practice"}
+            </span>
           </div>
 
           <div className="garden-companion-name">
@@ -316,7 +346,7 @@ export default function GardenView({
             </button>
           )}
           <div className="garden-levels">
-            <div><span>Local care level</span><strong>Lv. {care.level}</strong></div>
+            <div><span>{isCloud ? "Cloud care level" : "Local care level"}</span><strong>Lv. {care.level}</strong></div>
             <div>
               <span>On-chain stage</span>
               <strong>{pet ? stageName(pet.traits.stage) : "Guest · no NFT"}</strong>
@@ -351,7 +381,7 @@ export default function GardenView({
                 type="button"
                 className="garden-feed-button"
                 onClick={() => act({ type: "feed" }, `${pet ? species : "Your guest"} enjoyed that snack. +20 Bond XP.`)}
-                disabled={Boolean(pending) || !canFeed}
+                disabled={Boolean(pending) || isOffline || !canFeed}
                 aria-describedby="garden-feed-reason"
               >
                 <span aria-hidden="true">♡ </span>{pending === "feed" ? "Sharing…" : "Share a snack"}
@@ -363,7 +393,7 @@ export default function GardenView({
                 type="button"
                 className="garden-play-button"
                 onClick={() => act({ type: "play" }, "A happy little moment together. +5 Bond XP.")}
-                disabled={Boolean(pending) || playRemaining > 0}
+                disabled={Boolean(pending) || isOffline || playRemaining > 0}
                 aria-describedby="garden-play-reason"
               >
                 <span aria-hidden="true">✧ </span>{pending === "play" ? "Playing…" : "Play together"}
@@ -376,6 +406,11 @@ export default function GardenView({
             <button type="button" className="garden-pet-link" onClick={onOpenPet}>View on-chain pet <span aria-hidden="true">↗</span></button>
           )}
           {!pet && <p className="garden-guest-note">One practice garden, five little friends. Changing your companion keeps your progress. No wallet needed.</p>}
+          {isCloud && (
+            <p className="garden-guest-note">
+              This garden follows your signed-in account across devices. The server verifies ownership and calculates every reward.
+            </p>
+          )}
         </section>
 
         <div className="garden-growing-column">
@@ -385,7 +420,7 @@ export default function GardenView({
                 <p className="garden-eyebrow">Small things, counted</p>
                 <h2 id="garden-field-notes-title">Field notes</h2>
               </div>
-              <span className="garden-local-badge">This device</span>
+              <span className="garden-local-badge">{isCloud ? "Your account" : "This device"}</span>
             </div>
             <div className="garden-note-stats">
               <div><strong>{state.harvests}</strong><span>Harvests</span></div>
@@ -406,7 +441,7 @@ export default function GardenView({
           <section className="garden-milestones" aria-labelledby="garden-milestone-title">
             <div className="garden-panel-heading">
               <div><p className="garden-eyebrow">Good things take a little care</p><h2 id="garden-milestone-title">Your bond, growing</h2></div>
-              <span className="garden-local-badge">Local progress</span>
+              <span className="garden-local-badge">{isCloud ? "Cloud progress" : "Local progress"}</span>
             </div>
             <div className="garden-milestone-track">
               {MILESTONES.map((target, index) => (
@@ -419,7 +454,9 @@ export default function GardenView({
             </div>
             <p>{nextMilestone ? `${nextMilestone - state.xp} Bond XP to your next care milestone.` : "Every care milestone reached. Keep making little memories."}</p>
             <p className="garden-chain-note">
-              Care milestones are saved on this device. On-chain evolution is not enabled here; your pet’s on-chain stage stays unchanged.
+              {isCloud
+                ? "Care milestones are saved to your account. On-chain evolution is not enabled here; your pet’s on-chain stage stays unchanged."
+                : "Care milestones are saved on this device. On-chain evolution is not enabled here; your pet’s on-chain stage stays unchanged."}
             </p>
           </section>
         </div>
@@ -427,7 +464,11 @@ export default function GardenView({
 
       <div className="garden-footer-note">
         <span aria-hidden="true">⌂</span>
-        <p>A little garden, kept on this device. Garden coins and Bond XP cannot be redeemed or exchanged for tokens. Playing sends no blockchain transactions.</p>
+        <p>
+          {isCloud
+            ? "A little garden, kept with your account. Garden coins and Bond XP cannot be redeemed or exchanged for tokens. Playing sends no blockchain transactions."
+            : "A little garden, kept on this device. Garden coins and Bond XP cannot be redeemed or exchanged for tokens. Playing sends no blockchain transactions."}
+        </p>
       </div>
     </section>
   );

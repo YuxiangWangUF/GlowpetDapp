@@ -3,6 +3,10 @@ dist/
 .env
 .env.*
 !.env.example
+server/.env
+server/.env.*
+!server/.env.example
+server/data/
 .DS_Store
 
 # Generated series data contains claim secrets. Never commit it.
@@ -18,3 +22,8 @@ public/proofs/
 artifacts/
 cache/
 .glowpet-local-demo/
+
+# Separate hosting checkout and generated upload packages are not source.
+/sites/
+/发布包/
+/output/releases/

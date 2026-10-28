@@ -4,8 +4,44 @@
   "approvedOn": "2026-10-20",
   "approvalScope": "base_character_visuals",
   "visualDirection": "A / Soft & Sweet",
-  "runtimeStatus": "web_preview_with_idle_animation",
-  "tokenAssignmentRulesFrozen": false,
+  "runtimeStatus": "web_preview_with_idle_animation_and_local_unique_nft_export",
+  "tokenAssignmentRulesFrozen": true,
+  "tokenAssignmentRuleScope": "deltax-unique-v2 implementation; deployment parameters become immutable when a new contract is deployed",
+  "nftImplementation": {
+    "status": "implemented_locally_not_uploaded_or_deployed",
+    "contract": "contracts/DeltaXGlowpet.sol",
+    "rulesVersion": "deltax-unique-v2",
+    "storage": "immutable_ipfs_directory_reference_to_complete_transparent_pngs",
+    "individualPortraitUniqueness": true,
+    "uniquenessScope": "one contract edition across all its series; not across independent deployments",
+    "combinationCapacity": 18432,
+    "combinationDimensions": {
+      "species": 5,
+      "headwear": 8,
+      "neckwear": 8,
+      "palette": 8,
+      "motif": 8
+    },
+    "defaultLocalEditionSize": 100,
+    "editionParametersFrozenAtDeployment": [
+      "directoryCID",
+      "editionSize",
+      "artworkSeed"
+    ],
+    "assignment": "permanent non-reusable series reservations plus a bijective seed-based permutation",
+    "generator": "scripts/generate-deltax-edition.mjs",
+    "publicManifest": "output/deltax-unique-v2/publish/collection.json",
+    "visiblePixelAndTraitDeduplication": true,
+    "imagePath": "ipfs://<actual-directory-CID>/portraits/<appearanceId>.png",
+    "sourceBaseImagesUnchanged": true,
+    "deploymentGuide": "docs/DELTAX_NFT_ART.md",
+    "headwearCompatibility": {
+      "sharedHeadwear": 7,
+      "catHeadwear": 8,
+      "lionCapExclusiveSpecies": "cat"
+    },
+    "approvedLionCapSource": "public/pets/deltax-wardrobe-v2/cat-lion-cap.png"
+  },
   "assetPathsRelativeTo": "repository_root",
   "references": {
     "family": "output/glowpet-concepts/A-family-v1.png",
@@ -82,7 +118,7 @@
     }
   ],
   "proposedTraitPlan": {
-    "status": "proposal_not_runtime",
+    "status": "future_base_character_variations_not_implemented; current unique edition uses the separate accessory traits in nftImplementation",
     "fixedByTokenAndRulesVersion": [
       "基础物种",
       "物种专属柔和毛色",
@@ -104,7 +140,7 @@
       "确定性只在同一规则版本及系列身份范围内承诺",
       "新增规则不可重新解释已有 NFT 的物种或固有特质",
       "肉眼差异与视觉碰撞率需批量生成和缩略图验收",
-      "稀有权重及限量数量尚未确定"
+      "当前独特配饰版次记录真实频次，不使用主观稀有等级；未来加权规则另行设计"
     ]
   },
   "runtimeAssets": {
@@ -117,6 +153,7 @@
     ],
     "selectionIsCosmetic": true,
     "onChainRendererUpdated": false,
+    "onChainRendererStatus": "these original web preview assets are unchanged; unique NFT contract code exists separately but is not deployed",
     "idleAnimation": {
       "breathingSeconds": 4.8,
       "swaySeconds": 9.6,

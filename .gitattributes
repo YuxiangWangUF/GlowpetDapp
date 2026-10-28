@@ -1,0 +1,10 @@
+* text=auto
+
+# Frozen artwork provenance is checked against the exact published bytes.
+/output/deltax-unique-v1/** -text
+/output/deltax-unique-v2/** -text
+*.png -text
+*.jpg -text
+*.jpeg -text
+*.webp -text
+*.zip -text

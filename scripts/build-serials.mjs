@@ -498,7 +498,9 @@ function main() {
         secret: c.secret,
         proof: proof.join(","),
       });
-      const claimUrl = `${appUrl.replace(/\/$/, "")}/?${params.toString()}`;
+      // The credential stays out of the HTTP request path. A fragment is not
+      // encryption, but browsers do not send it to the server, CDN or Referer.
+      const claimUrl = `${appUrl.replace(/\/$/, "")}/#claim=${params.toString()}`;
 
       writeJson(path.join(splitDir, `${serial}.json`), {
         v: PROTOCOL_VERSION,

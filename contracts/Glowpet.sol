@@ -114,6 +114,7 @@ contract Glowpet is ERC721, EIP712, Ownable {
         if (serialRoot == bytes32(0)) revert InvalidConfig();
         if (bytes(label).length > MAX_LABEL_BYTES) revert InvalidConfig();
 
+        _reserveArtwork(seriesId, maxSupply);
         _series[seriesId] = Series(maxSupply, 0, true, salt, serialRoot, label);
         emit SeriesCreated(seriesId, maxSupply, serialRoot, label);
     }
@@ -226,7 +227,7 @@ contract Glowpet is ERC721, EIP712, Ownable {
         });
     }
 
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         _requireOwned(tokenId);
 
         Traits memory t = _traits(tokenId);
@@ -253,7 +254,11 @@ contract Glowpet is ERC721, EIP712, Ownable {
     // Trait derivation (must match the JS reference generator)
     // ------------------------------------------------------------------
 
-    function _traits(uint256 tokenId) internal pure returns (Traits memory t) {
+    /// @dev Derived editions may reserve artwork before a series is created.
+    ///      A closed series never calls this hook again or releases its reservation.
+    function _reserveArtwork(uint256, uint64) internal virtual {}
+
+    function _traits(uint256 tokenId) internal view virtual returns (Traits memory t) {
         uint256 h = uint256(keccak256(abi.encode(tokenId)));
 
         t.species = uint8(h >> 128) % 14;

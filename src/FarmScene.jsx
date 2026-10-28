@@ -76,6 +76,7 @@ export default function FarmScene({
   seeds,
   selectedCrop,
   pending,
+  locked = false,
   reaction,
   onSelectCrop,
   onBuy,
@@ -97,6 +98,7 @@ export default function FarmScene({
   const [heldSeedId, setHeldSeedId] = useState(null);
   const [pickingSeed, setPickingSeed] = useState(null);
   const [pickupMoment, setPickupMoment] = useState(null);
+  const busy = Boolean(pending) || locked;
   const [consumeMoment, setConsumeMoment] = useState(null);
   const [shopMessage, setShopMessage] = useState(null);
   const cabinetTrigger = useRef(null);
@@ -175,7 +177,7 @@ export default function FarmScene({
   }
 
   function buySeed(crop) {
-    if (pending) return;
+    if (busy) return;
     const stock = seeds?.[crop.id] ?? 0;
     if (stock >= SEED_CAP) {
       setShopMessage({ tone: "error", text: `The ${crop.name} shelf is full.` });
@@ -336,7 +338,7 @@ export default function FarmScene({
       ? (index === 2 ? -26 : 26)
       : (index === 0 ? 13 : index === 2 ? -13 : 15);
     // With a seed in hand, walking onto an empty patch plants it immediately.
-    const autoPlant = !pending && plots[index] === null
+    const autoPlant = !busy && plots[index] === null
       && heldSeedId === selectedCrop.id
       && (seeds?.[selectedCrop.id] ?? 0) > 0;
     walkTo(spot.x + offset, spot.y + (compact ? 12 : 15), {
@@ -449,7 +451,7 @@ export default function FarmScene({
                     if (empty) openCabinet(event);
                     else if (!held) pickUpSeed(crop.id);
                   }}
-                  disabled={held || Boolean(pending)}
+                  disabled={held || busy}
                   aria-busy={pickingSeed === crop.id}
                   aria-label={empty
                     ? `Buy ${crop.name} seeds. Out of stock.`
@@ -636,7 +638,7 @@ export default function FarmScene({
                   aria-label={empty
                     ? `${crop.name}: out of stock. Open the cabinet to buy seeds.`
                     : `${crop.name}: ${stock} in stock. Take one from the cabinet.`}
-                  disabled={held || Boolean(pending)}
+                  disabled={held || busy}
                   onClick={(event) => takeOrShop(crop, event)}
                 >
                   <span className="farm-seed-icon" aria-hidden="true">
@@ -690,9 +692,9 @@ export default function FarmScene({
               type="button"
               className="farm-action-button"
               onClick={() => onHarvest(activePlot)}
-              disabled={Boolean(pending)}
+              disabled={busy}
             >
-              {pending ? "Harvesting…" : `Harvest ${active.crop?.name ?? "crop"}`}
+              {pending ? "Harvesting…" : locked ? "Offline" : `Harvest ${active.crop?.name ?? "crop"}`}
             </button>
           )}
         </div>
@@ -753,7 +755,7 @@ export default function FarmScene({
                     key={crop.id}
                     className="seed-packet"
                     onClick={() => buySeed(crop)}
-                    disabled={Boolean(pending) || full || !affordable}
+                    disabled={busy || full || !affordable}
                     aria-label={`Buy 1 ${crop.name} seed for ${price}. ${stock} in stock.`}
                   >
                     <span className="seed-packet-head">

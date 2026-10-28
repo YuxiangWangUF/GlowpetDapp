@@ -6,25 +6,45 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:visitor": "node scripts/build-visitor.mjs",
+    "release:edgeone": "node scripts/package-edgeone.mjs",
     "preview": "vite preview",
     "serials": "node scripts/build-serials.mjs",
     "serials:demo": "node scripts/build-serials.mjs --supply 100 --out .glowpet-demo --split 1-100 --split-dir .glowpet-demo/proofs",
     "contracts:compile": "node scripts/compile-contracts.mjs",
+    "art:generate": "node scripts/generate-deltax-edition.mjs",
+    "art:verify": "node scripts/generate-deltax-edition.mjs --verify output/deltax-unique-v2/publish/collection.json",
+    "dev:server": "node server/index.js",
+    "dev:worker": "node server/worker-entry.js",
+    "db:migrate": "node server/db/migrate-cli.js",
+    "local:node": "hardhat node --config hardhat.local.config.cjs --no-compile",
+    "local:deploy": "node scripts/deploy-local.mjs",
     "test:unit": "node --test test/*.test.mjs tests/*.test.mjs",
     "test:contracts": "npm run contracts:compile && hardhat test --no-compile test/contracts.cjs",
-    "test": "npm run test:unit && npm run test:contracts"
+    "test:server": "node --test server/test/*.test.mjs",
+    "test:integration": "node --test server/test/*.integration.test.mjs",
+    "test": "npm run test:unit && npm run test:contracts && npm run test:server"
   },
   "dependencies": {
+    "@fastify/cors": "^11.3.1",
+    "@fastify/rate-limit": "^11.2.1",
+    "@privy-io/node": "^0.36.0",
+    "@privy-io/react-auth": "^3.51.0",
     "dompurify": "^3.4.17",
+    "dotenv": "^18.0.9",
     "ethers": "^6.15.0",
+    "fastify": "^5.12.7",
+    "pg": "^8.23.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.7.0",
-    "vite": "^6.4.4",
+    "@electric-sql/pglite": "^0.5.11",
     "@openzeppelin/contracts": "5.6.1",
+    "@vitejs/plugin-react": "^4.7.0",
     "hardhat": "2.29.1",
-    "solc": "0.8.30"
+    "sharp": "0.35.5",
+    "solc": "0.8.30",
+    "vite": "^6.4.4"
   }
 }

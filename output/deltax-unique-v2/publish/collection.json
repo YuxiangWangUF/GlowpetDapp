@@ -1,0 +1,4706 @@
+{
+  "schemaVersion": 1,
+  "status": "export_complete_not_uploaded_or_deployed",
+  "artworkVersion": "deltax-unique-v2",
+  "editionSize": 100,
+  "seed": "0x6c8e9cf570932bd1a6f41d05f44b13c79c37f1ce9b4b85ee719432a648382b01",
+  "imageSize": 1254,
+  "capacity": 18432,
+  "rendererVersion": "deltax-chinese-wardrobe-v2",
+  "permutation": {
+    "multiplier": 967,
+    "offset": 13057
+  },
+  "uniquenessScope": "one contract / edition, across all its series",
+  "rendererSha256": "efe82ee5bc08631b0c222f2c2e2914c267911d18e4a9ead7293c347623660e45",
+  "rulesSha256": "fbb8d9aafaaf1e8bf9ced18dc5580c9a6e8a7a525ee18eb2b4e2b62a9afa91f7",
+  "renderer": {
+    "sharp": "0.35.5",
+    "vips": "8.18.7"
+  },
+  "sources": [
+    {
+      "file": "rabbit.png",
+      "sha256": "22d1f5985c7e54f4358068365cb727e63701eeeaae67d18f682a2c701ecf4a14",
+      "bytes": 1725164
+    },
+    {
+      "file": "cat.png",
+      "sha256": "527c02ea159d2f588a72c996130c56f360c50afe0c5426efbcc3843cf166dbba",
+      "bytes": 991357,
+      "lionCap": {
+        "file": "deltax-wardrobe-v2/cat-lion-cap.png",
+        "sha256": "6d4b01b6a5868d828cc202d26115cb46a8d97bc1a6632b0c3eb3ff808ee941ba",
+        "bytes": 1365485
+      }
+    },
+    {
+      "file": "fox.png",
+      "sha256": "70d8059a0927b30ab207cb23638967890a0d41d307ee55e589f17c206a334404",
+      "bytes": 907391
+    },
+    {
+      "file": "mouse.png",
+      "sha256": "02d509465f35f4fada234405685cbb93401e7496e686d33176d36e38aca713e0",
+      "bytes": 779296
+    },
+    {
+      "file": "sheep.png",
+      "sha256": "0a6f803f9dcd186459ce7a215af6e84e62f67d3056af494f8aca378a6d297d09",
+      "bytes": 646304
+    }
+  ],
+  "uniqueTraitCount": 100,
+  "uniquePixelCount": 100,
+  "frequencies": {
+    "Species": {
+      "Rabbit": 20,
+      "Cat": 23,
+      "Fox": 21,
+      "Mouse": 21,
+      "Sheep": 15
+    },
+    "Headwear": {
+      "Jade Hairpin": 14,
+      "Plum Blossom": 14,
+      "Osmanthus Bloom": 14,
+      "Silk Bow": 14,
+      "Butterfly Clip": 14,
+      "Cloud Comb": 14,
+      "Lotus Crown": 14,
+      "Lion Cap": 2
+    },
+    "Neckwear": {
+      "Chinese Knot": 12,
+      "Silk Scarf": 14,
+      "Cloud Collar": 13,
+      "Sachet": 12,
+      "Jade Pendant": 11,
+      "Porcelain Pendant": 15,
+      "Brocade Collar": 12,
+      "Longevity Lock": 11
+    },
+    "Palette": {
+      "Cinnabar": 13,
+      "Celadon": 12,
+      "Indigo": 12,
+      "Lotus": 12,
+      "Amber": 13,
+      "Jade": 12,
+      "Wisteria": 13,
+      "Pearl": 13
+    },
+    "Motif": {
+      "Cloud": 14,
+      "Lotus": 11,
+      "Plum": 10,
+      "Bamboo": 15,
+      "Waves": 10,
+      "Ruyi": 13,
+      "Moon": 16,
+      "Koi": 11
+    }
+  },
+  "assets": [
+    {
+      "globalIndex": 0,
+      "file": "portraits/14505.png",
+      "traits": {
+        "appearanceId": 14505,
+        "speciesIndex": 0,
+        "headwear": 5,
+        "neckwear": 2,
+        "palette": 5,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Jade"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "14505"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:5:2:5:5",
+      "bytes": 2097510,
+      "sha256": "f2d7d702280b97b090eb8d47428ff1b3ac60671eac9ecffde49201dfa4863a0b",
+      "pixelSha256": "5b9f9896000cb49d2817391c8669e7124262e8cd5a9f6513bb7626c5652e2dba"
+    },
+    {
+      "globalIndex": 1,
+      "file": "portraits/15580.png",
+      "traits": {
+        "appearanceId": 15580,
+        "speciesIndex": 0,
+        "headwear": 4,
+        "neckwear": 5,
+        "palette": 0,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "15580"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:4:5:0:6",
+      "bytes": 2152847,
+      "sha256": "046f4004f70f0db910430480edd46ce33cb01beaac3f5e231aafbf063ea00b3e",
+      "pixelSha256": "6fe041b878cdbc47abf160e0a11c685bc87b86bf047174f5ac77fc1414154255"
+    },
+    {
+      "globalIndex": 2,
+      "file": "portraits/16655.png",
+      "traits": {
+        "appearanceId": 16655,
+        "speciesIndex": 0,
+        "headwear": 3,
+        "neckwear": 0,
+        "palette": 4,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Chinese Knot"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "16655"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:3:0:4:6",
+      "bytes": 2136540,
+      "sha256": "9e8600dc3121ce3d64d07bf69a113848e0bfabbeef2cf8912b82b7c1eb7dc628",
+      "pixelSha256": "daf35133c9496a6646e1c60fe504697aec5b65ada67b7350242a64f33fce4e58"
+    },
+    {
+      "globalIndex": 3,
+      "file": "portraits/17730.png",
+      "traits": {
+        "appearanceId": 17730,
+        "speciesIndex": 0,
+        "headwear": 2,
+        "neckwear": 3,
+        "palette": 7,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Sachet"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "17730"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:2:3:7:6",
+      "bytes": 2172912,
+      "sha256": "296014d5646f9b4937bfa773117588cb462bfca7be168813597d763d03ea0f96",
+      "pixelSha256": "dfc672b394d3f49f6a87236df07db07eb6f7bc6966714ba9fbdeeb32b0602e2c"
+    },
+    {
+      "globalIndex": 4,
+      "file": "portraits/18805.png",
+      "traits": {
+        "appearanceId": 18805,
+        "speciesIndex": 0,
+        "headwear": 1,
+        "neckwear": 6,
+        "palette": 2,
+        "motif": 7
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Brocade Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Indigo"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Koi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "18805"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:1:6:2:7",
+      "bytes": 2134269,
+      "sha256": "3cf774fe3836f486a7848a4e49198152e5b8394990c55a849942f4b1fde5ad31",
+      "pixelSha256": "bafa3f1e90fc1d3be39055b716163760d91feff5c48a7c28398d888c6561db00"
+    },
+    {
+      "globalIndex": 5,
+      "file": "portraits/19880.png",
+      "traits": {
+        "appearanceId": 19880,
+        "speciesIndex": 0,
+        "headwear": 0,
+        "neckwear": 1,
+        "palette": 6,
+        "motif": 7
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Koi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "19880"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:0:1:6:7",
+      "bytes": 2152220,
+      "sha256": "e4144e425502cc66bd55786c00483e3b5d150e9aa8094597bac8c4fafbf1d244",
+      "pixelSha256": "bc61fed0b6990298a5b8c024ba0b7137de997c873f0dfcea49ad8f25379e5e37"
+    },
+    {
+      "globalIndex": 6,
+      "file": "portraits/471.png",
+      "traits": {
+        "appearanceId": 471,
+        "speciesIndex": 1,
+        "headwear": 6,
+        "neckwear": 3,
+        "palette": 1,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Sachet"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Celadon"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "471"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:6:3:1:0",
+      "bytes": 1240128,
+      "sha256": "583fcf752bc5334b5418b3451ecbb5f56852e62fb1460bf94873a263f065e943",
+      "pixelSha256": "070b4b6fd1c6ce1d4dc75085f920f7ae6c246d06b63ad2bc5564d97c196e7914"
+    },
+    {
+      "globalIndex": 7,
+      "file": "portraits/1546.png",
+      "traits": {
+        "appearanceId": 1546,
+        "speciesIndex": 1,
+        "headwear": 5,
+        "neckwear": 6,
+        "palette": 4,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Brocade Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "1546"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:5:6:4:0",
+      "bytes": 1193271,
+      "sha256": "da04af4cd30e99b568f16aca3c2141317ba9abce4d13ed40c8af1ade373d0482",
+      "pixelSha256": "6cd6904b8b5a19e357db6254c832ebd585f0be019b69cc1736b9a875323bda03"
+    },
+    {
+      "globalIndex": 8,
+      "file": "portraits/2621.png",
+      "traits": {
+        "appearanceId": 2621,
+        "speciesIndex": 1,
+        "headwear": 4,
+        "neckwear": 1,
+        "palette": 0,
+        "motif": 1
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "2621"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:4:1:0:1",
+      "bytes": 1215866,
+      "sha256": "86fe934751f26d42cc7daad2a96e163b26f31bbc633c828017f41aa552143717",
+      "pixelSha256": "8b01a5cab5dda485c223e1c2a3682e043d0a7cbe0e3b3151cbf3a7a3cb02576c"
+    },
+    {
+      "globalIndex": 9,
+      "file": "portraits/3696.png",
+      "traits": {
+        "appearanceId": 3696,
+        "speciesIndex": 1,
+        "headwear": 3,
+        "neckwear": 4,
+        "palette": 3,
+        "motif": 1
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Jade Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "3696"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:3:4:3:1",
+      "bytes": 1216748,
+      "sha256": "e7982c6d80106ccc08b7e1666ac7a6e20848ba00b685ea492f524d33fb067403",
+      "pixelSha256": "511b11a877b25dc76c2f8ddd51a8f3fba7b5daad5498606aebb4980d349cd174"
+    },
+    {
+      "globalIndex": 10,
+      "file": "portraits/4771.png",
+      "traits": {
+        "appearanceId": 4771,
+        "speciesIndex": 1,
+        "headwear": 2,
+        "neckwear": 7,
+        "palette": 6,
+        "motif": 1
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Longevity Lock"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "4771"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:2:7:6:1",
+      "bytes": 1227589,
+      "sha256": "ef3eedc89016b49f9a4191fb8e972d3d86c1b60f1c6d4527cfd82cbf4b13502b",
+      "pixelSha256": "c8a6186171d76b4af29bec9727bbf39c15c05f27607cf55da63dd3e8fdcf57f4"
+    },
+    {
+      "globalIndex": 11,
+      "file": "portraits/5846.png",
+      "traits": {
+        "appearanceId": 5846,
+        "speciesIndex": 1,
+        "headwear": 1,
+        "neckwear": 2,
+        "palette": 2,
+        "motif": 2
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Indigo"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Plum"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "5846"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:1:2:2:2",
+      "bytes": 1200220,
+      "sha256": "42dd5804960477a620524ef7a233acf937ea3ca9c1a8b8382b721364bd302f56",
+      "pixelSha256": "b3d334658b136a196273497f8affaf397334978f04ff0bef7bd59d6a70a1cd08"
+    },
+    {
+      "globalIndex": 12,
+      "file": "portraits/6921.png",
+      "traits": {
+        "appearanceId": 6921,
+        "speciesIndex": 1,
+        "headwear": 0,
+        "neckwear": 5,
+        "palette": 5,
+        "motif": 2
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Jade"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Plum"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "6921"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:0:5:5:2",
+      "bytes": 1235656,
+      "sha256": "8c08874c21f6891ef4f57ba117ea654b9236a049df61330df61095bfa2daaf0a",
+      "pixelSha256": "f81914287242479b9831bc54d76e56ed781ec63d8a608fb3cc21c884f10143d6"
+    },
+    {
+      "globalIndex": 13,
+      "file": "portraits/7992.png",
+      "traits": {
+        "appearanceId": 7992,
+        "speciesIndex": 2,
+        "headwear": 6,
+        "neckwear": 7,
+        "palette": 0,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Longevity Lock"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "7992"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:6:7:0:3",
+      "bytes": 1161618,
+      "sha256": "9bfd6537af909785da72728d33bdc8be5d759cb70ea5488f6b6af7bc30f673c2",
+      "pixelSha256": "3741c3f7cf4a21bd9d41a68fe43941dc81bd840bcee602f920173d05e8f39486"
+    },
+    {
+      "globalIndex": 14,
+      "file": "portraits/9067.png",
+      "traits": {
+        "appearanceId": 9067,
+        "speciesIndex": 2,
+        "headwear": 5,
+        "neckwear": 2,
+        "palette": 4,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "9067"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:5:2:4:3",
+      "bytes": 1134606,
+      "sha256": "dfab5c2bdfcac8b8d4a0ed323f30d812a0b78386585b56762cff4f86220de6b1",
+      "pixelSha256": "b74f5b1b826f238c401eb394182b1eedac6b5c4231133c588d0066062bae6841"
+    },
+    {
+      "globalIndex": 15,
+      "file": "portraits/10142.png",
+      "traits": {
+        "appearanceId": 10142,
+        "speciesIndex": 2,
+        "headwear": 4,
+        "neckwear": 5,
+        "palette": 7,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "10142"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:4:5:7:3",
+      "bytes": 1159360,
+      "sha256": "3fbb426af3156a4473e86591c450cf2e22767cddc19c49564633aa8f8876a0ff",
+      "pixelSha256": "1b7e349d3ce154c67ab2b6143d3119c75ba8f0a3c9f03b2f628883f5a75b9dbd"
+    },
+    {
+      "globalIndex": 16,
+      "file": "portraits/11217.png",
+      "traits": {
+        "appearanceId": 11217,
+        "speciesIndex": 2,
+        "headwear": 3,
+        "neckwear": 0,
+        "palette": 3,
+        "motif": 4
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Chinese Knot"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Waves"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "11217"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:3:0:3:4",
+      "bytes": 1150724,
+      "sha256": "dc283f0e722a0f5218bf2bdbf29f7e37dd32df0a9c0b617bc93ce01f011e9c1e",
+      "pixelSha256": "f8dfd24203c6574d1a96a8264001ee7f971f79f1d1d1ffc494ab8c1811fd749d"
+    },
+    {
+      "globalIndex": 17,
+      "file": "portraits/12292.png",
+      "traits": {
+        "appearanceId": 12292,
+        "speciesIndex": 2,
+        "headwear": 2,
+        "neckwear": 3,
+        "palette": 6,
+        "motif": 4
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Sachet"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Waves"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "12292"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:2:3:6:4",
+      "bytes": 1181307,
+      "sha256": "691dbd98ee4befe95b31aac51f59903ed35ad4f9d21f2ad76e9d109a39401e8f",
+      "pixelSha256": "fe1dc4fa03d38deb3cca89111670badd5c3bca13554a2aa54fd4b692e4614b10"
+    },
+    {
+      "globalIndex": 18,
+      "file": "portraits/13367.png",
+      "traits": {
+        "appearanceId": 13367,
+        "speciesIndex": 2,
+        "headwear": 1,
+        "neckwear": 6,
+        "palette": 1,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Brocade Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Celadon"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "13367"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:1:6:1:5",
+      "bytes": 1152013,
+      "sha256": "1bd2202749e1d9dea90bc43e1ccc064c94e429405146a222864ae8f8c9837441",
+      "pixelSha256": "991560fbc3178753a61ce0ada64f7f7af0d6a5753da9c6744cf851ffb02ddc89"
+    },
+    {
+      "globalIndex": 19,
+      "file": "portraits/14442.png",
+      "traits": {
+        "appearanceId": 14442,
+        "speciesIndex": 2,
+        "headwear": 0,
+        "neckwear": 1,
+        "palette": 5,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Jade"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "14442"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:0:1:5:5",
+      "bytes": 1166778,
+      "sha256": "cb5826fe41e7dcf223a35de91030e54e45ffefacca91ae4ff9261fa359cbdb4a",
+      "pixelSha256": "a70d3a7cb68048e1dd09728b01a0cc5838c1ca980265cf632a3ff5ab8164ffa6"
+    },
+    {
+      "globalIndex": 20,
+      "file": "portraits/15513.png",
+      "traits": {
+        "appearanceId": 15513,
+        "speciesIndex": 3,
+        "headwear": 6,
+        "neckwear": 3,
+        "palette": 0,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Sachet"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "15513"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:6:3:0:6",
+      "bytes": 984026,
+      "sha256": "6226a4fb0ce680b6f33e3b4337d9a33125f98ca5095d9ca2864818794a3ffc23",
+      "pixelSha256": "9b36879a973d7706520d3bc14345f7dde006044993937972c48b6ce14f4984b3"
+    },
+    {
+      "globalIndex": 21,
+      "file": "portraits/16588.png",
+      "traits": {
+        "appearanceId": 16588,
+        "speciesIndex": 3,
+        "headwear": 5,
+        "neckwear": 6,
+        "palette": 3,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Brocade Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "16588"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:5:6:3:6",
+      "bytes": 950576,
+      "sha256": "89fee0e91b41b705b1ada1c56d9964bd5846eb77187834908ab6fbfc00b04d80",
+      "pixelSha256": "d4064e58b0ae803e1abdb0fede5a4a436920ad68f7d59503e9cd030058667680"
+    },
+    {
+      "globalIndex": 22,
+      "file": "portraits/17663.png",
+      "traits": {
+        "appearanceId": 17663,
+        "speciesIndex": 3,
+        "headwear": 4,
+        "neckwear": 1,
+        "palette": 7,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "17663"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:4:1:7:6",
+      "bytes": 972182,
+      "sha256": "bcfc2e1ca26949233862edb40a21cffddfe04d2148f53998bad4f65cacaad5c4",
+      "pixelSha256": "8748fe5853dab879107fba588061f28e798fa13cbc2b9b78b31c1afd66e7578e"
+    },
+    {
+      "globalIndex": 23,
+      "file": "portraits/18738.png",
+      "traits": {
+        "appearanceId": 18738,
+        "speciesIndex": 3,
+        "headwear": 3,
+        "neckwear": 4,
+        "palette": 2,
+        "motif": 7
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Jade Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Indigo"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Koi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "18738"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:3:4:2:7",
+      "bytes": 981362,
+      "sha256": "f67336ec67a52ccbdb69f6c7949752e0a503f3a9d609b0030df7e49d1ea9ae42",
+      "pixelSha256": "e092185891799e4a568f13a8951863f8815637e2d1d3309c1c31138d4a4d9e6f"
+    },
+    {
+      "globalIndex": 24,
+      "file": "portraits/19813.png",
+      "traits": {
+        "appearanceId": 19813,
+        "speciesIndex": 3,
+        "headwear": 2,
+        "neckwear": 7,
+        "palette": 5,
+        "motif": 7
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Longevity Lock"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Jade"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Koi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "19813"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:2:7:5:7",
+      "bytes": 985228,
+      "sha256": "6cbd4b9583798704cda80c6da6ea9e73701272e4329583fca2f0c370d1aa973b",
+      "pixelSha256": "fafaef8003ca84470f29294394427b3538b92a0ab4394ad31618c9541643b5a4"
+    },
+    {
+      "globalIndex": 25,
+      "file": "portraits/408.png",
+      "traits": {
+        "appearanceId": 408,
+        "speciesIndex": 3,
+        "headwear": 1,
+        "neckwear": 2,
+        "palette": 1,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Celadon"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "408"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:1:2:1:0",
+      "bytes": 960074,
+      "sha256": "7fbd20053df30efdf4416bdac4e056eba594f0f89534d63c88a492f3b6255e0e",
+      "pixelSha256": "db398038fc7ed9d037ffd17204c7abdb5cab55746169b697410c5305084ef5bb"
+    },
+    {
+      "globalIndex": 26,
+      "file": "portraits/1483.png",
+      "traits": {
+        "appearanceId": 1483,
+        "speciesIndex": 3,
+        "headwear": 0,
+        "neckwear": 5,
+        "palette": 4,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "1483"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:0:5:4:0",
+      "bytes": 989479,
+      "sha256": "fb0a5561f32e12bb4894aee0592532d549ee812fdd8a8818aca18445f2187c60",
+      "pixelSha256": "7d710921130a97d3143f21f9cb5c28ea577b94e98a126e3035f8ebd77760ef74"
+    },
+    {
+      "globalIndex": 27,
+      "file": "portraits/2554.png",
+      "traits": {
+        "appearanceId": 2554,
+        "speciesIndex": 4,
+        "headwear": 6,
+        "neckwear": 7,
+        "palette": 7,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Longevity Lock"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "2554"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:6:7:7:0",
+      "bytes": 795150,
+      "sha256": "14a35bca4639c57875ac74b3911d4d14447d01e3bb2f8ac845023d5a60b16f40",
+      "pixelSha256": "3fb59d8e4f3dbabe34a9de4f35e4917b7b0a094d2e1e199570b44c2934eb731e"
+    },
+    {
+      "globalIndex": 28,
+      "file": "portraits/3629.png",
+      "traits": {
+        "appearanceId": 3629,
+        "speciesIndex": 4,
+        "headwear": 5,
+        "neckwear": 2,
+        "palette": 3,
+        "motif": 1
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "3629"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:5:2:3:1",
+      "bytes": 771147,
+      "sha256": "df2a0de9df26ed6233b95266a29f3213a24f120539818f8a7576dfd7b6dcc2eb",
+      "pixelSha256": "3e12020b8f519ccd81f735dde8be7582248e72b9295a46382845c88b691cee40"
+    },
+    {
+      "globalIndex": 29,
+      "file": "portraits/4704.png",
+      "traits": {
+        "appearanceId": 4704,
+        "speciesIndex": 4,
+        "headwear": 4,
+        "neckwear": 5,
+        "palette": 6,
+        "motif": 1
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "4704"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:4:5:6:1",
+      "bytes": 806909,
+      "sha256": "993a704a88cdf48574285e2b86c2568bc24d2321d47d420b6546f535ed3cff2b",
+      "pixelSha256": "b79ab98b0a64935d6d4239e05b94809e31887643a30d5efc145f6d7ac19f433c"
+    },
+    {
+      "globalIndex": 30,
+      "file": "portraits/5779.png",
+      "traits": {
+        "appearanceId": 5779,
+        "speciesIndex": 4,
+        "headwear": 3,
+        "neckwear": 0,
+        "palette": 2,
+        "motif": 2
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Chinese Knot"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Indigo"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Plum"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "5779"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:3:0:2:2",
+      "bytes": 801982,
+      "sha256": "f89c94015e093432e843d83396424b53bd76dd98655f623974d6a1dd1f7f983a",
+      "pixelSha256": "6990736e38f270549db787f4aa5334f4f643d4de8709b5397aaef66280f9c887"
+    },
+    {
+      "globalIndex": 31,
+      "file": "portraits/6854.png",
+      "traits": {
+        "appearanceId": 6854,
+        "speciesIndex": 4,
+        "headwear": 2,
+        "neckwear": 3,
+        "palette": 5,
+        "motif": 2
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Sachet"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Jade"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Plum"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "6854"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:2:3:5:2",
+      "bytes": 826643,
+      "sha256": "6b6fcce6ec3c818c730f849b09ffbd7a54457c0ad13ded600226af78c2635606",
+      "pixelSha256": "2476f6aa413f7794f1a4aa8cd4157555f8d7a15030f8ba6c24212a911bd9644b"
+    },
+    {
+      "globalIndex": 32,
+      "file": "portraits/7929.png",
+      "traits": {
+        "appearanceId": 7929,
+        "speciesIndex": 4,
+        "headwear": 1,
+        "neckwear": 6,
+        "palette": 0,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Brocade Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "7929"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:1:6:0:3",
+      "bytes": 800288,
+      "sha256": "9c11913e98b9217abc4fd0f1f110d4f3211a032c63e0cdc8b485684bed7e487c",
+      "pixelSha256": "c0a7fef00fc487a3553f948f2e6868baedf7b8aef0eebef44dfb1037b0bc3f26"
+    },
+    {
+      "globalIndex": 33,
+      "file": "portraits/9004.png",
+      "traits": {
+        "appearanceId": 9004,
+        "speciesIndex": 4,
+        "headwear": 0,
+        "neckwear": 1,
+        "palette": 4,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "9004"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:0:1:4:3",
+      "bytes": 807344,
+      "sha256": "7dc8452f7615c6437f2206445a184b8c82c047534528613247d102c4643be347",
+      "pixelSha256": "b0a09b1b852dd59212951ae53562bc7b8ad1340a7c1ba045ca6f9336fa129b6c"
+    },
+    {
+      "globalIndex": 34,
+      "file": "portraits/10076.png",
+      "traits": {
+        "appearanceId": 10076,
+        "speciesIndex": 1,
+        "headwear": 7,
+        "neckwear": 3,
+        "palette": 7,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lion Cap"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Sachet"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "10076"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:7:3:7:3",
+      "bytes": 1826832,
+      "sha256": "8f4e8eb015cc264e3dad2359213f7e22a70094a927ca923c7cb603769f213952",
+      "pixelSha256": "f00cfc0ddb4d91f06b54aa0d2860ea63d173df37e251642b562d389f973baa6e"
+    },
+    {
+      "globalIndex": 35,
+      "file": "portraits/11150.png",
+      "traits": {
+        "appearanceId": 11150,
+        "speciesIndex": 0,
+        "headwear": 6,
+        "neckwear": 6,
+        "palette": 2,
+        "motif": 4
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Brocade Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Indigo"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Waves"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "11150"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:6:6:2:4",
+      "bytes": 2116212,
+      "sha256": "dd1956c80bcc38fb8d698c9e01734eee75afd6c5e0564d87f68ac70948da072e",
+      "pixelSha256": "76d57b7e662348fafb4647c6433885bcf7ba8a4055db881a6abcecb6662f6a66"
+    },
+    {
+      "globalIndex": 36,
+      "file": "portraits/12225.png",
+      "traits": {
+        "appearanceId": 12225,
+        "speciesIndex": 0,
+        "headwear": 5,
+        "neckwear": 1,
+        "palette": 6,
+        "motif": 4
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Waves"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "12225"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:5:1:6:4",
+      "bytes": 2136295,
+      "sha256": "7cc748f6b3f1ce1afbf30cf28769e721da0de573ff9ce69fb548f6d879b2d9a2",
+      "pixelSha256": "5f994523883fcada134ca266554e622ea985add07dfb11fe1202f32ab2fc9432"
+    },
+    {
+      "globalIndex": 37,
+      "file": "portraits/13300.png",
+      "traits": {
+        "appearanceId": 13300,
+        "speciesIndex": 0,
+        "headwear": 4,
+        "neckwear": 4,
+        "palette": 1,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Jade Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Celadon"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "13300"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:4:4:1:5",
+      "bytes": 2156810,
+      "sha256": "a0eeb01d84ad3b8add166bcf5f1efa81cd74c900e41504fa0e828c9ca3db7e1a",
+      "pixelSha256": "ae2635ec6e6650916b66448d97a992e5204ee9443726d8ba07945fcfe7b09ad8"
+    },
+    {
+      "globalIndex": 38,
+      "file": "portraits/14375.png",
+      "traits": {
+        "appearanceId": 14375,
+        "speciesIndex": 0,
+        "headwear": 3,
+        "neckwear": 7,
+        "palette": 4,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Longevity Lock"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "14375"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:3:7:4:5",
+      "bytes": 2117213,
+      "sha256": "36fdc46b1dc4d087c9288ea1f2f7729f6bcf29aa185207aa75dfc9abe9509380",
+      "pixelSha256": "fd4db44d6008894e548b87c7614b0e9606a2082641cc120630166f8a60050eb4"
+    },
+    {
+      "globalIndex": 39,
+      "file": "portraits/15450.png",
+      "traits": {
+        "appearanceId": 15450,
+        "speciesIndex": 0,
+        "headwear": 2,
+        "neckwear": 2,
+        "palette": 0,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "15450"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:2:2:0:6",
+      "bytes": 2118036,
+      "sha256": "985b1e3f389c26c1e69a7e3fd20cfbab5a80cefcf44fe9bca5d03036118f1771",
+      "pixelSha256": "7a235e010abe6641fd081400e8b4ff9fe9d86c023acc8ce8b8369aafaa76585b"
+    },
+    {
+      "globalIndex": 40,
+      "file": "portraits/16525.png",
+      "traits": {
+        "appearanceId": 16525,
+        "speciesIndex": 0,
+        "headwear": 1,
+        "neckwear": 5,
+        "palette": 3,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "16525"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:1:5:3:6",
+      "bytes": 2167422,
+      "sha256": "2f29b904e7eb52be8a392fa6508d59f0bfcae9a9facff34ad792b4fdd1e1f11a",
+      "pixelSha256": "6d0164ba12300181b65ff334938716bfda82fec08c1b6640997e2210da1d2b86"
+    },
+    {
+      "globalIndex": 41,
+      "file": "portraits/17600.png",
+      "traits": {
+        "appearanceId": 17600,
+        "speciesIndex": 0,
+        "headwear": 0,
+        "neckwear": 0,
+        "palette": 7,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Chinese Knot"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "17600"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:0:0:7:6",
+      "bytes": 2162226,
+      "sha256": "38d3e7e6e242f2a0c26fc5ef6f7a624a9b1c7a94f559d8febde34098ead3a72c",
+      "pixelSha256": "f0fd093016d49efd987357ecdbfb49e6f070870b704ef9ed0f122209a8ccc487"
+    },
+    {
+      "globalIndex": 42,
+      "file": "portraits/18671.png",
+      "traits": {
+        "appearanceId": 18671,
+        "speciesIndex": 1,
+        "headwear": 6,
+        "neckwear": 2,
+        "palette": 2,
+        "motif": 7
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Indigo"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Koi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "18671"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:6:2:2:7",
+      "bytes": 1192636,
+      "sha256": "a123cfe78525b29a23382d58588cf1d0a7d9f8ad9fb40a54f8ab7e89fda5cc6f",
+      "pixelSha256": "b9d3c9fa810133b176bb9d74a5fc2c477533d7717347ceeb5360183e3fa704d2"
+    },
+    {
+      "globalIndex": 43,
+      "file": "portraits/19746.png",
+      "traits": {
+        "appearanceId": 19746,
+        "speciesIndex": 1,
+        "headwear": 5,
+        "neckwear": 5,
+        "palette": 5,
+        "motif": 7
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Jade"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Koi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "19746"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:5:5:5:7",
+      "bytes": 1226372,
+      "sha256": "fbbb411d329bd5604d8f7ecf0c2f910cd885f64be8935cb922f3434fda18cf9d",
+      "pixelSha256": "60f166abeb9cd2a038a3345c3ab226ef459810b33a709d730a470aec195455b7"
+    },
+    {
+      "globalIndex": 44,
+      "file": "portraits/341.png",
+      "traits": {
+        "appearanceId": 341,
+        "speciesIndex": 1,
+        "headwear": 4,
+        "neckwear": 0,
+        "palette": 1,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Chinese Knot"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Celadon"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "341"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:4:0:1:0",
+      "bytes": 1226211,
+      "sha256": "3db66a4c741ca9d661e3416c0fddae8764aa3e9b7c639bea2b6bfc529effa2be",
+      "pixelSha256": "cfe76550136fbd7d4a924caaeae4286453a4e63323a5579e577d55243c2ce725"
+    },
+    {
+      "globalIndex": 45,
+      "file": "portraits/1416.png",
+      "traits": {
+        "appearanceId": 1416,
+        "speciesIndex": 1,
+        "headwear": 3,
+        "neckwear": 3,
+        "palette": 4,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Sachet"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "1416"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:3:3:4:0",
+      "bytes": 1220732,
+      "sha256": "26b9341840be089ba998f621bafce3be4360ec3c71a89dc0ba59038444a6b30a",
+      "pixelSha256": "31cc40c1a98b55253bf6386e720c85d345174d82c569396e08e1e02bb075d871"
+    },
+    {
+      "globalIndex": 46,
+      "file": "portraits/2491.png",
+      "traits": {
+        "appearanceId": 2491,
+        "speciesIndex": 1,
+        "headwear": 2,
+        "neckwear": 6,
+        "palette": 7,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Brocade Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "2491"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:2:6:7:0",
+      "bytes": 1206327,
+      "sha256": "c9ed37f1fe7ba2d6e1746cffdefec81a6d85f2252c500229c10976253b6cef31",
+      "pixelSha256": "4f0d6c4fc01e2ff81b9082705863007cceb5a254d297b07fa7155247f37e7a97"
+    },
+    {
+      "globalIndex": 47,
+      "file": "portraits/3566.png",
+      "traits": {
+        "appearanceId": 3566,
+        "speciesIndex": 1,
+        "headwear": 1,
+        "neckwear": 1,
+        "palette": 3,
+        "motif": 1
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "3566"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:1:1:3:1",
+      "bytes": 1227183,
+      "sha256": "6de19ce00500d64359be15ff47ca44ca538dd975b08acd6f2757380a74097a24",
+      "pixelSha256": "b31c4e5180f083fbee0a2fe4295fce0186f381a4355dde16618880fbd3baeae9"
+    },
+    {
+      "globalIndex": 48,
+      "file": "portraits/4641.png",
+      "traits": {
+        "appearanceId": 4641,
+        "speciesIndex": 1,
+        "headwear": 0,
+        "neckwear": 4,
+        "palette": 6,
+        "motif": 1
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Jade Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "4641"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:0:4:6:1",
+      "bytes": 1237181,
+      "sha256": "c6ddd4520054b4067f70a519703a599554ca53215649ca90bd6b91537af50189",
+      "pixelSha256": "7dcec33a526ab8aed6b3f1df4db3c3c0fa67430a1243063e58afe887a18498db"
+    },
+    {
+      "globalIndex": 49,
+      "file": "portraits/5712.png",
+      "traits": {
+        "appearanceId": 5712,
+        "speciesIndex": 2,
+        "headwear": 6,
+        "neckwear": 6,
+        "palette": 1,
+        "motif": 2
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Brocade Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Celadon"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Plum"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "5712"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:6:6:1:2",
+      "bytes": 1150817,
+      "sha256": "eea9f82f7ebe00143bfde8e1854a7901c2452c801d96d7a56b6aa0d2a0ca15ef",
+      "pixelSha256": "5e8cbb07634881067678443f4a33ad37924670c0be2e8ae3794aa964ac6b46ca"
+    },
+    {
+      "globalIndex": 50,
+      "file": "portraits/6787.png",
+      "traits": {
+        "appearanceId": 6787,
+        "speciesIndex": 2,
+        "headwear": 5,
+        "neckwear": 1,
+        "palette": 5,
+        "motif": 2
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Jade"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Plum"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "6787"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:5:1:5:2",
+      "bytes": 1160297,
+      "sha256": "c82c74780850a84af405fd5c06afdd8342967d945d58b570fa297bc0af6bd358",
+      "pixelSha256": "d76d60213598121b5135d4d56b2fcca4cf0741a0635a58cbcfba1b7634f47433"
+    },
+    {
+      "globalIndex": 51,
+      "file": "portraits/7862.png",
+      "traits": {
+        "appearanceId": 7862,
+        "speciesIndex": 2,
+        "headwear": 4,
+        "neckwear": 4,
+        "palette": 0,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Jade Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "7862"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:4:4:0:3",
+      "bytes": 1161585,
+      "sha256": "984fd756a63eefa9641e1cf606301bacec06bc2668213c64089a404d565f2bcb",
+      "pixelSha256": "17b52f77386dbbae694a42c64087c91310c23eb22cfba108db12852689fdde42"
+    },
+    {
+      "globalIndex": 52,
+      "file": "portraits/8937.png",
+      "traits": {
+        "appearanceId": 8937,
+        "speciesIndex": 2,
+        "headwear": 3,
+        "neckwear": 7,
+        "palette": 3,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Longevity Lock"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "8937"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:3:7:3:3",
+      "bytes": 1138716,
+      "sha256": "97cc0212a39e706f21299bfe37a1fa2cf15f786940652da8bc2f5c79151ab5f5",
+      "pixelSha256": "b558039f5d10f892bbda116825a9d4ea44b8546b7d4278d5138e7a39c3ddb08c"
+    },
+    {
+      "globalIndex": 53,
+      "file": "portraits/10012.png",
+      "traits": {
+        "appearanceId": 10012,
+        "speciesIndex": 2,
+        "headwear": 2,
+        "neckwear": 2,
+        "palette": 7,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "10012"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:2:2:7:3",
+      "bytes": 1142145,
+      "sha256": "f61386ff0959c7d425a8344f6fb7fc175daed78facb95e6c322a93fd0f1acc34",
+      "pixelSha256": "b14f487e9aefe68175b9948eedb602894cbf748f4bca8ea634c6d7489a8bf3e7"
+    },
+    {
+      "globalIndex": 54,
+      "file": "portraits/11087.png",
+      "traits": {
+        "appearanceId": 11087,
+        "speciesIndex": 2,
+        "headwear": 1,
+        "neckwear": 5,
+        "palette": 2,
+        "motif": 4
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Indigo"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Waves"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "11087"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:1:5:2:4",
+      "bytes": 1175054,
+      "sha256": "63f066cdbe3dbe4808fd88a5369e38dac1dbbbb25e1d27159461d45b8d03a9f2",
+      "pixelSha256": "c75452834c8d7a9d405a797377782e4d0dce4a15ac7b95a5b73260e637bcfb51"
+    },
+    {
+      "globalIndex": 55,
+      "file": "portraits/12162.png",
+      "traits": {
+        "appearanceId": 12162,
+        "speciesIndex": 2,
+        "headwear": 0,
+        "neckwear": 0,
+        "palette": 6,
+        "motif": 4
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Chinese Knot"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Waves"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "12162"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:0:0:6:4",
+      "bytes": 1173538,
+      "sha256": "f7f8fb6b7747c04e205e6e755025672898859b9e4dedc97f7fe7a14eb282019a",
+      "pixelSha256": "33680ad56a2875534bab726c112ca3da9b8d6a4fe17fd2ef74fb6435bd8811c5"
+    },
+    {
+      "globalIndex": 56,
+      "file": "portraits/13233.png",
+      "traits": {
+        "appearanceId": 13233,
+        "speciesIndex": 3,
+        "headwear": 6,
+        "neckwear": 2,
+        "palette": 1,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Celadon"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "13233"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:6:2:1:5",
+      "bytes": 948011,
+      "sha256": "c2c4d20e66410222ef8ab72a26442ffaf0bac1827a871bea6797a23481ac42c2",
+      "pixelSha256": "c2f17010fb832ea0a45fd12e83da8b40044cac0939e2bfba77cd8222ce628f57"
+    },
+    {
+      "globalIndex": 57,
+      "file": "portraits/14308.png",
+      "traits": {
+        "appearanceId": 14308,
+        "speciesIndex": 3,
+        "headwear": 5,
+        "neckwear": 5,
+        "palette": 4,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "14308"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:5:5:4:5",
+      "bytes": 974538,
+      "sha256": "ad9b1a76222bc94bb62a90b24f38ee9383747c3333cc7fc4bb380aeefd7f2b56",
+      "pixelSha256": "7a81e0d1ef0fc59c90961a899a76af7d08bf7404a1b186650d1347b41723e161"
+    },
+    {
+      "globalIndex": 58,
+      "file": "portraits/15383.png",
+      "traits": {
+        "appearanceId": 15383,
+        "speciesIndex": 3,
+        "headwear": 4,
+        "neckwear": 0,
+        "palette": 0,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Chinese Knot"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "15383"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:4:0:0:6",
+      "bytes": 984913,
+      "sha256": "a43f8bd03d9f8c7ba07380cf4158e6198887e5f92ed4365ce21aae35c8c93570",
+      "pixelSha256": "a4b1058cbb037cff5a7618f14060438068ff82eea0d7f844d95a8d356792a3e1"
+    },
+    {
+      "globalIndex": 59,
+      "file": "portraits/16458.png",
+      "traits": {
+        "appearanceId": 16458,
+        "speciesIndex": 3,
+        "headwear": 3,
+        "neckwear": 3,
+        "palette": 3,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Sachet"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "16458"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:3:3:3:6",
+      "bytes": 980153,
+      "sha256": "db9e3985a3c86e304d86a95c6beeb47c1f4975e571160240a23287697b34b644",
+      "pixelSha256": "5b3bc156cff8c8eee9fc12065b23de4dc5765fff0e50edcf0487a7113419df5f"
+    },
+    {
+      "globalIndex": 60,
+      "file": "portraits/17533.png",
+      "traits": {
+        "appearanceId": 17533,
+        "speciesIndex": 3,
+        "headwear": 2,
+        "neckwear": 6,
+        "palette": 6,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Brocade Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "17533"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:2:6:6:6",
+      "bytes": 970365,
+      "sha256": "2630ddcd4fed422aef37c7dab0d133b8d27244736d721db0dc99cdff2ee3b428",
+      "pixelSha256": "253f80fe56eb8b432a0e0f0e3290aac86c664d42ea527415e7fbed0b852d587b"
+    },
+    {
+      "globalIndex": 61,
+      "file": "portraits/18608.png",
+      "traits": {
+        "appearanceId": 18608,
+        "speciesIndex": 3,
+        "headwear": 1,
+        "neckwear": 1,
+        "palette": 2,
+        "motif": 7
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Indigo"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Koi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "18608"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:1:1:2:7",
+      "bytes": 987111,
+      "sha256": "98a8d2dc56efcb065a3c003484f52175405fca5382aef0c156b6f6d670f785d6",
+      "pixelSha256": "0808671a14704515f546047cc491f1cd0a3c7666b462acc4d6781504826da1a7"
+    },
+    {
+      "globalIndex": 62,
+      "file": "portraits/19683.png",
+      "traits": {
+        "appearanceId": 19683,
+        "speciesIndex": 3,
+        "headwear": 0,
+        "neckwear": 4,
+        "palette": 5,
+        "motif": 7
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Jade Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Jade"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Koi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "19683"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:0:4:5:7",
+      "bytes": 992261,
+      "sha256": "78c213ec7991b563d91b249df331f8077693863aa8a98ce7dbe080dd23700db6",
+      "pixelSha256": "5e376027a93cfed08b3ad7e37c0aa5a8694b7d25a95e440e9367f585b71dae32"
+    },
+    {
+      "globalIndex": 63,
+      "file": "portraits/274.png",
+      "traits": {
+        "appearanceId": 274,
+        "speciesIndex": 4,
+        "headwear": 6,
+        "neckwear": 6,
+        "palette": 0,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Brocade Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "274"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:6:6:0:0",
+      "bytes": 787024,
+      "sha256": "337f617cb76d0afe7ea30880eab5fa52e5f2a70ce56df11ba6f43a9999fa67a2",
+      "pixelSha256": "d4f0c4bd6fb52f75f0b09b1b2bd6b5d51db99eb554f319f2b8d8f7046e916d01"
+    },
+    {
+      "globalIndex": 64,
+      "file": "portraits/1349.png",
+      "traits": {
+        "appearanceId": 1349,
+        "speciesIndex": 4,
+        "headwear": 5,
+        "neckwear": 1,
+        "palette": 4,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "1349"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:5:1:4:0",
+      "bytes": 793927,
+      "sha256": "8b1080b7fdeaa91792b68e2bbda35293128065be1fe0abf676d45a89a02a0e7e",
+      "pixelSha256": "c97cc28365ea8546cbd36b7aa297d89f285b7a9478b6d03e38a62672cc1d701b"
+    },
+    {
+      "globalIndex": 65,
+      "file": "portraits/2424.png",
+      "traits": {
+        "appearanceId": 2424,
+        "speciesIndex": 4,
+        "headwear": 4,
+        "neckwear": 4,
+        "palette": 7,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Jade Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "2424"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:4:4:7:0",
+      "bytes": 806737,
+      "sha256": "82a337b25b64e8cc245e81386ef57489c319be2f52280d8feb7502a8a69d8afb",
+      "pixelSha256": "6886b375fa69a9ecd5b61b1a4a19548d5706841410322278303329be9f0193a3"
+    },
+    {
+      "globalIndex": 66,
+      "file": "portraits/3499.png",
+      "traits": {
+        "appearanceId": 3499,
+        "speciesIndex": 4,
+        "headwear": 3,
+        "neckwear": 7,
+        "palette": 2,
+        "motif": 1
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Longevity Lock"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Indigo"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "3499"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:3:7:2:1",
+      "bytes": 789866,
+      "sha256": "b4260bb03e23f345462bacac06c8dc667e090534fa37a7a4a340bc268eaf6262",
+      "pixelSha256": "31aa64b9ba8ef19a0336cf6f3fefd2ae3cbc1b3967d66b7d712206cdac8050e2"
+    },
+    {
+      "globalIndex": 67,
+      "file": "portraits/4574.png",
+      "traits": {
+        "appearanceId": 4574,
+        "speciesIndex": 4,
+        "headwear": 2,
+        "neckwear": 2,
+        "palette": 6,
+        "motif": 1
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "4574"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:2:2:6:1",
+      "bytes": 788442,
+      "sha256": "821fa175f607056e6b642327da7608e279e17e8b653ecca605587c9cd9808c69",
+      "pixelSha256": "c3cbbffd9bf03c57d1d1f1099a22d2c4ce9300a9d36e4c497df92a336705a2c3"
+    },
+    {
+      "globalIndex": 68,
+      "file": "portraits/5649.png",
+      "traits": {
+        "appearanceId": 5649,
+        "speciesIndex": 4,
+        "headwear": 1,
+        "neckwear": 5,
+        "palette": 1,
+        "motif": 2
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Celadon"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Plum"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "5649"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:1:5:1:2",
+      "bytes": 816872,
+      "sha256": "4f568b19c676cf6c232bb0fbfefa64a9daa718284d1e48bff23efe26d6b91c60",
+      "pixelSha256": "a0170aabc8fcceb71d2802e7f4c56d3acd35636c37bbb91d14d4b22614b32e1a"
+    },
+    {
+      "globalIndex": 69,
+      "file": "portraits/6724.png",
+      "traits": {
+        "appearanceId": 6724,
+        "speciesIndex": 4,
+        "headwear": 0,
+        "neckwear": 0,
+        "palette": 5,
+        "motif": 2
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Chinese Knot"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Jade"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Plum"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "6724"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:0:0:5:2",
+      "bytes": 816980,
+      "sha256": "e2f711c05d1b47019b4d0038f59c8da8abb75aa67f433b32df2759e84ed975f6",
+      "pixelSha256": "67a1a087ec3edad58b5fa7faa333c51085b5952d90a6dfb7afdbde41734239fc"
+    },
+    {
+      "globalIndex": 70,
+      "file": "portraits/7796.png",
+      "traits": {
+        "appearanceId": 7796,
+        "speciesIndex": 1,
+        "headwear": 7,
+        "neckwear": 2,
+        "palette": 0,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lion Cap"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "7796"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:7:2:0:3",
+      "bytes": 1774131,
+      "sha256": "6142add4c91c00fd476239663add0e10456c5fd71466d616b9ce1e9867037160",
+      "pixelSha256": "0f7add8b0b58bf97203bf95a382d48dc4afc85bebd41c71b1cbef24824b99c78"
+    },
+    {
+      "globalIndex": 71,
+      "file": "portraits/8870.png",
+      "traits": {
+        "appearanceId": 8870,
+        "speciesIndex": 0,
+        "headwear": 6,
+        "neckwear": 5,
+        "palette": 3,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "8870"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:6:5:3:3",
+      "bytes": 2154137,
+      "sha256": "5f02e9d0e10af467fa8a699fd77dce728f2b83906bc9bcf5dfe509f139a80772",
+      "pixelSha256": "9ffa347752a3f01b0efbbe5c47b72bdfb163cc813e1969d02e01fd91868b4df4"
+    },
+    {
+      "globalIndex": 72,
+      "file": "portraits/9945.png",
+      "traits": {
+        "appearanceId": 9945,
+        "speciesIndex": 0,
+        "headwear": 5,
+        "neckwear": 0,
+        "palette": 7,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Chinese Knot"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "9945"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:5:0:7:3",
+      "bytes": 2146930,
+      "sha256": "69767cb8c8bf669ef29a5f259e02e6ea0fa3fcc1d6080837fdb3bddae4271599",
+      "pixelSha256": "a88d6b888493e782eace0a192f649639f2444d1c80f1654e862a809bbd41042c"
+    },
+    {
+      "globalIndex": 73,
+      "file": "portraits/11020.png",
+      "traits": {
+        "appearanceId": 11020,
+        "speciesIndex": 0,
+        "headwear": 4,
+        "neckwear": 3,
+        "palette": 2,
+        "motif": 4
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Sachet"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Indigo"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Waves"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "11020"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:4:3:2:4",
+      "bytes": 2164894,
+      "sha256": "62a5f99516153f80691c4d0637a66347f352e2460879d72689641528c7637baa",
+      "pixelSha256": "34a881f9cd9de2e362a5d8acd25c8d5370c7cdc73716134044e1509cfbbe9854"
+    },
+    {
+      "globalIndex": 74,
+      "file": "portraits/12095.png",
+      "traits": {
+        "appearanceId": 12095,
+        "speciesIndex": 0,
+        "headwear": 3,
+        "neckwear": 6,
+        "palette": 5,
+        "motif": 4
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Brocade Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Jade"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Waves"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "12095"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:3:6:5:4",
+      "bytes": 2105306,
+      "sha256": "9721ecef74046892e5d3fc172c848a770b62fde5199c2d241e9bb718c69c4fc3",
+      "pixelSha256": "c664869c482aed1671685a59852acbbe7edb88649365a3bdbac2e5dc7074c094"
+    },
+    {
+      "globalIndex": 75,
+      "file": "portraits/13170.png",
+      "traits": {
+        "appearanceId": 13170,
+        "speciesIndex": 0,
+        "headwear": 2,
+        "neckwear": 1,
+        "palette": 1,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Celadon"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "13170"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:2:1:1:5",
+      "bytes": 2156061,
+      "sha256": "a8cb9713b43278c6190063a2827ff6393030c8f9b1654869b32308e96da382f5",
+      "pixelSha256": "2c3fcb2a5f0057a7ff661ea9401e19e0e76b91c3015aabb14e2014e89799e4db"
+    },
+    {
+      "globalIndex": 76,
+      "file": "portraits/14245.png",
+      "traits": {
+        "appearanceId": 14245,
+        "speciesIndex": 0,
+        "headwear": 1,
+        "neckwear": 4,
+        "palette": 4,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Jade Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "14245"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:1:4:4:5",
+      "bytes": 2174274,
+      "sha256": "fb4cea7ba6332dc3ffb7ef7a3efc0f4cd95e3a51f60549d89d3f6454b731a0da",
+      "pixelSha256": "aee0124c3ed2d4901297581d772237c202aef7617d44a7a1f0a1047333c30154"
+    },
+    {
+      "globalIndex": 77,
+      "file": "portraits/15320.png",
+      "traits": {
+        "appearanceId": 15320,
+        "speciesIndex": 0,
+        "headwear": 0,
+        "neckwear": 7,
+        "palette": 7,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Rabbit"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Longevity Lock"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "15320"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "0:0:7:7:5",
+      "bytes": 2142303,
+      "sha256": "aa412e87e7d0bcedb2c0a964fb2963214cec0c95d5feb25b1b19269fcec6e69e",
+      "pixelSha256": "4d6ce53a7b72fd3305377b34a79d10f7d90dd11bc0491b3ba32ccdb8df04e3c2"
+    },
+    {
+      "globalIndex": 78,
+      "file": "portraits/16391.png",
+      "traits": {
+        "appearanceId": 16391,
+        "speciesIndex": 1,
+        "headwear": 6,
+        "neckwear": 1,
+        "palette": 3,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "16391"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:6:1:3:6",
+      "bytes": 1218637,
+      "sha256": "8ae6848ac50e18ca3c1341f0a19450e1acd560d154e1b13e0709e1f55ca11db2",
+      "pixelSha256": "4440476d98c0a19832c4f000bcdd1526a7dfcac365edf588b450f62569ca39db"
+    },
+    {
+      "globalIndex": 79,
+      "file": "portraits/17466.png",
+      "traits": {
+        "appearanceId": 17466,
+        "speciesIndex": 1,
+        "headwear": 5,
+        "neckwear": 4,
+        "palette": 6,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Jade Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "17466"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:5:4:6:6",
+      "bytes": 1225154,
+      "sha256": "4768be380cf4f15d92a5640cc9612c17aa55dccf8b87cc0cccd827cb34ce2037",
+      "pixelSha256": "0cb00b49f6d05e5bdccdea321a1ec48eef48ddc89dd364a6df207a7f58c87b7f"
+    },
+    {
+      "globalIndex": 80,
+      "file": "portraits/18541.png",
+      "traits": {
+        "appearanceId": 18541,
+        "speciesIndex": 1,
+        "headwear": 4,
+        "neckwear": 7,
+        "palette": 1,
+        "motif": 7
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Longevity Lock"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Celadon"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Koi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "18541"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:4:7:1:7",
+      "bytes": 1209036,
+      "sha256": "1639ae98113f6709c0a6028ca0baf1386dffe94f34759b64b26d20d62ee36172",
+      "pixelSha256": "2fcfddfb44430e6b6fe746b16f04259007b6f7d81bd431631083bd49de4d1b1a"
+    },
+    {
+      "globalIndex": 81,
+      "file": "portraits/19616.png",
+      "traits": {
+        "appearanceId": 19616,
+        "speciesIndex": 1,
+        "headwear": 3,
+        "neckwear": 2,
+        "palette": 5,
+        "motif": 7
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Jade"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Koi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "19616"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:3:2:5:7",
+      "bytes": 1176361,
+      "sha256": "048fc1f8d0fcdac182d53669af43964d3fed4b4a2f414a1e4ac6cb1b642b3206",
+      "pixelSha256": "36c2062b553658955d00452981052c7f36fc9ab8ccc27812f4cdf1c618315367"
+    },
+    {
+      "globalIndex": 82,
+      "file": "portraits/211.png",
+      "traits": {
+        "appearanceId": 211,
+        "speciesIndex": 1,
+        "headwear": 2,
+        "neckwear": 5,
+        "palette": 0,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "211"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:2:5:0:0",
+      "bytes": 1243890,
+      "sha256": "3d33fa732672805a6a46cb61e2e8c6afc6677e22e70a0b6ebc4357f748560559",
+      "pixelSha256": "051c20749f655586c8bb54842451db42793a1e839c2c61fcabc94807815a23fe"
+    },
+    {
+      "globalIndex": 83,
+      "file": "portraits/1286.png",
+      "traits": {
+        "appearanceId": 1286,
+        "speciesIndex": 1,
+        "headwear": 1,
+        "neckwear": 0,
+        "palette": 4,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Chinese Knot"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "1286"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:1:0:4:0",
+      "bytes": 1240070,
+      "sha256": "8cc9b460e8d22f8d0077263a5e15e5fb16d73a65e54f28ca5508cf7697e71caf",
+      "pixelSha256": "c7f8974b4098c1a6165e73b3594e5671d1a9c462749a28b2ba457d133ee8ac8a"
+    },
+    {
+      "globalIndex": 84,
+      "file": "portraits/2361.png",
+      "traits": {
+        "appearanceId": 2361,
+        "speciesIndex": 1,
+        "headwear": 0,
+        "neckwear": 3,
+        "palette": 7,
+        "motif": 0
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Cat"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Sachet"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Cloud"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "2361"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "1:0:3:7:0",
+      "bytes": 1240546,
+      "sha256": "32441667f5f747c340f4deb067e13da90a4c6430a374b504b36dbcf115e19bba",
+      "pixelSha256": "1c8e5f1b28cb8a8e73659ab4588552489a84c8b934969ceec3504345f5f02491"
+    },
+    {
+      "globalIndex": 85,
+      "file": "portraits/3432.png",
+      "traits": {
+        "appearanceId": 3432,
+        "speciesIndex": 2,
+        "headwear": 6,
+        "neckwear": 5,
+        "palette": 2,
+        "motif": 1
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Indigo"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "3432"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:6:5:2:1",
+      "bytes": 1172790,
+      "sha256": "7c2e89db7e39f7010dc78a8a81daf7de65e6c4dd7fe44ce04888961b851b50e2",
+      "pixelSha256": "6252eeab06b58bf1e308be0f59a89018a07d3a8e98ca30e5c5a3094882610f48"
+    },
+    {
+      "globalIndex": 86,
+      "file": "portraits/4507.png",
+      "traits": {
+        "appearanceId": 4507,
+        "speciesIndex": 2,
+        "headwear": 5,
+        "neckwear": 0,
+        "palette": 6,
+        "motif": 1
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Chinese Knot"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "4507"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:5:0:6:1",
+      "bytes": 1166999,
+      "sha256": "82156fb4ab84e5bf353d0f2f547c9d941a6d1bc0d1b7b7b9dac9fad5fd4355e6",
+      "pixelSha256": "26e6769bd5d8ca4d069158c0f76240533e65fbd84a6b98bb228116226c92a662"
+    },
+    {
+      "globalIndex": 87,
+      "file": "portraits/5582.png",
+      "traits": {
+        "appearanceId": 5582,
+        "speciesIndex": 2,
+        "headwear": 4,
+        "neckwear": 3,
+        "palette": 1,
+        "motif": 2
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Sachet"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Celadon"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Plum"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "5582"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:4:3:1:2",
+      "bytes": 1165843,
+      "sha256": "0ccdc6176a4af0664de4aa29926be4c82177a8f63c41ba3e78f19abc3fcd0bde",
+      "pixelSha256": "8c97e7ad1c9bf3c889935c378061cdb389835d4d411b8e52169298f5b65ccd15"
+    },
+    {
+      "globalIndex": 88,
+      "file": "portraits/6657.png",
+      "traits": {
+        "appearanceId": 6657,
+        "speciesIndex": 2,
+        "headwear": 3,
+        "neckwear": 6,
+        "palette": 4,
+        "motif": 2
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Brocade Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Plum"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "6657"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:3:6:4:2",
+      "bytes": 1126891,
+      "sha256": "9b37d64c6ba9f20e7d48b7be42b66731650fa9983cd4d03c579fc199a915b13e",
+      "pixelSha256": "58884e5d1da528bfda5228c405e37731eadccbd8b52b6f6f548599836c7e80bf"
+    },
+    {
+      "globalIndex": 89,
+      "file": "portraits/7732.png",
+      "traits": {
+        "appearanceId": 7732,
+        "speciesIndex": 2,
+        "headwear": 2,
+        "neckwear": 1,
+        "palette": 0,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "7732"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:2:1:0:3",
+      "bytes": 1170609,
+      "sha256": "3f49185f64fd33d4a1b5b35a3098f5556a6647069bbf63082a55e6dde0777a8b",
+      "pixelSha256": "247efc3dd39ae90cd8a41aa74dc1da610738625848433a511d41051faaaa6256"
+    },
+    {
+      "globalIndex": 90,
+      "file": "portraits/8807.png",
+      "traits": {
+        "appearanceId": 8807,
+        "speciesIndex": 2,
+        "headwear": 1,
+        "neckwear": 4,
+        "palette": 3,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Jade Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "8807"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:1:4:3:3",
+      "bytes": 1172370,
+      "sha256": "e91ad4d2b84b50fde12cdb841fae566120af90b14b1b461242cae15e9914da44",
+      "pixelSha256": "d99ccd4a129a5de4c0a68a46eef1424e874a6a36ed2a15cfb1cc01038020f49f"
+    },
+    {
+      "globalIndex": 91,
+      "file": "portraits/9882.png",
+      "traits": {
+        "appearanceId": 9882,
+        "speciesIndex": 2,
+        "headwear": 0,
+        "neckwear": 7,
+        "palette": 6,
+        "motif": 3
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Fox"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Longevity Lock"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Bamboo"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "9882"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "2:0:7:6:3",
+      "bytes": 1161486,
+      "sha256": "9ad50fe962e35c92bad4b2a542d3121a98e76beb83b9015a01af4b8a7d857124",
+      "pixelSha256": "4f99e5c232348666db3d83808d3816a0cea69673d4a7d01db01f2adb39f97661"
+    },
+    {
+      "globalIndex": 92,
+      "file": "portraits/10953.png",
+      "traits": {
+        "appearanceId": 10953,
+        "speciesIndex": 3,
+        "headwear": 6,
+        "neckwear": 1,
+        "palette": 2,
+        "motif": 4
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Silk Scarf"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Indigo"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Waves"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "10953"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:6:1:2:4",
+      "bytes": 974389,
+      "sha256": "87ea9e4a95616d3e65729ccc573b5ba1aaa95ab87bba1e5edeb63b280421db33",
+      "pixelSha256": "50f2a961b06d0dbda373bf475a7710ed484e9374ac3914a97750ffeac80597de"
+    },
+    {
+      "globalIndex": 93,
+      "file": "portraits/12028.png",
+      "traits": {
+        "appearanceId": 12028,
+        "speciesIndex": 3,
+        "headwear": 5,
+        "neckwear": 4,
+        "palette": 5,
+        "motif": 4
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Cloud Comb"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Jade Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Jade"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Waves"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "12028"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:5:4:5:4",
+      "bytes": 977038,
+      "sha256": "48cedc5c71bf0268fe2ce8cff873acb0f292079f877767d335b61eb0d41c9275",
+      "pixelSha256": "17395d7f99a69808781d9288dbde527f39b3e7a082da6ef7de25b072605a5257"
+    },
+    {
+      "globalIndex": 94,
+      "file": "portraits/13103.png",
+      "traits": {
+        "appearanceId": 13103,
+        "speciesIndex": 3,
+        "headwear": 4,
+        "neckwear": 7,
+        "palette": 0,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Butterfly Clip"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Longevity Lock"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Cinnabar"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "13103"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:4:7:0:5",
+      "bytes": 973783,
+      "sha256": "228c25ece69c3a6b0f1e0c6b4704c8316004ff45e15c8b71ec131c01ee198648",
+      "pixelSha256": "0d1dea642d46e2d8d2d8f97ba301450a3b24969e269672bab309ef0ebadf20af"
+    },
+    {
+      "globalIndex": 95,
+      "file": "portraits/14178.png",
+      "traits": {
+        "appearanceId": 14178,
+        "speciesIndex": 3,
+        "headwear": 3,
+        "neckwear": 2,
+        "palette": 4,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Silk Bow"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Cloud Collar"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Amber"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "14178"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:3:2:4:5",
+      "bytes": 944098,
+      "sha256": "092e74ab36dfc69b59fddf636a454e7de130ed55ad147b25b76b7090248861bf",
+      "pixelSha256": "9fbe3241e7518de9e41875895d74c5574b74b4e01f1f25fbd55401103f74bc72"
+    },
+    {
+      "globalIndex": 96,
+      "file": "portraits/15253.png",
+      "traits": {
+        "appearanceId": 15253,
+        "speciesIndex": 3,
+        "headwear": 2,
+        "neckwear": 5,
+        "palette": 7,
+        "motif": 5
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Osmanthus Bloom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Pearl"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Ruyi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "15253"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:2:5:7:5",
+      "bytes": 989866,
+      "sha256": "d36d9776b8bfda1120bbf1d3e8df5ed592475cc09c10b5c60c16246c7d651c02",
+      "pixelSha256": "2214c033501460943159a05845c020d4f6d2483e70441dffd27b0f5b568d7cfa"
+    },
+    {
+      "globalIndex": 97,
+      "file": "portraits/16328.png",
+      "traits": {
+        "appearanceId": 16328,
+        "speciesIndex": 3,
+        "headwear": 1,
+        "neckwear": 0,
+        "palette": 3,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Plum Blossom"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Chinese Knot"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Lotus"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "16328"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:1:0:3:6",
+      "bytes": 988730,
+      "sha256": "1d5944b440d5afec695ed4836f8896f32e0a6caf00d8317c84fd630904f1d31c",
+      "pixelSha256": "57ad3f630a369d6b2d4d439f997813cd24393383650279c8e3b95f07d993846a"
+    },
+    {
+      "globalIndex": 98,
+      "file": "portraits/17403.png",
+      "traits": {
+        "appearanceId": 17403,
+        "speciesIndex": 3,
+        "headwear": 0,
+        "neckwear": 3,
+        "palette": 6,
+        "motif": 6
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Mouse"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Jade Hairpin"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Sachet"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Wisteria"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Moon"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "17403"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "3:0:3:6:6",
+      "bytes": 993926,
+      "sha256": "9078d35e86bb9c86cade57511aa05a8bc57bbc70a7e4b3fd187c5834bf6ee3f2",
+      "pixelSha256": "8d7788479950f6f05881241712868cd69579b1037ea650577affda449a1e78fc"
+    },
+    {
+      "globalIndex": 99,
+      "file": "portraits/18474.png",
+      "traits": {
+        "appearanceId": 18474,
+        "speciesIndex": 4,
+        "headwear": 6,
+        "neckwear": 5,
+        "palette": 1,
+        "motif": 7
+      },
+      "attributes": [
+        {
+          "trait_type": "Species",
+          "value": "Sheep"
+        },
+        {
+          "trait_type": "Headwear",
+          "value": "Lotus Crown"
+        },
+        {
+          "trait_type": "Neckwear",
+          "value": "Porcelain Pendant"
+        },
+        {
+          "trait_type": "Palette",
+          "value": "Celadon"
+        },
+        {
+          "trait_type": "Motif",
+          "value": "Koi"
+        },
+        {
+          "trait_type": "Appearance",
+          "value": "18474"
+        },
+        {
+          "trait_type": "Artwork",
+          "value": "deltax-unique-v2"
+        }
+      ],
+      "traitKey": "4:6:5:1:7",
+      "bytes": 807206,
+      "sha256": "6ef5d112fab442649cdbbb45e8bcdd43a820fd10d59439bdca514f61c5061fd2",
+      "pixelSha256": "746aa67747c3fc2a3001cdd8106ce4813c5f3114384f1444e29fd650d8c85a41"
+    }
+  ]
+}

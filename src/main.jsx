@@ -1,10 +1,7 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App.jsx";
-import "./styles.css";
+import { captureClaimBootstrap } from "./claim-bootstrap.js";
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+// Capture and scrub a charm credential before loading the sign-in SDK or any
+// other third-party code. The credential then lives only in this page's memory.
+captureClaimBootstrap();
+
+import("./main-app.jsx");

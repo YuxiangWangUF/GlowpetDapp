@@ -1,0 +1,40 @@
+{
+  "artworkVersion": "deltax-soft-v1",
+  "status": "prepared_not_uploaded_or_deployed",
+  "sourceDirectory": "public/pets/deltax-soft-v1",
+  "storage": "IPFS directory, CIDv1 dag-pb sha256; preserve filenames",
+  "speciesCodes": {
+    "rabbit": 2,
+    "cat": 0,
+    "fox": 4,
+    "mouse": 9,
+    "sheep": 7
+  },
+  "assets": [
+    {
+      "file": "rabbit.png",
+      "bytes": 1725164,
+      "sha256": "22d1f5985c7e54f4358068365cb727e63701eeeaae67d18f682a2c701ecf4a14"
+    },
+    {
+      "file": "cat.png",
+      "bytes": 991357,
+      "sha256": "527c02ea159d2f588a72c996130c56f360c50afe0c5426efbcc3843cf166dbba"
+    },
+    {
+      "file": "fox.png",
+      "bytes": 907391,
+      "sha256": "70d8059a0927b30ab207cb23638967890a0d41d307ee55e589f17c206a334404"
+    },
+    {
+      "file": "mouse.png",
+      "bytes": 779296,
+      "sha256": "02d509465f35f4fada234405685cbb93401e7496e686d33176d36e38aca713e0"
+    },
+    {
+      "file": "sheep.png",
+      "bytes": 646304,
+      "sha256": "0a6f803f9dcd186459ce7a215af6e84e62f67d3056af494f8aca378a6d297d09"
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+.home-portrait-showcase {
+  min-width: 0;
+  padding: 22px;
+  overflow: hidden;
+  border: 1px solid #e7dac8;
+  border-radius: 24px;
+  background: #faf5ed;
+  color: #4c3b35;
+  box-shadow: 0 24px 80px #0003;
+}
+
+.home-portrait-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.home-portrait-badge {
+  padding: 6px 9px;
+  border: 1px solid #d9cabb;
+  border-radius: 99px;
+  color: #786054;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.home-portrait-stage {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1.16;
+  margin: 8px 0 0;
+}
+
+.home-portrait-stage::before {
+  position: absolute;
+  z-index: -1;
+  width: 80%;
+  aspect-ratio: 1;
+  border: 1px solid #e8d6c6;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f2e3d6 10%, #f5eade 60%, transparent 71%);
+  content: "";
+}
+
+.home-portrait-character {
+  position: absolute;
+  top: 10%;
+  right: 3%;
+  color: #c8ad93;
+  font-family: "Songti SC", SimSun, serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  writing-mode: vertical-rl;
+}
+
+.home-portrait-image {
+  width: 90%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 12px #9a6c4715);
+  animation: home-portrait-arrive 0.3s ease both;
+}
+
+.home-portrait-caption {
+  text-align: center;
+  min-height: 62px;
+}
+
+.home-portrait-caption h2 {
+  margin: 0;
+  font-family: Georgia, "Songti SC", SimSun, serif;
+  font-size: 1.75rem;
+  font-weight: 500;
+}
+
+.home-portrait-caption h2 span { color: #927568; }
+.home-portrait-caption p {
+  margin: 7px 0 0;
+  color: #80685b;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.home-portrait-options {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 16px;
+}
+
+.home-portrait-options button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 4px 3px 8px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  background: #f1e7dc;
+  color: #80685b;
+  font: inherit;
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.home-portrait-options button:hover { background: #e9dbcd; }
+.home-portrait-options button[aria-pressed="true"] {
+  border-color: #af765c;
+  background: #fffcf7;
+  color: #70452f;
+}
+.home-portrait-options button:focus-visible {
+  outline: 2px solid #9b5e44;
+  outline-offset: 3px;
+}
+.home-portrait-options img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+.home-portrait-note {
+  margin: 14px 3px 0;
+  color: #80685b;
+  text-align: center;
+  font-size: 0.65rem;
+  line-height: 1.6;
+}
+.home-portrait-unavailable {
+  max-width: 220px;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+@keyframes home-portrait-arrive {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-portrait-image { animation: none; }
+  .home-portrait-options button { transition: none; }
+}
+@media (max-width: 480px) {
+  .home-portrait-showcase { padding: 16px; }
+  .home-portrait-heading { font-size: 0.56rem; }
+  .home-portrait-options { gap: 5px; }
+}

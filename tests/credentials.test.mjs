@@ -70,9 +70,12 @@ test("v2 exports use credential signer leaves, valid proofs and versioned URLs",
     assert.equal(split.protocolVersion, 2);
     assert.equal(split.credentialSigner, item.credentialSigner);
     const url = new URL(split.claimUrl);
-    assert.equal(url.searchParams.get("protocolVersion"), "2");
-    assert.equal(url.searchParams.get("chainId"), "31337");
-    assert.equal(url.searchParams.get("credentialSigner"), item.credentialSigner);
+    assert.equal(url.search, "");
+    assert.equal(url.hash.startsWith("#claim="), true);
+    const claimParams = new URLSearchParams(url.hash.slice("#claim=".length));
+    assert.equal(claimParams.get("protocolVersion"), "2");
+    assert.equal(claimParams.get("chainId"), "31337");
+    assert.equal(claimParams.get("credentialSigner"), item.credentialSigner);
   }
 
   const credential = bundle.items[0];

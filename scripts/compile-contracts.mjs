@@ -7,7 +7,7 @@ import solc from "solc";
 const require = createRequire(import.meta.url);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const openzeppelinRoot = path.dirname(require.resolve("@openzeppelin/contracts/package.json"));
-const contractFiles = ["GlowpetTypes.sol", "GlowpetFaceArt.sol", "GlowpetArt.sol", "Glowpet.sol"];
+const contractFiles = ["GlowpetTypes.sol", "GlowpetFaceArt.sol", "GlowpetArt.sol", "Glowpet.sol", "DeltaXGlowpet.sol"];
 
 /** Compile exclusively with the pinned local compiler and OpenZeppelin package. */
 export function compileContracts({ writeArtifacts = false } = {}) {
@@ -70,7 +70,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const { artifacts, compilerVersion, warnings } = compileContracts({ writeArtifacts: true });
   console.log(`Local Solidity ${compilerVersion}; optimizer 200 runs; viaIR; Cancun`);
   for (const warning of warnings) console.warn(warning.formattedMessage);
-  for (const name of ["GlowpetFaceArt", "GlowpetArt", "Glowpet"]) {
+  for (const name of ["GlowpetFaceArt", "GlowpetArt", "Glowpet", "DeltaXGlowpet", "DeltaXPortraits"]) {
     const bytes = (artifacts[name].deployedBytecode.length - 2) / 2;
     console.log(`${name}: ${bytes.toLocaleString("en-US")} deployed bytes / 24,576`);
     if (bytes > 24_576) process.exitCode = 1;

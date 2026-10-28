@@ -1,10 +1,23 @@
 import { lazy, Suspense, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { BrowserProvider, Contract, JsonRpcProvider, isAddress, isHexString } from "ethers";
 import { sanitizePortrait } from "./portrait-svg.js";
+import { getDeltaXTraitRows } from "./nft-image.js";
 import { observeWallet } from "./wallet-state.js";
 import { authorizeClaim, CLAIM_PROTOCOL_VERSION, scrubClaimParameters } from "./claim-authorization.js";
+import { useAccount } from "./auth/account-context.jsx";
+import { AccountDialog, AccountMenu, SignInDialog } from "./auth/AccountPanel.jsx";
+import { API_BASE_URL } from "./auth/config.js";
+import { createApiClient } from "./api/client.js";
+import { getBootstrapClaim } from "./claim-bootstrap.js";
+import {
+  buildSponsoredClaim,
+  describeClaimJob,
+  randomRequestId,
+  waitForClaim,
+} from "./sponsored-claim.js";
 import PendantView from "./PendantView.jsx";
-import PlushCompanion from "./PlushCompanion.jsx";
+import HomePortraitShowcase from "./HomePortraitShowcase.jsx";
+import { SPECIES as PREVIEW_SPECIES, HEADWEAR, NECKWEAR } from "../shared/deltax-traits.js";
 import { makeGardenKey } from "./garden-state.js";
 import {
   ACCESSORY_NAMES,
@@ -45,14 +58,16 @@ const GardenView = lazy(() => import("./GardenView.jsx"));
 
 export default function App() {
   const portraitScope = useId();
-  // Claim data can arrive pre-filled from the charm's QR link.
-  const initialClaim = useMemo(() => {
-    try {
-      return parseClaimCode(window.location.search);
-    } catch (error) {
-      return { error: error.message };
-    }
-  }, []);
+  const account = useAccount();
+  const accountRef = useRef(account);
+  accountRef.current = account;
+  const api = useMemo(() => createApiClient({
+    baseUrl: API_BASE_URL,
+    getAccessToken: () => accountRef.current.getAccessToken(),
+  }), []);
+
+  // The credential was captured and scrubbed before the sign-in SDK loaded.
+  const initialClaim = useMemo(() => getBootstrapClaim(), []);
 
   const [wallet, setWallet] = useState({ address: "", chainId: null });
   const [seriesId, setSeriesId] = useState(() => {
@@ -118,6 +133,11 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [busyLabel, setBusyLabel] = useState("");
   const [txHash, setTxHash] = useState("");
+  const [signInOpen, setSignInOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [claimJob, setClaimJob] = useState(null);
+  const claimPendingRef = useRef(null);
+  const claimAbortRef = useRef(null);
   const [status, setStatus] = useState(() =>
     initialClaim.error
       ? { tone: "error", text: initialClaim.error }
@@ -139,6 +159,9 @@ export default function App() {
   }, []);
 
   const isSepolia = wallet.chainId === SEPOLIA_CHAIN_ID;
+  const isEmbedded = account.mode === "embedded";
+  const activeAddress = isEmbedded ? account.address : wallet.address;
+  const activeIsSepolia = isEmbedded ? account.chainId === SEPOLIA_CHAIN_ID : isSepolia;
   // A local Hardhat demo is a different chain from the wallet. Claims must be
   // blocked: otherwise MetaMask sends the claim calldata to a no-code address
   // on Sepolia, which succeeds without minting anything.
@@ -153,13 +176,32 @@ export default function App() {
     [readProvider],
   );
 
-  const storageKey = wallet.address
-    ? `glowpet:v1:${SEPOLIA_CHAIN_ID}:${seriesId.toString()}:${wallet.address.toLowerCase()}`
+  const storageKey = activeAddress
+    ? `glowpet:v1:${SEPOLIA_CHAIN_ID}:${seriesId.toString()}:${activeAddress.toLowerCase()}`
     : "";
 
   useEffect(() => {
     findRequest.current += 1;
-  }, [wallet.address, seriesId]);
+  }, [activeAddress, seriesId]);
+
+  useEffect(() => {
+    if (account.mode === "embedded" && account.walletReady) {
+      setSignInOpen(false);
+      setAccountOpen(false);
+    }
+  }, [account.mode, account.walletReady]);
+
+  useEffect(() => {
+    if (account.mode !== "guest") return;
+    claimAbortRef.current?.abort();
+    claimPendingRef.current = null;
+    setClaimJob(null);
+    setTxHash("");
+  }, [account.mode]);
+
+  useEffect(() => () => {
+    claimAbortRef.current?.abort();
+  }, []);
 
   // -------------------------------------------------------------------------
   // Wallet lifecycle
@@ -251,6 +293,8 @@ export default function App() {
   // -------------------------------------------------------------------------
 
   useEffect(() => {
+    if (!CONFIGURED) return undefined;
+
     let cancelled = false;
     readProvider
       .send("eth_chainId", [])
@@ -432,7 +476,7 @@ export default function App() {
 
   // Reopen the pet this wallet activated last, if it still owns it.
   useEffect(() => {
-    if (linkedTokenId || !storageKey || !isSepolia || !readContract) return undefined;
+    if (linkedTokenId || !storageKey || !activeIsSepolia || !readContract) return undefined;
 
     let cancelled = false;
     const saved = readSavedPet(storageKey);
@@ -446,7 +490,7 @@ export default function App() {
         const owner = await readContract.ownerOf(saved);
         if (cancelled) return;
 
-        if (!sameAddress(owner, wallet.address)) {
+        if (!sameAddress(owner, activeAddress)) {
           savePet(storageKey, null);
           setPet(null);
           return;
@@ -461,9 +505,9 @@ export default function App() {
       cancelled = true;
       petRequest.current += 1;
     };
-  }, [storageKey, isSepolia, readContract, wallet.address, loadPetWithRetry, linkedTokenId]);
+  }, [storageKey, activeIsSepolia, readContract, activeAddress, loadPetWithRetry, linkedTokenId]);
 
-  // Homepage showcase: the most recent pet claimed in the active series.
+  // Keep a link to the latest claimed pet, separate from the collection preview.
   useEffect(() => {
     if (!readContract) {
       setFeaturedLoading(false);
@@ -507,7 +551,7 @@ export default function App() {
   // read-only; on a real deployment it shows only the connected wallet's pets.
   useEffect(() => {
     setCollectionLimit(12);
-  }, [wallet.address, seriesId, isDemoChain]);
+  }, [activeAddress, seriesId, isDemoChain]);
 
   useEffect(() => {
     if (view !== "pets") return undefined;
@@ -517,7 +561,7 @@ export default function App() {
       return undefined;
     }
 
-    const owner = isDemoChain ? null : wallet.address;
+    const owner = isDemoChain ? null : activeAddress;
     if (!isDemoChain && !owner) {
       setCollection([]);
       setCollectionError("");
@@ -553,7 +597,7 @@ export default function App() {
   }, [
     view,
     isDemoChain,
-    wallet.address,
+    activeAddress,
     readContract,
     discoverPets,
     collectionNonce,
@@ -561,24 +605,24 @@ export default function App() {
   ]);
 
   async function findMyPet() {
-    if (!readContract || !wallet.address) return;
+    if (!readContract || !activeAddress) return;
     const requestId = ++findRequest.current;
 
     setBusy(true);
     setBusyLabel("Scanning events");
     try {
-      const account = wallet.address;
+      const holder = activeAddress;
 
       // Claims cover mints; Transfer also covers pets received from someone
       // else. Both are filtered to this wallet and the active series below.
       const [claims, transfers] = await Promise.all([
         readContract.queryFilter(
-          readContract.filters.Claimed(account),
+          readContract.filters.Claimed(holder),
           DEPLOY_BLOCK,
           "latest",
         ),
         readContract.queryFilter(
-          readContract.filters.Transfer(null, account),
+          readContract.filters.Transfer(null, holder),
           DEPLOY_BLOCK,
           "latest",
         ),
@@ -613,7 +657,7 @@ export default function App() {
         try {
           const owner = await readContract.ownerOf(tokenId);
           if (requestId !== findRequest.current) return;
-          if (!sameAddress(owner, account)) continue;
+          if (!sameAddress(owner, holder)) continue;
         } catch {
           continue;
         }
@@ -718,6 +762,227 @@ export default function App() {
     }
   }
 
+  function readClaimForm() {
+    const serial = Number(serialInput);
+    if (!Number.isInteger(serial) || serial < 1) {
+      setStatus({ tone: "error", text: "Enter a valid charm serial." });
+      return null;
+    }
+    if (series && serial > series.maxSupply) {
+      setStatus({
+        tone: "error",
+        text: `Serial ${serial} is outside this series (1–${series.maxSupply}).`,
+      });
+      return null;
+    }
+
+    const secret = secretInput.trim().toLowerCase();
+    if (!isHexString(secret, 32)) {
+      setStatus({
+        tone: "error",
+        text: "The claim secret must be 32 bytes of hex (0x followed by 64 characters).",
+      });
+      return null;
+    }
+
+    let proof;
+    try {
+      proof = parseProof(proofInput);
+    } catch (error) {
+      setStatus({ tone: "error", text: error.message });
+      return null;
+    }
+    if (proof.length === 0 && series?.maxSupply !== 1) {
+      setStatus({ tone: "error", text: "Paste the Merkle proof from the charm's tag." });
+      return null;
+    }
+    return { serial, secret, proof };
+  }
+
+  function finishClaim(tokenId, recipient, message) {
+    const id = BigInt(tokenId);
+    savePet(
+      `glowpet:v1:${SEPOLIA_CHAIN_ID}:${seriesId.toString()}:${recipient.toLowerCase()}`,
+      id.toString(),
+    );
+    claimPendingRef.current = null;
+    setSecretInput("");
+    setProofInput("");
+    setClaimCodeInput("");
+    setLinkedTokenId(id);
+    const urlParams = new URLSearchParams({ token: id.toString() });
+    if (allowMotion) urlParams.set("motion", "1");
+    window.history.replaceState({}, "", `${window.location.pathname}?${urlParams.toString()}`);
+    setView("pet");
+    window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+    setStatus({ tone: "success", text: message });
+    loadPetWithRetry(id, { attempts: 5 });
+    readContract
+      ?.seriesInfo(seriesId)
+      .then((info) => setSeries(normalizeSeriesInfo(info)))
+      .catch(() => {});
+  }
+
+  async function claimSponsored() {
+    if (!account.walletReady || !account.address) {
+      setStatus({ tone: "warn", text: "Your Glowpet wallet is still being prepared. Try again in a moment." });
+      return;
+    }
+    if (!account.capabilities?.sponsoredClaim) {
+      setStatus({
+        tone: "error",
+        text: "Sponsored claims are not enabled on this server. Use an existing wallet or try again later.",
+      });
+      return;
+    }
+    if (!readContract) {
+      setStatus({ tone: "error", text: "The Glowpet contract is not configured in this build." });
+      return;
+    }
+
+    const inputs = readClaimForm();
+    if (!inputs) return;
+
+    const serverChain = account.server?.chain;
+    const chainId = Number(serverChain?.chainId ?? 0);
+    const contractAddress = serverChain?.contractAddress ?? "";
+    if (!chainId || !contractAddress) {
+      setStatus({ tone: "error", text: "The account service did not return a claim network." });
+      return;
+    }
+
+    const controller = new AbortController();
+    claimAbortRef.current?.abort();
+    claimAbortRef.current = controller;
+    setBusy(true);
+    setBusyLabel("Preparing claim");
+    setTxHash("");
+    setStatus({ tone: "info", text: "Checking your charm and preparing an authorization for your Glowpet wallet." });
+
+    try {
+      const currentSeries = normalizeSeriesInfo(await readContract.seriesInfo(seriesId));
+      if (!currentSeries.open) throw new Error("This series is closed and no longer accepting claims.");
+
+      const recipient = account.address;
+      const authorization = await buildSponsoredClaim({
+        secret: inputs.secret,
+        proof: inputs.proof,
+        root: currentSeries.root,
+        chainId,
+        contractAddress,
+        seriesId,
+        serial: inputs.serial,
+        recipient,
+        ttlSeconds: 600,
+      });
+
+      const nowSeconds = Math.floor(Date.now() / 1000);
+      let pending = claimPendingRef.current;
+      const reusable = pending
+        && pending.serial === inputs.serial
+        && pending.seriesId === String(seriesId)
+        && pending.credentialSigner === authorization.credentialSigner
+        && pending.recipient === recipient
+        && BigInt(pending.deadline) > BigInt(nowSeconds + 30);
+
+      if (!reusable) {
+        pending = {
+          key: randomRequestId(),
+          body: authorization.body,
+          deadline: authorization.deadline,
+          serial: inputs.serial,
+          seriesId: String(seriesId),
+          credentialSigner: authorization.credentialSigner,
+          recipient,
+        };
+      }
+      claimPendingRef.current = pending;
+      setBusyLabel("Submitting claim");
+      setStatus({ tone: "info", text: "Submitting your claim to the platform sponsor. No wallet signature or gas is needed." });
+
+      let job;
+      try {
+        job = await api.submitClaim(pending.body, pending.key, { signal: controller.signal });
+      } catch (error) {
+        if (error.code !== "NETWORK_ERROR") throw error;
+        setStatus({ tone: "warn", text: "The response was lost. Retrying with the same request key so the platform cannot submit it twice." });
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+        job = await api.submitClaim(pending.body, pending.key, { signal: controller.signal });
+      }
+
+      claimPendingRef.current = null;
+      setClaimJob(job);
+      setTxHash(job.txHash ?? "");
+      setStatus({ tone: "info", text: describeClaimJob(job) });
+
+      let current = job;
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        setBusyLabel("Waiting for confirmation");
+        const final = await waitForClaim({
+          api,
+          jobId: current.jobId,
+          signal: controller.signal,
+          onUpdate: (next) => {
+            setClaimJob(next);
+            if (next.txHash) setTxHash(next.txHash);
+            setStatus({ tone: "info", text: describeClaimJob(next) });
+          },
+        });
+
+        if (final.status === "CONFIRMED") {
+          const tokenId = final.tokenId
+            ? BigInt(final.tokenId)
+            : seriesId * SERIES_STRIDE + BigInt(inputs.serial);
+          finishClaim(tokenId, recipient, "Charm activated in your Glowpet wallet. Loading your pet…");
+          return;
+        }
+
+        if (final.status === "EXPIRED_UNSENT") {
+          setBusyLabel("Renewing authorization");
+          const renewed = await buildSponsoredClaim({
+            secret: inputs.secret,
+            proof: inputs.proof,
+            root: currentSeries.root,
+            chainId,
+            contractAddress,
+            seriesId,
+            serial: inputs.serial,
+            recipient,
+            ttlSeconds: 600,
+          });
+          const updated = await api.updateClaimAuthorization(
+            final.jobId,
+            { deadline: renewed.deadline, signature: renewed.signature },
+            randomRequestId(),
+            { signal: controller.signal },
+          );
+          current = updated;
+          setClaimJob(updated);
+          setStatus({ tone: "info", text: "Authorization renewed. Waiting for the sponsor." });
+          continue;
+        }
+
+        throw new Error(describeClaimJob(final));
+      }
+
+      throw new Error("The claim is still processing. Open My Pets in a minute; it will not be submitted twice.");
+    } catch (error) {
+      if (error.name === "AbortError") return;
+      if (error.code === "AUTH_REQUIRED") {
+        setSignInOpen(true);
+        setStatus({ tone: "error", text: "Your sign-in expired. Sign in again, then retry the claim." });
+      } else if (error.code === "WALLET_NOT_READY") {
+        setStatus({ tone: "warn", text: "Your wallet is still being prepared. Try again in a moment." });
+      } else {
+        setStatus({ tone: "error", text: error.message || describeError(error) });
+      }
+    } finally {
+      if (claimAbortRef.current === controller) claimAbortRef.current = null;
+      setBusy(false);
+      setBusyLabel("");
+    }
+  }
+
   async function claim(event) {
     event?.preventDefault();
 
@@ -732,6 +997,14 @@ export default function App() {
       });
       return;
     }
+    if (isEmbedded) {
+      await claimSponsored();
+      return;
+    }
+    if (account.authAvailable && !wallet.address) {
+      setSignInOpen(true);
+      return;
+    }
     if (!window.ethereum) {
       setStatus({ tone: "error", text: "MetaMask was not detected. Install it and reload." });
       return;
@@ -744,39 +1017,9 @@ export default function App() {
       return;
     }
 
-    const serial = Number(serialInput);
-    if (!Number.isInteger(serial) || serial < 1) {
-      setStatus({ tone: "error", text: "Enter a valid charm serial." });
-      return;
-    }
-    if (series && serial > series.maxSupply) {
-      setStatus({
-        tone: "error",
-        text: `Serial ${serial} is outside this series (1–${series.maxSupply}).`,
-      });
-      return;
-    }
-
-    const secret = secretInput.trim().toLowerCase();
-    if (!isHexString(secret, 32)) {
-      setStatus({
-        tone: "error",
-        text: "The claim secret must be 32 bytes of hex (0x followed by 64 characters).",
-      });
-      return;
-    }
-
-    let proof;
-    try {
-      proof = parseProof(proofInput);
-    } catch (error) {
-      setStatus({ tone: "error", text: error.message });
-      return;
-    }
-    if (proof.length === 0 && series?.maxSupply !== 1) {
-      setStatus({ tone: "error", text: "Paste the Merkle proof from the charm's tag." });
-      return;
-    }
+    const inputs = readClaimForm();
+    if (!inputs) return;
+    const { serial, secret, proof } = inputs;
 
     if (!isSepolia) {
       const switched = await switchToSepolia();
@@ -875,27 +1118,7 @@ export default function App() {
         }
       }
 
-      savePet(
-        `glowpet:v1:${SEPOLIA_CHAIN_ID}:${seriesId.toString()}:${signerAddress.toLowerCase()}`,
-        tokenId.toString(),
-      );
-      setSecretInput("");
-      setProofInput("");
-      setClaimCodeInput("");
-      // Keep a ?token= view so a refresh can recover the portrait, and bring
-      // the pet card into view instead of leaving the user on the form.
-      setLinkedTokenId(tokenId);
-      const urlParams = new URLSearchParams({ token: tokenId.toString() });
-      if (allowMotion) urlParams.set("motion", "1");
-      window.history.replaceState({}, "", `${window.location.pathname}?${urlParams.toString()}`);
-      setView("pet");
-      window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
-      setStatus({ tone: "success", text: "Charm activated on-chain. Loading your pet…" });
-
-      readContract
-        ?.seriesInfo(seriesId)
-        .then((info) => setSeries(normalizeSeriesInfo(info)))
-        .catch(() => {});
+      finishClaim(tokenId, signerAddress, "Charm activated on-chain. Loading your pet…");
     } catch (error) {
       // A relayer may have submitted the same signed claim first. The token is
       // still ours, so show it instead of an alarming "already claimed" error.
@@ -905,18 +1128,7 @@ export default function App() {
           const existingId = seriesId * SERIES_STRIDE + BigInt(serial);
           const owner = await readContract.ownerOf(existingId);
           if (sameAddress(owner, claimedTo)) {
-            savePet(
-              `glowpet:v1:${SEPOLIA_CHAIN_ID}:${seriesId.toString()}:${claimedTo.toLowerCase()}`,
-              existingId.toString(),
-            );
-            setSecretInput("");
-            setProofInput("");
-            setClaimCodeInput("");
-            openPet(existingId);
-            setStatus({
-              tone: "success",
-              text: "Your claim was already relayed on-chain. The pet is in your wallet.",
-            });
+            finishClaim(existingId, claimedTo, "Your claim was already relayed on-chain. The pet is in your wallet.");
             return;
           }
         } catch {
@@ -949,6 +1161,9 @@ export default function App() {
     if (!pet) return [];
     const t = pet.traits;
 
+    const deltaXRows = getDeltaXTraitRows(pet.metadata);
+    if (deltaXRows) return deltaXRows;
+
     return [
       ["Species", SPECIES_NAMES[t.species] ?? `#${t.species}`],
       ["Palette", PALETTE_NAMES[t.palette] ?? `#${t.palette}`],
@@ -966,14 +1181,23 @@ export default function App() {
 
   const claimButtonLabel = isDemoChain
     ? "Read-only local demo"
-    : !wallet.address
-      ? "Connect wallet to activate"
-      : busy
-        ? busyLabel || "Working…"
-        : "Activate Glowpet";
+    : isEmbedded
+      ? account.status === "error"
+        ? "Account unavailable"
+        : !account.walletReady || account.status === "loading"
+          ? "Preparing your wallet…"
+          : busy
+            ? busyLabel || "Working…"
+            : "Activate with my Glowpet wallet"
+      : account.authAvailable && !wallet.address
+        ? "Sign in to activate"
+        : !wallet.address
+          ? "Connect wallet to activate"
+          : busy
+            ? busyLabel || "Working…"
+            : "Activate Glowpet";
 
   const homePet = pet ?? featuredPet;
-  const homeSvg = useMemo(() => (homePet ? sanitizePortrait(homePet.svg, `${portraitScope}-home`) : ""), [homePet, portraitScope]);
 
   function navigate(next) {
     findRequest.current += 1;
@@ -1061,12 +1285,28 @@ export default function App() {
       tokenId: companion.tokenId,
       owner: companion.owner,
     } : {});
+    const serverChain = account.server?.chain;
+    const cloudReady = Boolean(
+      companion
+      && isEmbedded
+      && account.accountId
+      && account.capabilities?.cloudGarden
+      && serverChain?.contractAddress
+      && sameAddress(serverChain.contractAddress, GLOWPET_ADDRESS)
+      && Number(serverChain.chainId) === Number(readChainId),
+    );
     return (
       <Suspense fallback={<div className="card collection-empty">Opening your garden…</div>}>
         <GardenView
           key={key}
           storageKey={key}
           pet={companion}
+          cloud={cloudReady ? {
+            enabled: true,
+            tokenId: companion.tokenId.toString(),
+            accountId: account.accountId,
+            api,
+          } : null}
           onBack={() => companion ? openPet(companion.tokenId) : navigate("home")}
           onOpenPet={companion ? () => openPet(companion.tokenId) : undefined}
         />
@@ -1086,9 +1326,9 @@ export default function App() {
               <em>one unique pet.</em>
             </h1>
             <p className="lede">
-              A limited-edition pendant with a screen. Scan its tag to claim the
-              pet whose identity is derived from the charm's serial — owned by
-              you, rendered by the contract, impossible to duplicate.
+              Meet five soft companions dressed in jade, silk and lucky knots.
+              Explore the new collection, then bring your own Glowpet along
+              for a little everyday magic.
             </p>
             <div className="home-actions">
               <button type="button" className="primary home-cta" onClick={() => navigate("activate")}>
@@ -1103,60 +1343,25 @@ export default function App() {
             </div>
             <div className="home-stats">
               <span>
-                <strong>{series ? series.minted.toLocaleString("en-US") : "—"}</strong> claimed
+                <strong>{PREVIEW_SPECIES.length}</strong> companions
               </span>
               <span>
-                <strong>{series ? series.maxSupply.toLocaleString("en-US") : "—"}</strong> edition
+                <strong>{HEADWEAR.length}</strong> headwear styles
               </span>
               <span>
-                <strong>{series ? (series.open ? "Open" : "Closed") : "—"}</strong> status
+                <strong>{NECKWEAR.length}</strong> neckwear styles
               </span>
             </div>
-          </div>
-
-          <div className="home-showcase card">
-            {homeSvg && homePet ? (
-              <>
-                <div
-                  className="pet-stage force-motion"
-                  dangerouslySetInnerHTML={{ __html: homeSvg }}
-                  aria-label="Featured on-chain Glowpet"
-                />
-                <div className="home-showcase-meta">
-                  <div>
-                    <h2>
-                      {SPECIES_NAMES[homePet.traits.species] ?? "Glowpet"}{" "}
-                      <span>#{padSerial(homePet.traits.serial)}</span>
-                    </h2>
-                    <p>
-                      {series?.label ?? "Glowpet"} · Token {homePet.tokenId.toString()}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    className="ghost small"
-                    onClick={() => openPet(homePet.tokenId)}
-                  >
-                    View pet
-                  </button>
-                </div>
-              </>
-            ) : featuredLoading ? (
-              <div className="home-showcase-empty">
-                <div className="spinner" aria-hidden="true" />
-                <p>Looking for the newest pet on-chain…</p>
-              </div>
-            ) : (
-              <div className="home-showcase-empty home-plush-preview">
-                <span className="eyebrow">DELTAX · SOFT LITTLE FRIENDS</span>
-                <PlushCompanion model="rabbit" motion forceMotion />
-                <p>A little softness. A little everyday magic.</p>
-                <button type="button" className="ghost small" onClick={() => openGarden(null)}>
-                  Choose a Glowpet
+            {homePet && !featuredLoading && (
+              <p className="muted">
+                <button type="button" className="ghost small" onClick={() => openPet(homePet.tokenId)}>
+                  View previously claimed pet #{padSerial(homePet.traits.serial)}
                 </button>
-              </div>
+              </p>
             )}
           </div>
+
+          <HomePortraitShowcase />
         </section>
 
         <section className="home-features">
@@ -1170,10 +1375,10 @@ export default function App() {
           </article>
           <article className="feature-card">
             <span className="feature-index">02</span>
-            <h3>Drawn by the contract</h3>
+            <h3>A character in every detail</h3>
             <p>
-              Traits and the SVG portrait are generated on-chain from the token
-              id. No server, no IPFS, no disappearing art.
+              The new collection combines Chinese-inspired headwear, neckwear,
+              colours and motifs into distinct, fixed looks.
             </p>
           </article>
           <article className="feature-card">
@@ -1187,9 +1392,9 @@ export default function App() {
         </section>
 
         <section className="home-species">
-          <p className="eyebrow">14 SPECIES</p>
+          <p className="eyebrow">FIVE LITTLE COMPANIONS · NEW COLLECTION</p>
           <div className="species-strip">
-            {SPECIES_NAMES.map((name) => (
+            {PREVIEW_SPECIES.map(({ name }) => (
               <span key={name}>{name}</span>
             ))}
           </div>
@@ -1199,7 +1404,7 @@ export default function App() {
   }
 
   function renderPets() {
-    const canBrowse = isDemoChain || Boolean(wallet.address);
+    const canBrowse = isDemoChain || Boolean(activeAddress);
     const visiblePets = collection.slice(0, collectionLimit);
     const hasMorePets = collection.length > collectionLimit;
 
@@ -1217,9 +1422,14 @@ export default function App() {
             <button type="button" className="primary" onClick={() => navigate("activate")}>
               Activate a Pet
             </button>
-            {!isDemoChain && !wallet.address && (
+            {!isDemoChain && !activeAddress && account.authAvailable && (
+              <button type="button" className="primary" onClick={() => setSignInOpen(true)}>
+                Sign in with email
+              </button>
+            )}
+            {!isDemoChain && !activeAddress && (
               <button type="button" className="ghost" onClick={connectWallet} disabled={busy}>
-                Connect wallet
+                Use existing wallet
               </button>
             )}
             {canBrowse && (
@@ -1245,10 +1455,23 @@ export default function App() {
         {!canBrowse ? (
           <section className="card collection-empty">
             <EmptyPet />
-            <h2>Connect to see your pets</h2>
-            <p>Your pets are held by your wallet, not by this website.</p>
-            <button type="button" className="primary" onClick={connectWallet} disabled={busy}>
-              Connect wallet
+            <h2>
+              {account.mode === "embedded"
+                ? "Preparing your wallet…"
+                : account.authAvailable ? "Sign in to see your pets" : "Connect to see your pets"}
+            </h2>
+            <p>
+              {account.mode === "embedded"
+                ? "Your free Glowpet wallet is being created. This usually takes a few seconds."
+                : "Use a one-time email code, or connect a wallet you already use. Your pets stay in your wallet, not on this website."}
+            </p>
+            {account.authAvailable && account.mode === "guest" && (
+              <button type="button" className="primary" onClick={() => setSignInOpen(true)}>
+                Sign in with email
+              </button>
+            )}
+            <button type="button" className="ghost" onClick={connectWallet} disabled={busy}>
+              Use existing wallet
             </button>
           </section>
         ) : collectionLoading || !collectionReady ? (
@@ -1368,7 +1591,16 @@ export default function App() {
         </nav>
 
         <div className="wallet-area">
-          {wallet.address ? (
+          <AccountMenu
+            account={account}
+            onSignIn={() => setSignInOpen(true)}
+            onOpenAccount={() => setAccountOpen(true)}
+          />
+          {isEmbedded ? (
+            <span className={`network ${activeIsSepolia ? "ok" : "bad"}`}>
+              {activeIsSepolia ? "Sepolia" : `Chain ${account.chainId ?? "…"}`}
+            </span>
+          ) : wallet.address ? (
             <>
               <span className={`network ${isSepolia ? "ok" : "bad"}`}>
                 {isSepolia ? "Sepolia" : "Wrong network"}
@@ -1378,14 +1610,14 @@ export default function App() {
               </span>
             </>
           ) : (
-            <button type="button" className="ghost" onClick={connectWallet} disabled={busy}>
-              Connect wallet
+            <button type="button" className="ghost small" onClick={connectWallet} disabled={busy}>
+              Use existing wallet
             </button>
           )}
         </div>
       </header>
 
-      {wallet.address && !isSepolia && (
+      {!isEmbedded && wallet.address && !isSepolia && (
         <div className="banner">
           <span>Glowpet lives on the Sepolia testnet.</span>
           <button type="button" className="ghost small" onClick={switchToSepolia} disabled={busy}>
@@ -1458,8 +1690,8 @@ export default function App() {
                   <h1>Unbox your pet</h1>
                   <p className="lede">
                     Scan the tag on your charm, or enter its serial and claim
-                    credential below. The contract draws a pet only this charm
-                    can produce.
+                    credential below. Each charm claims its own NFT with a
+                    fixed species and portrait.
                   </p>
                 </div>
               </section>
@@ -1490,7 +1722,7 @@ export default function App() {
             </div>
 
             {!CONFIGURED ? (
-              <SetupNotice />
+              <SetupNotice onExplore={() => openGarden(null)} />
             ) : (
               <>
                 <div className="series-stats">
@@ -1573,6 +1805,18 @@ export default function App() {
                       : "Comma, space or newline separated."}
                   </p>
                   <p className="hint">Use the credential printed on your charm, never your wallet's private key. It stays in this browser.</p>
+                  {account.authAvailable && account.mode === "guest" && !wallet.address && (
+                    <p className="hint">
+                      A one-time email code creates a free wallet for you and the platform pays the claim gas.
+                      You can also use an existing wallet from the header.
+                    </p>
+                  )}
+                  {isEmbedded && account.walletReady && (
+                    <p className="hint">
+                      This claim will be minted to {shortAddress(account.address)}. The platform sponsors gas;
+                      your charm credential is still signed only in this page.
+                    </p>
+                  )}
 
                   <button type="submit" className="primary" disabled={busy || isDemoChain}>
                     {claimButtonLabel}
@@ -1604,7 +1848,25 @@ export default function App() {
 
             {status.text && <div className={`status ${status.tone}`}>{status.text}</div>}
 
-            {txHash && !isDemoChain && (
+            {claimJob && (
+              <div className={`claim-progress${claimJob.status === "CONFIRMED" ? " is-done" : ""}`} aria-live="polite">
+                <div className="claim-progress-head">
+                  {claimJob.status !== "CONFIRMED" && <span className="spinner small" aria-hidden="true" />}
+                  <strong>{String(claimJob.status).replaceAll("_", " ")}</strong>
+                  {claimJob.requiredConfirmations > 0 && (
+                    <span>{claimJob.confirmations} / {claimJob.requiredConfirmations} confirmations</span>
+                  )}
+                </div>
+                <p>{describeClaimJob(claimJob)}</p>
+                {claimJob.txHash && (
+                  <a className="tx-link" href={txUrl(claimJob.txHash)} target="_blank" rel="noreferrer">
+                    View claim transaction on Etherscan ↗
+                  </a>
+                )}
+              </div>
+            )}
+
+            {txHash && !isDemoChain && !claimJob && (
               <a className="tx-link" href={txUrl(txHash)} target="_blank" rel="noreferrer">
                 View transaction on Etherscan ↗
               </a>
@@ -1726,9 +1988,14 @@ export default function App() {
                       credential. The contract will draw a pet that only this serial
                       can produce.
                     </p>
-                    {wallet.address && isSepolia && !isDemoChain && (
+                    {activeAddress && (isEmbedded || isSepolia) && !isDemoChain && (
                       <button type="button" className="ghost" onClick={findMyPet} disabled={busy}>
                         Find my Glowpet on-chain
+                      </button>
+                    )}
+                    {!activeAddress && account.authAvailable && (
+                      <button type="button" className="primary" onClick={() => setSignInOpen(true)}>
+                        Sign in with email
                       </button>
                     )}
                   </>
@@ -1745,7 +2012,7 @@ export default function App() {
         <span>
           {isDemoChain
             ? `Local demo on chain ${readChainId}. No explorer; claims are disabled.`
-            : "Art, traits and ownership live on Sepolia. No backend, no custody."}
+            : "Pet ownership is recorded on-chain. New collection artwork is shown as a preview until release."}
         </span>
         <span className="footer-links">
           {CONFIGURED && !isDemoChain && (
@@ -1756,6 +2023,26 @@ export default function App() {
           <span>Testnet only · no monetary value</span>
         </span>
       </footer>
+
+      <SignInDialog
+        account={account}
+        open={signInOpen}
+        onClose={() => setSignInOpen(false)}
+        onUseExistingWallet={() => {
+          setSignInOpen(false);
+          connectWallet();
+        }}
+      />
+      <AccountDialog
+        account={account}
+        open={accountOpen}
+        onClose={() => setAccountOpen(false)}
+        onUseExistingWallet={async () => {
+          await account.logout();
+          setAccountOpen(false);
+          connectWallet();
+        }}
+      />
     </div>
   );
 }
@@ -1832,30 +2119,18 @@ function EmptyPet() {
   );
 }
 
-function SetupNotice() {
+function SetupNotice({ onExplore }) {
   return (
     <div className="setup">
-      <p className="eyebrow">CONFIGURATION</p>
-      <h2>Deploy the contracts first</h2>
+      <p className="eyebrow">COMING SOON</p>
+      <h2>Activations are not open yet</h2>
       <p>
-        Add the Glowpet address to <code>.env</code>, then restart the dev server:
+        Meet the companions and try the guest garden while we prepare for launch.
+        Your guest progress stays on this device.
       </p>
-      <pre>VITE_GLOWPET_ADDRESS=0x…</pre>
-      <ol>
-        <li>
-          Deploy <code>GlowpetFaceArt</code>
-        </li>
-        <li>
-          Deploy <code>GlowpetArt(faceArtAddress)</code>
-        </li>
-        <li>
-          Deploy <code>Glowpet(artAddress)</code>
-        </li>
-        <li>
-          Call <code>createSeries(...)</code> with the generated root
-        </li>
-      </ol>
-      <p className="hint">The full walkthrough is in README.md.</p>
+      <button type="button" className="primary" onClick={onExplore}>
+        Explore the guest garden
+      </button>
     </div>
   );
 }

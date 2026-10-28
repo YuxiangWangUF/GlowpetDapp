@@ -1,5 +1,7 @@
 import { isHexString } from "ethers";
+import { nftImageSvg } from "./nft-image.js";
 import { assertClaimProtocol } from "./claim-authorization.js";
+export { GLOWPET_ABI } from "../shared/glowpet-abi.js";
 export { CLAIM_DOMAIN_NAME, CLAIM_DOMAIN_VERSION, CLAIM_TYPES } from "./claim-authorization.js";
 
 /**
@@ -28,36 +30,6 @@ export const SEPOLIA_CHAIN_ID = 11155111;
 export const SEPOLIA_CHAIN_ID_HEX = "0xaa36a7";
 export const SEPOLIA_EXPLORER_URL = "https://sepolia.etherscan.io";
 export const SERIES_STRIDE = 1_000_000n;
-
-/**
- * Human-readable ABI. It lists only the calls and events this app uses, plus
- * the custom errors so ethers can decode reverts into readable messages.
- */
-export const GLOWPET_ABI = [
-  "function claimProtocolVersion() pure returns (uint256)",
-  "function claim(uint256 seriesId, uint32 serial, address credentialSigner, bytes32[] proof, address recipient, uint256 deadline, bytes signature) returns (uint256 tokenId)",
-  "function seriesInfo(uint256 seriesId) view returns (uint64 maxSupply, uint64 minted, bool open, uint32 salt, bytes32 serialRoot, string label)",
-  "function petState(uint256 tokenId) view returns (uint8 species, uint8 palette, uint8 eyeStyle, uint8 mouthStyle, uint8 accessory, uint8 eyewear, uint8 frameColor, uint8 stage, uint8 bodyShape, int8 tilt, uint16 level, uint32 serial, uint256 seriesId)",
-  "function tokenURI(uint256 tokenId) view returns (string)",
-  "function ownerOf(uint256 tokenId) view returns (address)",
-  "function balanceOf(address owner) view returns (uint256)",
-  "function serialClaimed(uint256 tokenId) view returns (bool)",
-  "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
-  "event Claimed(address indexed owner, uint256 indexed tokenId, uint256 seriesId, uint32 serial)",
-  "event Evolved(uint256 indexed tokenId, uint8 stage)",
-  "error InvalidConfig()",
-  "error InvalidSerial()",
-  "error InvalidCredentialSigner()",
-  "error InvalidRecipient()",
-  "error InvalidProof()",
-  "error InvalidSignature()",
-  "error SignatureExpired()",
-  "error SeriesExists()",
-  "error SeriesNotOpen()",
-  "error AlreadyClaimed()",
-  "error MaxSupplyReached()",
-  "error StageMustIncrease()",
-];
 
 // Display names. Index = value stored in the trait struct.
 export const SPECIES_NAMES = [
@@ -116,7 +88,7 @@ export function decodeTokenURI(uri) {
   const svg =
     typeof metadata.image === "string" && metadata.image.startsWith(imagePrefix)
       ? base64ToUtf8(metadata.image.slice(imagePrefix.length))
-      : "";
+      : nftImageSvg(metadata.image);
 
   return { metadata, image: metadata.image ?? "", svg };
 }

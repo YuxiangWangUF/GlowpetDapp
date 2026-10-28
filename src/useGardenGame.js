@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   advanceGame, createGame, getGardenActionError, reduceGame, upgradeGame,
 } from "./garden-state.js";
+import useCloudGardenGame from "./useCloudGardenGame.js";
 
 const browserStorage = () => globalThis.localStorage;
 const browserLocks = () => globalThis.navigator?.locks;
@@ -151,7 +152,7 @@ export function createGardenStore(storageKey, {
   };
 }
 
-export default function useGardenGame(storageKey) {
+function useLocalGardenGame(storageKey) {
   const store = useMemo(() => createGardenStore(storageKey), [storageKey]);
   const [snapshot, setSnapshot] = useState(() => store.getSnapshot());
   const [now, setNow] = useState(Date.now);
@@ -182,5 +183,22 @@ export default function useGardenGame(storageKey) {
     dispatch: store.dispatch,
     storageError: active.storageError,
     storageStatus: active.storageStatus,
+    source: "local",
   };
+}
+
+/**
+ * Shared component-facing hook. Guest and local pet journals keep the original
+ * browser store; an authenticated owner of a claimed pet can use the cloud
+ * adapter, where the server computes every reward.
+ */
+export default function useGardenGame(storageKey, { cloud = null } = {}) {
+  const local = useLocalGardenGame(storageKey);
+  const cloudGame = useCloudGardenGame({
+    enabled: Boolean(cloud?.enabled),
+    tokenId: cloud?.tokenId ?? "",
+    accountId: cloud?.accountId ?? "",
+    api: cloud?.api ?? null,
+  });
+  return cloud?.enabled ? cloudGame : local;
 }
