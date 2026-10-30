@@ -2,6 +2,8 @@
 
 Continuing on another device? Start with [the agent handoff](docs/AGENT_HANDOFF.md)
 and [repository instructions](AGENTS.md). Use Node.js 24 LTS and `npm ci`.
+See [the current progress report](docs/PROJECT_STATUS.md) for the latest verified
+baseline, completed work and remaining release requirements.
 The public release currently provides the homepage, artwork previews and a local
 guest garden. Production accounts, cloud saves and NFT activation still require
 their own service configuration and release verification.
@@ -141,24 +143,24 @@ Requirements: Node.js 24 LTS with npm for the complete toolchain. MetaMask and S
 
 > Use Node.js 24 LTS consistently for frontend, server and artwork work when
 > moving between devices.
+> The 2026-10-30 check found clean-install and visitor-build blockers; see
+> [current results and next steps](docs/PROJECT_STATUS.md) before treating a
+> fresh checkout as verified. The commands below remain the intended workflow.
 
 ```bash
-npm install
-cp .env.example .env
+npm ci
+npm run dev -- --host 127.0.0.1
 ```
 
-Deploy the contracts (next section), then set the Glowpet address in `.env`:
+Open the URL Vite prints, usually `http://127.0.0.1:5173`. A fresh checkout
+defaults to guest mode and needs no wallet, environment file or deployed
+contract. Start with the homepage and `?view=garden`.
 
-```env
-VITE_GLOWPET_ADDRESS=0xYourDeployedGlowpetAddress
-VITE_GLOWPET_SERIES_ID=1
-```
-
-```bash
-npm run dev
-```
-
-Open the URL Vite prints, usually `http://localhost:5173`.
+For chain interactions, configure an actual verified contract as described
+below. Preserve existing local environment files when resuming on another
+device; use `.env.example` as a reference instead of overwriting local settings.
+`npm run build:visitor` builds the public guest version, and
+`npm run release:edgeone` packages it locally without uploading or deploying.
 
 ### Local zero-wallet demo (no MetaMask, no Sepolia)
 
@@ -427,8 +429,10 @@ Those files are served **only by the Vite dev server** and are never copied into
 not be published with a production build. Use `.glowpet-demo/proofs` exclusively
 for local demos; a real deployment writes credentials into NFC tags/QR codes.
 
-If you deploy the demo to a local Hardhat node instead of Sepolia, generate a
-matching series with `--chain-id 31337`; the leaf commits to `block.chainid`.
+Credentials must match the node's actual chain ID because the leaf commits to
+`block.chainid`. This repository's `npm run local:node` uses `11155111` on
+loopback; it is not public Sepolia. Use `--chain-id 31337` only for a separately
+configured node that actually reports that chain ID.
 
 ## The garden
 
@@ -478,7 +482,9 @@ disable this feature, use one garden tab at a time to avoid conflicting saves.
 The guest garden now uses the approved Soft & Sweet bunny, kitty, fox, mouse and
 lamb. Switch between the five looks below the portrait; this changes only the
 preview and keeps the same practice garden. The selected look is remembered on
-this device. The homepage also shows the bunny when there is no minted pet to feature.
+this device. The homepage's `HomePortraitShowcase` uses complete
+`deltax-unique-v2` WebP portraits, including the approved cat-only plush lion cap.
+Those homepage previews do not change the guest garden's five base characters.
 
 Transparent PNG assets live in `public/pets/deltax-soft-v1/`. The reusable
 `PlushCompanion` component adds a 4.8-second breathing loop, a 3.4-second gentle
@@ -514,9 +520,15 @@ against the old root.
 On 2026-10-20 the user approved the soft A direction for **DeltaX**: rabbit,
 cat, fox, mouse and sheep. The approved visual references and model catalog
 are recorded in [`docs/deltax-base-models.json`](docs/deltax-base-models.json);
-the proposed token-derived variation plan is in PRD §9.3.1. These are concept
-art references, not yet composable runtime assets. The current renderer below
-still uses the original 14-species design; no deployed NFT artwork was changed.
+the current edition rules are in [DELTAX_NFT_ART.md](docs/DELTAX_NFT_ART.md) and
+PRD §9.3.1. The five transparent base images are used in the guest garden.
+The implemented `deltax-unique-v2` renderer and `DeltaXGlowpet` contract support
+18,432 allowed combinations; a frozen 100-image edition is checked in. IPFS
+publication and the new contract's target-network deployment remain pending.
+
+The original SVG implementation remains available for legacy pets. Its
+14-species renderer is described below; the new previews do not replace
+existing deployed NFT artwork.
 
 - 14 species: cat, dog, rabbit, bear, fox, panda, frog, sheep, pig, mouse,
   penguin, cow, tiger, lion.
@@ -648,6 +660,8 @@ cloud garden. These are deliberately left for later milestones (see
 | --- | --- |
 | `npm run dev` | Vite dev server |
 | `npm run build` | Production build in `dist/` |
+| `npm run build:visitor` | Build with fixed public guest configuration; no deployment |
+| `npm run release:edgeone` | Build and package an EdgeOne ZIP locally; no upload or DNS changes |
 | `npm run preview` | Serve the production build locally |
 | `npm run dev:server` | Account/claim/garden API |
 | `npm run dev:worker` | Sponsored-claim worker (separate process; PostgreSQL) |
