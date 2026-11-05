@@ -1,0 +1,83 @@
+runtime-rabbit-prompt.txt
+Built-in image_gen; transparent_background=true
+Reference: output/glowpet-concepts/A-soft-sweet.png
+Output: public/pets/deltax-soft-v1/rabbit.png
+
+Use case: background-extraction. Asset type: production game character transparent PNG cutout. Reference image is the approved Glowpet A Soft & Sweet bunny design sheet. Create a SINGLE isolated full-body front-facing bunny matching the LARGE main bunny: warm ivory creamy short plush fur with fine tactile fluff; very wide rounded head that is also the little body, no tall torso, two tiny round paws below; one tall thick rounded upright ear at viewer left, one thick gently folded ear at viewer right; low-set dark brown glossy open eyes, tiny brown nose and smiling mouth, soft peach blush; ONE small warm glowing golden FOUR-POINT star embedded on the viewer-right cheek. Preserve the exact approved character identity, head-to-ear proportion, softness, detailed short plush texture, and expression. Remove all text, swatches, accessory device, other poses and other characters from the reference. Square composition with just one complete character centered; no cropping of ears or paws, generous transparent margins of at least 8% around every outer edge. True transparent RGBA background, no white or cream backdrop, no floor, no ground shadow, no cast shadow, no scene, no pedestal. Soft studio illumination on the character only. This will be animated with a gentle breathing loop in a web pet game.
+
+
+runtime-cat-fox-prompts.txt
+Built-in image_gen, individual image calls, reference: output/glowpet-concepts/A-family-v1.png
+
+CAT
+Use case: background-extraction / identity-preserve.
+Asset type: production transparent PNG character asset for a virtual-pet game.
+Input image: the attached approved Glowpet family concept sheet is the identity and material reference.
+Primary request: extract and faithfully recreate ONLY the KITTY, second character from left, as one complete individual character. Do not redesign it.
+Subject: the exact creamy warm-ivory plush kitten, broad rounded almost spherical head/body, short soft rounded triangular ears with blush-pink centers, subtle pale beige forehead stripes, low-set glossy dark brown eyes, tiny coral-pink nose and little curved mouth, soft pink cheeks, two tiny front paws, small curled cream tail to its viewer-right. Preserve the small warm golden four-point glowing star on its viewer-right cheek. Keep the same soft short plush fur, gentle full three-dimensional volume and sweet calm expression as reference.
+Composition: square canvas, single whole kitty centered, face looking straight forward, sitting low on two paws. Entire silhouette including ears, paws and tail visible, with at least 8% fully transparent margin on each of all four sides.
+Backdrop: GENUINELY TRANSPARENT alpha background. No floor, no ground plane, no drop shadow, no cast shadow, no background gradient or haze. Preserve fine fur edge alpha.
+Lighting: very soft warm studio light intrinsic to the character, consistent with reference.
+Constraints: one character only; no other animals; no scene; no words, letters, logo, chart, labels, watermark, decorative particles or props. Do not include a drawn checkerboard. Keep cat identity, dimensions, colors, facial layout and star consistent with approved reference.
+
+FOX
+Use case: background-extraction / identity-preserve.
+Asset type: production transparent PNG character asset for a virtual-pet game.
+Input image: the attached approved Glowpet family concept sheet is the identity and material reference.
+Primary request: extract and faithfully recreate ONLY the FOX, third character from left, as one complete individual character. Do not redesign it.
+Subject: the exact apricot-peach plush fox, broad rounded almost spherical head/body, upright soft triangular ears with cream-blush centers, pale warm creamy white cheek-and-muzzle mask, low-set glossy dark brown eyes, tiny brown nose and little curved mouth, soft pink cheeks, two tiny creamy front paws, fluffy curled apricot tail at viewer-right with creamy white tip. Preserve the small warm golden four-point glowing star on its viewer-right cheek. Keep the same soft short plush fur, gentle full three-dimensional volume and sweet calm expression as reference.
+Composition: square canvas, single whole fox centered, face looking straight forward, sitting low on two paws. Entire silhouette including ears, paws and tail visible, with at least 10% fully transparent margin on each of all four sides.
+Backdrop: GENUINELY TRANSPARENT alpha background. No floor, no ground plane, no drop shadow, no cast shadow, no background gradient or haze. Preserve fine fur edge alpha.
+Lighting: very soft warm studio light intrinsic to the character, consistent with reference.
+Constraints: one character only; no other animals; no scene; no words, letters, logo, chart, labels, watermark, decorative particles or props. Do not include a drawn checkerboard. Keep fox identity, dimensions, colors, facial layout and star consistent with approved reference.
+
+CAT FINAL COMPOSITION PASS
+Use case: identity-preserve / background-extraction.
+Make one targeted composition correction to this exact cat asset, preserving its character design, face, fur, colors, star, pose, paws, tail and soft lighting unchanged. Scale the ENTIRE existing character down uniformly so its entire visible silhouette fits inside the central 70% of the square canvas in BOTH width and height. Center it exactly. This gives genuinely EMPTY transparent margins of at least 15% at left, right, top and bottom. Remove all stray pixels beyond the character silhouette and all hazy residual alpha pixels in the margins. True transparent alpha backdrop, no shadow, no ground, no glow outside the character. One complete cat only, no lettering, nothing new.
+
+FOX FINAL COMPOSITION PASS
+Use case: identity-preserve / background-extraction.
+Make one targeted composition correction to this exact fox asset, preserving its character design, face, fur, colors, star, pose, paws, tail and soft lighting unchanged. Scale the ENTIRE existing character down uniformly so its entire visible silhouette fits inside the central 70% of the square canvas in BOTH width and height. Center it exactly. This gives genuinely EMPTY transparent margins of at least 15% at left, right, top and bottom. Remove all stray pixels beyond the character silhouette and all hazy residual alpha pixels in the margins. True transparent alpha backdrop, no shadow, no ground, no glow outside the character. One complete fox only, no lettering, nothing new.
+
+
+runtime-mouse-sheep-prompts.txt
+Glowpet DeltaX soft family — runtime mouse and sheep
+Mode: built-in image_gen, transparent_background=true. Original alpha preserved; no post-generation edits.
+Final assets: public/pets/deltax-soft-v1/mouse.png; public/pets/deltax-soft-v1/sheep.png
+Both assets: 1254 × 1254 RGBA PNG.
+
+MOUSE — initial extraction
+Use case: background-extraction
+Asset type: production transparent PNG game character sprite for Glowpet DeltaX soft family.
+Input image: reference/edit target A-mouse-detail-v1.png. Extract and faithfully recreate ONLY the large front-facing mouse character shown at the left, matching its approved identity. Do not create a new design.
+Primary request: one complete, front-facing silver-grey plush mouse, very wide round head-body, large round ears with soft blush-pink inner ears, short silky plush fur, three-lobed forelock, low-set shy large grey glossy eyes, tiny pink nose and small smiling mouth, pink cheeks, exactly two tiny front paws, thin pink curled tail visible to image right, and a warm gold glowing FOUR-POINT star on the image-right cheek. Preserve all approved proportions, soft toy material and gentle expression. The whole head, both ears, both paws, and entire tail must be visible.
+Scene/backdrop: actual fully transparent alpha background. No background color, no room, no ground plane, no floor, no cast shadow, no detached shadow.
+Composition: square image, single centered isolated character. Fit the entire mouse with at least 8 percent clear transparent padding on all four edges. Straight-on eye-level portrait. No extra characters or views.
+Lighting: softly lit plush fibers with gentle intrinsic volume shading; warm cheek star only. No large halo outside character.
+Constraints: no text, no labels, no palette swatches, no device, no graph, no board, no border, no icons, no watermarks. Do not include the other expressions or the pendant device from the reference. Maintain true transparent pixels around the silhouette and preserve fine fur alpha edge.
+
+MOUSE — final padding revision
+Use case: precise-object-edit.
+Edit the supplied transparent mouse sprite ONLY to make it substantially smaller within the square transparent canvas. Preserve its exact identity, pose, colors, materials, facial expression, gold four-point cheek star, paws, ears and tail.
+Make the entire character about 60 percent of the square canvas width and height, absolutely centered, leaving approximately 20 percent EMPTY TRANSPARENT margin on every side. The transparent border must be large and obvious. This is a game sprite that needs extra room around it for animation; do not tightly crop the character. Keep the whole character, all fur, both ears, feet and tail.
+Actual transparent RGBA background; do not add any background, floor, shadows, halo, scenery, words, other characters, or props. Change nothing about the character except its scale and central position in the canvas.
+
+SHEEP — initial extraction
+Use case: background-extraction
+Asset type: production transparent PNG game character sprite for Glowpet DeltaX soft family.
+Input image: reference/edit target A-family-v1.png. Extract and faithfully recreate ONLY the lamb at the far right labeled LAMB, matching its approved identity. Do not create a new design.
+Primary request: one complete front-facing cream plush lamb, very wide round head-body, cloud-like rounded cream wool cap covering the top of head, outward-drooping horizontal ears with peach-pink inner ears, low-set glossy dark eyes, tiny warm brown nose and small smiling mouth, pink blush cheeks, exactly two tiny front paws, and a warm gold glowing FOUR-POINT star on the image-right cheek. Preserve approved proportions, gentle expression, and short plush wool material.
+Scene/backdrop: actual fully transparent alpha background. No background color, no room, no ground plane, no floor, no cast shadow, no detached shadow.
+Composition: square image. Single isolated lamb, absolutely centered both horizontally and vertically. The entire character including both ears and both paws occupies at most 78 percent of the canvas width AND height, leaving generous empty transparent padding of at least 10 percent on every side. All body parts and fur edges must fit fully inside that padded area. Straight-on eye-level portrait.
+Lighting: soft plush fiber lighting and intrinsic volume shading only; warm cheek star. No large halo outside character.
+Constraints: no other animals, no text, no label, no palette, no device, no chart, no board, no border, no icons, no watermark. Actual transparent pixels around complete silhouette, fine fur alpha edge.
+
+SHEEP — final padding revision
+Use case: precise-object-edit.
+Edit the supplied transparent cream lamb sprite ONLY to make it substantially smaller within the square transparent canvas. Preserve its exact identity, pose, colors, plush materials, cloud wool cap, facial expression, gold four-point cheek star, two paws, and drooping ears.
+Make the entire character about 60 percent of the square canvas width and height, absolutely centered, leaving approximately 20 percent EMPTY TRANSPARENT margin on every side. The transparent border must be large and obvious. This is a game sprite that needs extra room around it for animation; do not tightly crop the character. Keep the whole character, all wool, both ears, and both paws.
+Actual transparent RGBA background; do not add any background, floor, shadows, halo, scenery, words, other characters, or props. Change nothing about the character except its scale and central position in the canvas.
+
+Validation: mouse alpha>1 bbox (232,317)-(1025,972); sheep alpha>1 bbox (207,326)-(1050,980).
+Both have true transparent pixels and fine fur alpha edges. A few alpha=1 pixels remain in the transparent surround from the built-in tool; visually imperceptible.
+

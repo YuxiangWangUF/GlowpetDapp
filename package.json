@@ -14,6 +14,8 @@
     "contracts:compile": "node scripts/compile-contracts.mjs",
     "art:generate": "node scripts/generate-deltax-edition.mjs",
     "art:verify": "node scripts/generate-deltax-edition.mjs --verify output/deltax-unique-v2/publish/collection.json",
+    "ipfs:publish": "node scripts/ipfs-publish.mjs",
+    "ipfs:verify": "node scripts/ipfs-verify.mjs",
     "dev:server": "node server/index.js",
     "dev:worker": "node server/worker-entry.js",
     "db:migrate": "node server/db/migrate-cli.js",
@@ -40,9 +42,13 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.11",
+    "@ipld/car": "^5.4.7",
     "@openzeppelin/contracts": "5.6.1",
     "@vitejs/plugin-react": "^4.7.0",
     "hardhat": "2.29.1",
+    "ipfs-car": "^3.1.0",
+    "multiformats": "^14.0.5",
+    "pinata": "^2.5.6",
     "sharp": "0.35.5",
     "solc": "0.8.30",
     "vite": "^6.4.4"

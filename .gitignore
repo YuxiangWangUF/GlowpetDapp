@@ -27,3 +27,9 @@ cache/
 /sites/
 /发布包/
 /output/releases/
+
+# The 10,000-item release edition is kept locally/IPFS, not in Git.
+/output/deltax-unique-v2-10000-sepolia-20261103/
+
+# Local agent/tooling state, not project source.
+/.zcode/

@@ -34,6 +34,7 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { assertPrivateOutput } from "./credential-safety.mjs";
+import { APPEARANCE_CAPACITY, ARTWORK_VERSION } from "../shared/deltax-traits.js";
 
 const PROTOCOL_VERSION = 2;
 const SERIES_STRIDE = 1_000_000n;
@@ -62,6 +63,7 @@ Options
   --series <n>          Series id stored on-chain. Default: 1
   --chain-id <n>        Chain the series will be deployed on. Default: 11155111 (Sepolia)
   --label <text>        Series label rendered under every portrait. Default: DeltaX
+  --artwork <mode>      Deployment guide: legacy-svg | deltax. Default: legacy-svg
   --salt <n>            uint32 metadata salt (not part of the leaf). Default: 0
   --seed <0x…>          32-byte seed used to derive secrets. Default: random
   --seed-file <path>    Read the seed from a file (keeps it out of shell history)
@@ -254,6 +256,14 @@ function main() {
   const chainId = intArg(args["chain-id"] ?? DEFAULT_CHAIN_ID, "chain-id", 1, Number.MAX_SAFE_INTEGER);
   const salt = intArg(args.salt ?? 0, "salt", 0, 0xffffffff);
   const label = args.label === undefined || args.label === true ? "DeltaX" : String(args.label);
+  const artwork = args.artwork === undefined ? "legacy-svg" : String(args.artwork);
+  if (!["legacy-svg", "deltax"].includes(artwork)) {
+    throw new Error("--artwork must be legacy-svg or deltax");
+  }
+  const deltaX = artwork === "deltax";
+  if (deltaX && supply > APPEARANCE_CAPACITY) {
+    throw new Error(`DeltaX supply must not exceed ${APPEARANCE_CAPACITY} allowed appearances; it must also fit the deployed edition.`);
+  }
   if (Buffer.byteLength(label, "utf8") > MAX_LABEL_BYTES) {
     throw new Error(`--label must be at most ${MAX_LABEL_BYTES} UTF-8 bytes (the contract limit)`);
   }
@@ -357,6 +367,7 @@ function main() {
   // --- public metadata -----------------------------------------------------
   const seriesInfo = {
     protocolVersion: PROTOCOL_VERSION,
+    ...(deltaX ? { intendedContract: "DeltaXGlowpet", artworkVersion: ARTWORK_VERSION } : {}),
     seriesId,
     label,
     maxSupply: supply,
@@ -377,7 +388,7 @@ function main() {
   fs.writeFileSync(
     path.join(outDir, "deployment.txt"),
     [
-      "Glowpet.createSeries",
+      `${deltaX ? "DeltaXGlowpet" : "Glowpet"}.createSeries`,
       `Claim protocol: ${PROTOCOL_VERSION} (requires claimProtocolVersion() == ${PROTOCOL_VERSION})`,
       "Protocol v1 contracts, Merkle roots and proofs are not compatible.",
       "",
@@ -387,15 +398,28 @@ function main() {
       `  serialRoot : ${root}`,
       `  label      : ${JSON.stringify(label)}`,
       "",
-      "Paste those five values into the deployed Glowpet contract in Remix.",
+      `Use those five values with the deployed ${deltaX ? "DeltaXGlowpet" : "Glowpet"} contract.`,
+      "Creating a series reserves its supply; NFTs are minted only when claimed.",
       "",
       "Raw calldata:",
       calldata,
       "",
-      "Deployment order (constructors):",
-      "  1. GlowpetFaceArt()",
-      "  2. GlowpetArt(faceArtAddress)",
-      "  3. Glowpet(artAddress)",
+      ...(deltaX ? [
+        "DeltaX deployment prerequisites:",
+        "  Verify the frozen artwork edition and its full PNG set.",
+        "  Persistently pin the public artwork directory to IPFS and verify downloads.",
+        "  Deploy DeltaXGlowpet(directoryCID, editionSize, artworkSeed).",
+        "  Use the verified CID, edition size and PUBLIC artwork seed from that edition.",
+        "  The private credential seed is unrelated and must never enter constructor arguments.",
+        "  DeltaXGlowpet creates DeltaXPortraits internally; do not deploy the legacy SVG contracts.",
+        "  The sum of series supplies must fit the immutable edition size.",
+        "  Generating these credentials does not publish artwork or deploy a contract.",
+      ] : [
+        "Deployment order (constructors):",
+        "  1. GlowpetFaceArt()",
+        "  2. GlowpetArt(faceArtAddress)",
+        "  3. Glowpet(artAddress)",
+      ]),
       "",
     ].join("\n"),
   );
@@ -419,7 +443,7 @@ function main() {
       `seed:     ${seed}`,
       "",
       "Regenerate the same credentials with:",
-      `  node scripts/build-serials.mjs --series ${seriesId} --chain-id ${chainId} --supply ${supply} --seed-file ${seedPath} --out <dir>`,
+      `  node scripts/build-serials.mjs --series ${seriesId} --chain-id ${chainId} --supply ${supply}${deltaX ? " --artwork deltax" : ""} --seed-file ${seedPath} --out <dir>`,
       "",
     ].join("\n"),
     { mode: 0o600 },
@@ -524,7 +548,9 @@ function main() {
   console.log(`  output   ${outDir}`);
   console.log(`  elapsed  ${((Date.now() - started) / 1000).toFixed(1)}s`);
   console.log("");
-  console.log("Next: deploy GlowpetFaceArt -> GlowpetArt -> Glowpet, then call createSeries");
+  console.log(deltaX
+    ? "Next: verify and pin the full artwork edition, deploy DeltaXGlowpet, then call createSeries"
+    : "Next: deploy GlowpetFaceArt -> GlowpetArt -> Glowpet, then call createSeries");
   console.log(`with the arguments in ${path.join(outDir, "deployment.txt")}.`);
 }
 

@@ -12,15 +12,37 @@ const TRAIT_VALUES = new Map([
   ["Motif", new Set(["Cloud", "Lotus", "Plum", "Bamboo", "Waves", "Ruyi", "Moon", "Koi"])],
 ]);
 const UNIQUE_TRAITS = ["Species", "Headwear", "Neckwear", "Palette", "Motif", "Appearance", "Stage"];
+const env = import.meta.env ?? {};
+const DEFAULT_IPFS_GATEWAY = "https://ipfs.io";
+
+/**
+ * Contracts store ipfs:// URIs; the browser needs an HTTPS gateway. Only a
+ * plain HTTPS base is accepted, so a misconfigured VITE_IPFS_GATEWAY can never
+ * turn into a javascript: or credentialed URL. Gateways can be swapped without
+ * touching the deployed contracts.
+ */
+export function normalizeIpfsGateway(value) {
+  const raw = typeof value === "string" ? value.trim() : "";
+  if (!raw) return DEFAULT_IPFS_GATEWAY;
+  let url;
+  try { url = new URL(raw); } catch { return DEFAULT_IPFS_GATEWAY; }
+  if (url.protocol !== "https:" || url.username || url.password || url.search || url.hash) {
+    return DEFAULT_IPFS_GATEWAY;
+  }
+  const prefix = url.pathname.replace(/\/+$/, "").replace(/\/ipfs$/, "");
+  return `${url.origin}${prefix}`;
+}
+
+export const IPFS_GATEWAY = normalizeIpfsGateway(env.VITE_IPFS_GATEWAY);
 
 /** Resolve only the two immutable PNG path formats issued by DeltaX contracts. */
-export function resolveNftImage(uri) {
+export function resolveNftImage(uri, gateway = IPFS_GATEWAY) {
   if (typeof uri !== "string") return "";
   const match = /^ipfs:\/\/(bafy[a-z2-7]{55})\/((?:rabbit|cat|fox|mouse|sheep)\.png|portraits\/(?:0|[1-9][0-9]{0,4})\.png)$/.exec(uri);
   if (!match || match[0] !== uri) return "";
   const appearance = /^portraits\/([0-9]+)\.png$/.exec(match[2]);
   if (appearance && Number(appearance[1]) > MAX_APPEARANCE_ID) return "";
-  return `https://ipfs.io/ipfs/${match[1]}/${match[2]}`;
+  return `${gateway}/ipfs/${match[1]}/${match[2]}`;
 }
 
 function numericTrait(value, maximum) {

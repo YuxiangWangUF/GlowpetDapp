@@ -1,0 +1,40 @@
+Glowpet DeltaX soft family — runtime mouse and sheep
+Mode: built-in image_gen, transparent_background=true. Original alpha preserved; no post-generation edits.
+Final assets: public/pets/deltax-soft-v1/mouse.png; public/pets/deltax-soft-v1/sheep.png
+Both assets: 1254 × 1254 RGBA PNG.
+
+MOUSE — initial extraction
+Use case: background-extraction
+Asset type: production transparent PNG game character sprite for Glowpet DeltaX soft family.
+Input image: reference/edit target A-mouse-detail-v1.png. Extract and faithfully recreate ONLY the large front-facing mouse character shown at the left, matching its approved identity. Do not create a new design.
+Primary request: one complete, front-facing silver-grey plush mouse, very wide round head-body, large round ears with soft blush-pink inner ears, short silky plush fur, three-lobed forelock, low-set shy large grey glossy eyes, tiny pink nose and small smiling mouth, pink cheeks, exactly two tiny front paws, thin pink curled tail visible to image right, and a warm gold glowing FOUR-POINT star on the image-right cheek. Preserve all approved proportions, soft toy material and gentle expression. The whole head, both ears, both paws, and entire tail must be visible.
+Scene/backdrop: actual fully transparent alpha background. No background color, no room, no ground plane, no floor, no cast shadow, no detached shadow.
+Composition: square image, single centered isolated character. Fit the entire mouse with at least 8 percent clear transparent padding on all four edges. Straight-on eye-level portrait. No extra characters or views.
+Lighting: softly lit plush fibers with gentle intrinsic volume shading; warm cheek star only. No large halo outside character.
+Constraints: no text, no labels, no palette swatches, no device, no graph, no board, no border, no icons, no watermarks. Do not include the other expressions or the pendant device from the reference. Maintain true transparent pixels around the silhouette and preserve fine fur alpha edge.
+
+MOUSE — final padding revision
+Use case: precise-object-edit.
+Edit the supplied transparent mouse sprite ONLY to make it substantially smaller within the square transparent canvas. Preserve its exact identity, pose, colors, materials, facial expression, gold four-point cheek star, paws, ears and tail.
+Make the entire character about 60 percent of the square canvas width and height, absolutely centered, leaving approximately 20 percent EMPTY TRANSPARENT margin on every side. The transparent border must be large and obvious. This is a game sprite that needs extra room around it for animation; do not tightly crop the character. Keep the whole character, all fur, both ears, feet and tail.
+Actual transparent RGBA background; do not add any background, floor, shadows, halo, scenery, words, other characters, or props. Change nothing about the character except its scale and central position in the canvas.
+
+SHEEP — initial extraction
+Use case: background-extraction
+Asset type: production transparent PNG game character sprite for Glowpet DeltaX soft family.
+Input image: reference/edit target A-family-v1.png. Extract and faithfully recreate ONLY the lamb at the far right labeled LAMB, matching its approved identity. Do not create a new design.
+Primary request: one complete front-facing cream plush lamb, very wide round head-body, cloud-like rounded cream wool cap covering the top of head, outward-drooping horizontal ears with peach-pink inner ears, low-set glossy dark eyes, tiny warm brown nose and small smiling mouth, pink blush cheeks, exactly two tiny front paws, and a warm gold glowing FOUR-POINT star on the image-right cheek. Preserve approved proportions, gentle expression, and short plush wool material.
+Scene/backdrop: actual fully transparent alpha background. No background color, no room, no ground plane, no floor, no cast shadow, no detached shadow.
+Composition: square image. Single isolated lamb, absolutely centered both horizontally and vertically. The entire character including both ears and both paws occupies at most 78 percent of the canvas width AND height, leaving generous empty transparent padding of at least 10 percent on every side. All body parts and fur edges must fit fully inside that padded area. Straight-on eye-level portrait.
+Lighting: soft plush fiber lighting and intrinsic volume shading only; warm cheek star. No large halo outside character.
+Constraints: no other animals, no text, no label, no palette, no device, no chart, no board, no border, no icons, no watermark. Actual transparent pixels around complete silhouette, fine fur alpha edge.
+
+SHEEP — final padding revision
+Use case: precise-object-edit.
+Edit the supplied transparent cream lamb sprite ONLY to make it substantially smaller within the square transparent canvas. Preserve its exact identity, pose, colors, plush materials, cloud wool cap, facial expression, gold four-point cheek star, two paws, and drooping ears.
+Make the entire character about 60 percent of the square canvas width and height, absolutely centered, leaving approximately 20 percent EMPTY TRANSPARENT margin on every side. The transparent border must be large and obvious. This is a game sprite that needs extra room around it for animation; do not tightly crop the character. Keep the whole character, all wool, both ears, and both paws.
+Actual transparent RGBA background; do not add any background, floor, shadows, halo, scenery, words, other characters, or props. Change nothing about the character except its scale and central position in the canvas.
+
+Validation: mouse alpha>1 bbox (232,317)-(1025,972); sheep alpha>1 bbox (207,326)-(1050,980).
+Both have true transparent pixels and fine fur alpha edges. A few alpha=1 pixels remain in the transparent surround from the built-in tool; visually imperceptible.
+

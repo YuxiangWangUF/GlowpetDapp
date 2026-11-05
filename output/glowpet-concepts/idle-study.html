@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Glowpet · 待机动画检查</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #1c1430;
+        color: #f5edf9;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 28px 24px 36px; }
+      main { max-width: 1420px; margin: auto; }
+      h1 { margin: 0 0 8px; font-size: 24px; font-weight: 650; }
+      p { color: #bbaccb; font-size: 14px; line-height: 1.6; margin: 6px 0; }
+      .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin: 22px 0 14px; }
+      button {
+        border: 1px solid #725d92;
+        border-radius: 10px;
+        padding: 11px 17px;
+        font: inherit;
+        font-size: 14px;
+        background: #322245;
+        color: #f6edf9;
+        cursor: pointer;
+      }
+      button:hover:not(:disabled) { background: #49335f; }
+      button[aria-pressed="true"] { background: #d9b9f4; color: #251332; border-color: #e8d1fa; }
+      button:disabled { opacity: 0.4; cursor: wait; }
+      button:focus-visible { outline: 2px solid #e6c5ff; outline-offset: 3px; }
+      #status { min-height: 23px; }
+      .companions { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; margin-top: 24px; }
+      .card { min-width: 0; border: 1px solid #443252; border-radius: 18px; padding: 16px 10px; text-align: center; background: #261a39; }
+      .frame { position: relative; width: 240px; max-width: 100%; aspect-ratio: 1; margin: auto; overflow: hidden; }
+      canvas { position: absolute; display: block; }
+      .name { margin: 12px 0 4px; font-size: 16px; font-weight: 600; color: #f5edf9; }
+      .load-state { font-size: 12px; color: #ac98bf; min-height: 20px; }
+      .hint { margin-top: 22px; }
+      @media (max-width: 700px) {
+        body { padding: 20px 12px; }
+        .companions { gap: 6px; }
+        .card { padding: 10px 2px; border-radius: 10px; }
+        .name { font-size: 12px; }
+        .load-state { font-size: 10px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Glowpet 待机动画检查</h1>
+      <p>检查眨眼闭合与耳根过渡；此页面仅作本地开发预览。</p>
+      <div class="toolbar" aria-label="动画检查控制">
+        <button type="button" data-mode="rest" aria-pressed="true" disabled>睁眼静止</button>
+        <button type="button" data-mode="blink" aria-pressed="false" disabled>闭眼检查</button>
+        <button type="button" data-mode="ears" aria-pressed="false" disabled>耳动检查</button>
+        <button type="button" data-mode="play" aria-pressed="false" disabled>播放待机</button>
+      </div>
+      <p id="status" role="status" aria-live="polite">正在加载 · 0 / 5 已就绪</p>
+      <div id="companions" class="companions"></div>
+      <p class="hint">切换到任一静态检查会暂停播放。闭眼检查显示完全闭合；耳动检查固定在轻摆位置。</p>
+    </main>
+    <script type="module">
+      import { createPlushFaceRenderer } from "../../src/plush-face-renderer.js";
+      import { getPlushIdlePose } from "../../src/plush-idle-motion.js";
+      import { PLUSH_RIGS } from "../../src/plush-rigs.js";
+
+      const models = [
+        { id: "rabbit", name: "小兔", bounds: [86, 51, 1168, 1186], ears: [1.6, -1.1] },
+        { id: "cat", name: "小猫", bounds: [187, 268, 1109, 1026], ears: [1.8, -1.8] },
+        { id: "fox", name: "小狐狸", bounds: [264, 266, 1076, 1013], ears: [1.65, -1.65] },
+        { id: "mouse", name: "小鼠", bounds: [235, 320, 1020, 969], ears: [1.5, -1.5] },
+        { id: "sheep", name: "小羊", bounds: [208, 331, 1048, 974], ears: [1.35, -1.35] },
+      ];
+      const cards = document.querySelector("#companions");
+      const status = document.querySelector("#status");
+      const buttons = [...document.querySelectorAll("[data-mode]")];
+      const renderers = new Map();
+      const allRenderers = new Set();
+      const labels = { rest: "睁眼静止", blink: "闭眼检查", ears: "耳动检查", play: "播放待机" };
+      let mode = "rest";
+      let frameId = null;
+      let playStartedAt = 0;
+      let failedCount = 0;
+      let loadingComplete = false;
+
+      function updateStatus() {
+        const phase = loadingComplete ? labels[mode] : "正在加载";
+        status.textContent = `${phase} · ${renderers.size} / ${models.length} 已就绪${failedCount ? ` · ${failedCount} 个载入失败` : ""}`;
+      }
+
+      function stopAnimation() {
+        if (frameId !== null) cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+
+      function drawStatic() {
+        for (const model of models) {
+          renderers.get(model.id)?.draw({
+            blink: mode === "blink" ? 1 : 0,
+            leftEar: mode === "ears" ? model.ears[0] * 1.25 * Math.PI / 180 : 0,
+            rightEar: mode === "ears" ? model.ears[1] * 1.25 * Math.PI / 180 : 0,
+          });
+        }
+      }
+
+      function animate(now) {
+        if (mode !== "play") return;
+        const elapsed = (now - playStartedAt) / 1000;
+        for (const model of models) {
+          renderers.get(model.id)?.draw(getPlushIdlePose(elapsed, model.id));
+        }
+        frameId = requestAnimationFrame(animate);
+      }
+
+      function selectMode(nextMode) {
+        stopAnimation();
+        mode = nextMode;
+        for (const button of buttons) button.setAttribute("aria-pressed", String(button.dataset.mode === mode));
+        if (mode === "play") {
+          playStartedAt = performance.now();
+          frameId = requestAnimationFrame(animate);
+        } else {
+          drawStatic();
+        }
+        updateStatus();
+      }
+
+      for (const button of buttons) {
+        button.addEventListener("click", () => selectMode(button.dataset.mode));
+      }
+
+      await Promise.allSettled(models.map(async (model) => {
+        const card = document.createElement("section");
+        card.className = "card";
+        const frame = document.createElement("div");
+        frame.className = "frame";
+        const canvas = document.createElement("canvas");
+        canvas.width = 1254;
+        canvas.height = 1254;
+        canvas.setAttribute("aria-label", `${model.name}动画预览`);
+        const [left, top, right, bottom] = model.bounds;
+        const scale = Math.min(0.88 * 1254 / (right - left), 0.83 * 1254 / (bottom - top));
+        Object.assign(canvas.style, {
+          left: `${(0.5 - (left + right) / 2 / 1254 * scale) * 100}%`,
+          top: `${(0.9 - bottom / 1254 * scale) * 100}%`,
+          width: `${scale * 100}%`,
+          height: `${scale * 100}%`,
+        });
+        frame.append(canvas);
+        const name = document.createElement("p");
+        name.className = "name";
+        name.textContent = model.name;
+        const loadState = document.createElement("div");
+        loadState.className = "load-state";
+        loadState.textContent = "载入中";
+        card.append(frame, name, loadState);
+        cards.append(card);
+        try {
+          const renderer = createPlushFaceRenderer(canvas, {
+            onError: () => { loadState.textContent = "载入失败"; },
+          });
+          allRenderers.add(renderer);
+          const loaded = await renderer.load(`/pets/deltax-soft-v1/${model.id}.png`, PLUSH_RIGS[model.id]);
+          if (!loaded) throw new Error("Renderer could not load this companion.");
+          renderers.set(model.id, renderer);
+          renderer.draw({ blink: 0, leftEar: 0, rightEar: 0 });
+          loadState.textContent = "已就绪";
+        } catch (error) {
+          failedCount++;
+          loadState.textContent = "载入失败";
+          console.error(`${model.id} preview:`, error);
+        }
+        updateStatus();
+      }));
+      loadingComplete = true;
+      for (const button of buttons) button.disabled = renderers.size === 0;
+      updateStatus();
+      window.addEventListener("pagehide", () => {
+        stopAnimation();
+        for (const renderer of allRenderers) renderer.dispose();
+      });
+    </script>
+  </body>
+</html>

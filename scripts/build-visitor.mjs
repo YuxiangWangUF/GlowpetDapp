@@ -14,6 +14,9 @@ export async function buildVisitor() {
     VITE_GLOWPET_SERIES_ID: '1', VITE_DEPLOY_BLOCK: '0', VITE_PROOF_BASE_URL: '',
     VITE_API_BASE_URL: '/api/v1',
     VITE_SEPOLIA_RPC_URL: 'https://ethereum-sepolia-rpc.publicnode.com',
+    // Public gateway for on-chain ipfs:// portraits. Change this line (for
+    // example to a dedicated Pinata gateway) before the public release.
+    VITE_IPFS_GATEWAY: 'https://ipfs.io',
   };
   const code = await new Promise((resolve, reject) => {
     const child = spawn(process.execPath, [path.join(PROJECT_ROOT, 'node_modules/vite/bin/vite.js'), 'build'], {

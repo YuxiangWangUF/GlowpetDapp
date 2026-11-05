@@ -1,0 +1,31 @@
+Built-in image_gen, individual image calls, reference: output/glowpet-concepts/A-family-v1.png
+
+CAT
+Use case: background-extraction / identity-preserve.
+Asset type: production transparent PNG character asset for a virtual-pet game.
+Input image: the attached approved Glowpet family concept sheet is the identity and material reference.
+Primary request: extract and faithfully recreate ONLY the KITTY, second character from left, as one complete individual character. Do not redesign it.
+Subject: the exact creamy warm-ivory plush kitten, broad rounded almost spherical head/body, short soft rounded triangular ears with blush-pink centers, subtle pale beige forehead stripes, low-set glossy dark brown eyes, tiny coral-pink nose and little curved mouth, soft pink cheeks, two tiny front paws, small curled cream tail to its viewer-right. Preserve the small warm golden four-point glowing star on its viewer-right cheek. Keep the same soft short plush fur, gentle full three-dimensional volume and sweet calm expression as reference.
+Composition: square canvas, single whole kitty centered, face looking straight forward, sitting low on two paws. Entire silhouette including ears, paws and tail visible, with at least 8% fully transparent margin on each of all four sides.
+Backdrop: GENUINELY TRANSPARENT alpha background. No floor, no ground plane, no drop shadow, no cast shadow, no background gradient or haze. Preserve fine fur edge alpha.
+Lighting: very soft warm studio light intrinsic to the character, consistent with reference.
+Constraints: one character only; no other animals; no scene; no words, letters, logo, chart, labels, watermark, decorative particles or props. Do not include a drawn checkerboard. Keep cat identity, dimensions, colors, facial layout and star consistent with approved reference.
+
+FOX
+Use case: background-extraction / identity-preserve.
+Asset type: production transparent PNG character asset for a virtual-pet game.
+Input image: the attached approved Glowpet family concept sheet is the identity and material reference.
+Primary request: extract and faithfully recreate ONLY the FOX, third character from left, as one complete individual character. Do not redesign it.
+Subject: the exact apricot-peach plush fox, broad rounded almost spherical head/body, upright soft triangular ears with cream-blush centers, pale warm creamy white cheek-and-muzzle mask, low-set glossy dark brown eyes, tiny brown nose and little curved mouth, soft pink cheeks, two tiny creamy front paws, fluffy curled apricot tail at viewer-right with creamy white tip. Preserve the small warm golden four-point glowing star on its viewer-right cheek. Keep the same soft short plush fur, gentle full three-dimensional volume and sweet calm expression as reference.
+Composition: square canvas, single whole fox centered, face looking straight forward, sitting low on two paws. Entire silhouette including ears, paws and tail visible, with at least 10% fully transparent margin on each of all four sides.
+Backdrop: GENUINELY TRANSPARENT alpha background. No floor, no ground plane, no drop shadow, no cast shadow, no background gradient or haze. Preserve fine fur edge alpha.
+Lighting: very soft warm studio light intrinsic to the character, consistent with reference.
+Constraints: one character only; no other animals; no scene; no words, letters, logo, chart, labels, watermark, decorative particles or props. Do not include a drawn checkerboard. Keep fox identity, dimensions, colors, facial layout and star consistent with approved reference.
+
+CAT FINAL COMPOSITION PASS
+Use case: identity-preserve / background-extraction.
+Make one targeted composition correction to this exact cat asset, preserving its character design, face, fur, colors, star, pose, paws, tail and soft lighting unchanged. Scale the ENTIRE existing character down uniformly so its entire visible silhouette fits inside the central 70% of the square canvas in BOTH width and height. Center it exactly. This gives genuinely EMPTY transparent margins of at least 15% at left, right, top and bottom. Remove all stray pixels beyond the character silhouette and all hazy residual alpha pixels in the margins. True transparent alpha backdrop, no shadow, no ground, no glow outside the character. One complete cat only, no lettering, nothing new.
+
+FOX FINAL COMPOSITION PASS
+Use case: identity-preserve / background-extraction.
+Make one targeted composition correction to this exact fox asset, preserving its character design, face, fur, colors, star, pose, paws, tail and soft lighting unchanged. Scale the ENTIRE existing character down uniformly so its entire visible silhouette fits inside the central 70% of the square canvas in BOTH width and height. Center it exactly. This gives genuinely EMPTY transparent margins of at least 15% at left, right, top and bottom. Remove all stray pixels beyond the character silhouette and all hazy residual alpha pixels in the margins. True transparent alpha backdrop, no shadow, no ground, no glow outside the character. One complete fox only, no lettering, nothing new.

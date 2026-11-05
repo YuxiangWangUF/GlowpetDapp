@@ -1,12 +1,16 @@
 # Glowpet 跨设备交接手册
 
-更新日期：2026-10-30（Asia/Shanghai）。仓库：<https://github.com/YuxiangWangUF/GlowpetDapp>。
+更新日期：2026-11-06（Asia/Shanghai）。仓库：<https://github.com/YuxiangWangUF/GlowpetDapp>。
 
-本轮进度与实际验收见 [PROJECT_STATUS.md](PROJECT_STATUS.md)：基于 `7ddc59c` 重新运行的 130 项自动测试通过，但标准 `npm ci` 与游客构建存在依赖阻塞。不要将下文 10/28 的构建成功记录视为新设备已通过。当前更新仅涉及 GitHub 文档，部署、域名迁移与备案继续暂缓。
+本版手册对应提交以 `git log -1 --oneline` 为准，记录了 IPFS 发布工具链与 Sepolia 10,000 版次的当前状态。最新进度与实际验收见 [PROJECT_STATUS.md](PROJECT_STATUS.md)；本手册中的历史结果（10/28、10/30、11/03）不能覆盖新设备的实际检查。
 
 本手册用于在新设备接手当前代码、素材和待办。先运行游客版，再按具体任务启用本地后端或合约。Git 提交记录是代码版本依据；运行中的进程、浏览器存档、平台账号和私密配置不会随 `git clone` 迁移。
 
-用户当前决定：**备案和域名迁移暂缓，先同步 GitHub、换设备继续开发。** 不要把先前的发布步骤当作本轮重新部署、购买云资源或提交备案的指令。
+## 0. 当前状态速览
+
+用户最新决定：**新版 NFT 采用 Sepolia（11155111）、总上限 10,000、领取时铸造；IPFS 存储选定 Pinata Picnic（1 TB / $20 月），账户尚未开通，未上传任何内容，未发送链上交易。** 上传与双网关校验脚本已进入仓库并跑通合成版次；前端网关已改为 `VITE_IPFS_GATEWAY` 可配置。备案和域名迁移继续暂缓。本轮具体步骤见 [SEPOLIA_RELEASE.md](SEPOLIA_RELEASE.md)。
+
+**新版 12.76 GB 版次不在 Git 里。** 它位于 `output/deltax-unique-v2-10000-sepolia-20261103/`，被 `.gitignore` 排除，也不会随 clone 迁移；换机必须用移动硬盘或局域网整目录拷贝（见第 5 节）。
 
 ## 1. 接手后的第一轮
 
@@ -22,6 +26,7 @@
 | --- | --- |
 | 游客首页、花园、角色展示 | `src/App.jsx`、`src/GardenView.jsx`、`src/HomePortraitShowcase.jsx` |
 | 独特外观、冻结图片、DeltaX 合约 | [DELTAX_NFT_ART.md](DELTAX_NFT_ART.md) |
+| Sepolia 发行、IPFS 上传与校验 | [SEPOLIA_RELEASE.md](SEPOLIA_RELEASE.md) |
 | 邮箱账号、代付、云花园 | [ONBOARDING_DEPLOYMENT.md](ONBOARDING_DEPLOYMENT.md)；[AGENT_EXECUTION_PLAYBOOK.md](AGENT_EXECUTION_PLAYBOOK.md) 是实现约束与验收规格 |
 
 ## 2. 新设备先跑游客版
@@ -63,7 +68,10 @@ VITE_API_BASE_URL=/api/v1
 VITE_GLOWPET_SERIES_ID=1
 VITE_DEPLOY_BLOCK=0
 VITE_SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
+VITE_IPFS_GATEWAY=
 ```
+
+`VITE_IPFS_GATEWAY` 只接受纯 HTTPS 基址（空值回退 `https://ipfs.io`，非法值同样回退）；`scripts/build-visitor.mjs` 中显式写死默认值，发布前如需专用网关就改那一行。合约保存的是 CID，不是网关，换网关不需要重新部署。
 
 构建后运行 `npm run preview -- --host 127.0.0.1`，以终端实际端口验收 `dist/`。普通 `npm run build` 按自身环境构建，不会替你切换游客配置；`VITE_*` 都会进入浏览器，不能放入私钥或服务端 secret。`mock` 身份只允许本地开发，生产构建会拒绝它。
 
@@ -77,10 +85,10 @@ VITE_SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
 | 邮箱账号和内嵌钱包 | `src/auth/` 的 Privy 适配、mock、固定 EOA 地址绑定和账户 UI | 真实 Privy app、邮件 OTP、恢复/导出、独立设备验收 |
 | 代付领取 | API、队列、幂等、nonce/预算预留、广播前持久化、回执对账 | 正式 PostgreSQL、隔离 relayer、真实 Sepolia 合约/系列及运营配置 |
 | 云花园 | 服务端动作校验、时间、revision、幂等、链上所有权检查、前端同步 | 正式服务部署、真实账号和两台物理设备验收 |
-| DeltaX NFT | v2 组合规则、100 张完整 PNG、核验器、元数据及合约接线 | IPFS 持久 pin、远端核验、新合约目标网部署、真实领取 |
+| DeltaX NFT | v2 规则、原 100 图冻结版次、新 10,000 图完整核验、核验器、离线部署计划、IPFS 上传/校验工具 | 真实 Pinata 账户与持久 pin、双网关核验、新合约目标网部署、真实领取 |
 | 其他 | 原外部钱包与旧 SVG 合约流程仍保留 | BLE 实物连接、自动链上进化、钱包通用代付未交付 |
 
-线上范围只获准开放游客版。代码存在不代表邮箱账号、NFT 领取和云端存档已在公网提供。PGlite/mock/本地链成功不等于真实 Privy、Sepolia 或生产数据库验收。
+当前公网实际提供游客功能（本轮用 Quick Tunnel 做临时公网测试，地址为一次性链接，不写入手册）。用户已开始新版 NFT 发行准备，但 Pinata 账户尚未开通，因此尚未上传 IPFS、也未发送链上交易。代码存在不代表邮箱账号、NFT 领取和云端存档已在公网提供。PGlite/mock/本地链成功不等于真实 Privy、Sepolia 或生产数据库验收。
 
 链上 `evolve` 仍由合约 owner 调用，云端 XP 不自动改变链上 Stage。代付范围是 `claim`，不包含 ERC-721 转移等其他交易。后台没有自动提价替换交易功能；卡住的 nonce 要对账，不能清空任务表“重试”。
 
@@ -94,7 +102,15 @@ VITE_SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
 - 游客花园仍用 `public/pets/deltax-soft-v1/` 五张基础图。首页用 `public/pets/deltax-unique-v2/` 的完整组合 WebP；修改首页图片不会改动链上 NFT。
 - NFT 最终 PNG 计划保存在 IPFS，链上保存所有权、分配规则和元数据，不能称为“全部像素上链”。
 
-当前已核验 100 张版次位于 `output/deltax-unique-v2/`，公开发布内容为其中 `publish/`；清单 SHA-256：
+11/03 新的一万张发行版次位于 `output/deltax-unique-v2-10000-sepolia-20261103/`，已完整核验；`publish/` 共 10,001 文件、约 12.76 GB。新清单 SHA-256 为：
+
+```text
+a5d3e62f25018c4692043cca0f014780f297b0feb29640a10af073c772717a54
+```
+
+该目录只在本机、被 Git 忽略，不会随 clone 迁移；未上传 IPFS 或部署。
+
+原已核验 100 张版次仍位于 `output/deltax-unique-v2/`，公开发布内容为其中 `publish/`；原清单 SHA-256 未变：
 
 ```text
 006de3c5b4c2627498b349fc04b3150c0b7fc729c760c64564efe599acfbfeec
@@ -114,7 +130,60 @@ node scripts/generate-deltax-edition.mjs --out output/deltax-experiment --supply
 
 `output/deltax-unique-v1/` 是历史版次；不要用 v2 规则去修补其冻结清单。美术规则的详细维度、CID 和发行流程以 [DELTAX_NFT_ART.md](DELTAX_NFT_ART.md) 为准。
 
-## 5. 可选本地全栈 demo
+## 5. 把 12.76 GB 版次带到新机
+
+Git 仓库只有代码。`publish/` 版次不能进 Git：GitHub 单文件上限 100 MB，整包 12.76 GB 也无法通过 Release 分卷可靠传输。使用移动硬盘或局域网整目录拷贝：
+
+```sh
+# 旧机
+output/deltax-unique-v2-10000-sepolia-20261103/
+
+# 新机放置到同一相对路径
+output/deltax-unique-v2-10000-sepolia-20261103/
+```
+
+拷贝后必须核对清单哈希（不要只看文件大小）：
+
+```sh
+shasum -a 256 output/deltax-unique-v2-10000-sepolia-20261103/publish/collection.json
+# 必须是 a5d3e62f25018c4692043cca0f014780f297b0feb29640a10af073c772717a54
+```
+
+再打包一次（`--dry-run` 不上传，只逐文件校验并算出目录 CID）：
+
+```sh
+npm run ipfs:publish -- \
+  --dir output/deltax-unique-v2-10000-sepolia-20261103/publish \
+  --out deployments/sepolia-10000-20261103/ipfs-publish-draft.json --dry-run
+```
+
+本地打包需要额外约 **13 GB** 磁盘放 CAR；空间不足时用 `--car /外置盘/edition.car` 指定位置。哈希或目录结构有任何不一致就停止，不要继续上传。
+
+## 6. IPFS 发布与校验
+
+已选 **Pinata Picnic**（1 TB）。凭证只放在 shell 环境变量 `PINATA_JWT`，不写入 `.env`、脚本或文档。
+
+```sh
+# 1) 只打包，确认 CID 与目录结构（无需账号）
+node scripts/ipfs-publish.mjs --dir <publish> --out <draft.json> --dry-run
+
+# 2) 上传：本地打 CAR（>90 MB 自动分块续传，car=true），CID 不一致则中止
+PINATA_JWT=... node scripts/ipfs-publish.mjs --dir <publish> --out <deployments/.../ipfs-publish.json>
+
+# 3) 双网关全量下载校验，生成 --ipfs-report 证据
+PINATA_JWT=... node scripts/ipfs-verify.mjs --dir <publish> --cid bafy... \
+  --publish-record <ipfs-publish.json> \
+  --gateway https://<专用网关>.mypinata.cloud --gateway https://ipfs.io \
+  --out <deployments/.../ipfs-verification.json>
+```
+
+- 目录根必须直接包含 `collection.json` 和 `portraits/`；打包布局与合约 `ipfs://<CID>/portraits/<appearanceId>.png` 一致。
+- 校验脚本先向 Pinata 复核记录中的文件 id 仍解析到该 CID，`pinned: true` 只由这次复核产生；随后逐张下载并比对 SHA-256，中断重跑会复用已校验文件。
+- 两个网关必须是不同主机名；预计下载约 24 GB（10,001 文件 × 2），在 Pinata 250 GB 月出口额度内。
+- 证据文件交给 `scripts/prepare-sepolia-release.mjs --cid … --ipfs-report … --nonce …` 才能生成未签名交易。
+- 网关与备案：直接引用第三方网关不产生 ICP 备案义务；自有域名解析到大陆服务器或走大陆 CDN 才需要备案；面向境内公众提供区块链信息服务另需网信办备案。详见 [SEPOLIA_RELEASE.md](SEPOLIA_RELEASE.md)。
+
+## 7. 可选本地全栈 demo
 
 仅在需要账号、领取或云花园开发时启用。此路径会生成本机配置和公开的 Hardhat 测试钱包，只能运行在本地测试网络。
 
@@ -152,22 +221,24 @@ npm run dev -- --host 127.0.0.1
 
 真实 PostgreSQL 模式才按 [ONBOARDING_DEPLOYMENT.md](ONBOARDING_DEPLOYMENT.md) 配置 `DATABASE_URL`，执行 `npm run db:migrate`，再分别启动 `npm run dev:server` 与 `npm run dev:worker`。生产中关闭 mock，费用上限与专用 relayer 未完整配置前保持代付暂停。
 
-## 6. Git 之外需要安全迁移的内容
+## 8. Git 之外需要安全迁移的内容
 
 | 内容 | 迁移方式与边界 |
 | --- | --- |
+| `output/deltax-unique-v2-10000-sepolia-20261103/`（12.76 GB） | 移动硬盘/局域网整目录拷贝，按第 5 节核对 `collection.json` SHA-256；不能进 Git 或 Release。 |
 | `.env`、`.env.local`、`.env.development.local`、`.env.production.local`、`server/.env` | 不进 Git。新设备依据样例重新配置；确需旧值时使用用户自己的安全传输方式，不能粘贴到公开 issue、聊天、手册或日志。前后端 secret 分开。 |
+| `PINATA_JWT` | 只在 shell 环境变量中使用；不写入 `.env`、脚本、手册或任何提交。 |
 | 正式领取 seed、proof 导出、`.glowpet-demo/`、`deployments/` | 都可能包含可直接领取宠物的 bearer 凭证，不能上传。已有链上系列要保留与 root 匹配的原始凭证，不能靠重新随机生成恢复。新机本地 demo 可另建合成数据。 |
 | 数据库和未决交易 | 有持久服务时做受保护的备份，保留 job、attempt、nonce slot 和预算状态。不要把数据库内容放到仓库；PGlite 内存 demo 没有可恢复的持久数据。 |
 | 游客花园 | 保存于原浏览器 `localStorage`，Git 不包含它。需要保留时只导出对应花园 JSON 和选角偏好，私下传输后在正确 origin 恢复，不批量复制身份 token、整个浏览器配置或所有 storage。 |
-| Codex、GitHub、腾讯云、Privy 等平台登录 | 在新设备按官方流程登录授权。仓库不包含登录态，也不复制或输出 Codex 凭据文件。 |
+| Codex、GitHub、腾讯云、Pinata、Privy 等平台登录 | 在新设备按官方流程登录授权。仓库不包含登录态，也不复制或输出凭据文件。 |
 | 一次性打包 ZIP、截图、临时日志 | 根据需要另行复制，优先从源码与锁定素材重建；不能把旧发布包当成比仓库源码更新的事实来源。 |
 
 游客花园 key 是 `glowpet:garden:v1:guest`，选角偏好 key 是 `glowpet:preview:deltax-soft-v1`。链上宠物的本机花园 key 还包含 chain、contract、token 和 owner。存档按协议、域名、端口隔离；`localhost`、`127.0.0.1`、正式域名、测试子域名之间不会自动共享。确认 origin 后再恢复，避免误以为存档丢失。
 
 所有 `VITE_*` 均是公开前端配置；服务端密钥、钱包私钥和领取 secret 不能放进去。不要将旧机的 `node_modules/`、本地日志、嵌套 Sites 仓库 `.git/` 或任何实际 `.env` 当作迁移资料加入提交。
 
-## 7. 检查命令与验收层次
+## 9. 检查命令与验收层次
 
 在仓库根目录按顺序执行：
 
@@ -180,9 +251,11 @@ npm run build:visitor
 git diff --check
 ```
 
+拿到版次后另跑一次 `npm run ipfs:publish -- --dir … --out … --dry-run`，确认打包出的目录 CID 与目录结构正确（不上传、不需要账号）。
+
 `test:contracts` 会先编译再运行 Hardhat 隔离测试，不需要连接正式链。`test:server` 内的集成测试用 PGlite 内存库和 fake chain，不依赖正在运行的本地 RPC，也不证明真实 PostgreSQL、Privy 或 Sepolia 可用。`test:integration` 是其中 API/数据库集成套件的单独入口，不要将与 `test:server` 重复运行的用例相加为新增覆盖。
 
-旧设备 2026-10-28 的历史交接验证：前端/共享单元测试 **89 项**、合约 **22 项**、服务端 **19 项**，合计 **130 项全部通过**。合约编译、v2 100 图核验、游客版 production build、公开凭证审计和 EdgeOne 本地打包当时也通过。测试结果只覆盖相应的本地自动检查，不代表真实 Privy、Sepolia、生产服务或新设备验收；10/30 的构建阻塞及其他复核结果见 [PROJECT_STATUS.md](PROJECT_STATUS.md)。
+历史记录：2026-10-28 前端/共享单元测试 89 项、合约 22 项、服务端 19 项；2026-11-06 本机单元测试 **103 项全部通过**（含新增 IPFS 打包与网关校验测试），游客版 production build 通过。测试只覆盖相应的本地自动检查，不代表真实 Privy、Sepolia、生产服务或新设备验收。
 
 依赖已经安装但旧机 npm/npx 启动入口不可用时，可用以下等价入口排查；它们不是替代新机正确安装 npm 的长期方案：
 
@@ -194,10 +267,11 @@ node --test server/test/*.test.mjs
 node node_modules/vite/bin/vite.js build
 ```
 
-## 8. 托管与域名的真实状态
+## 10. 托管与域名的真实状态
 
 | 地址或服务 | 当前记录 |
 | --- | --- |
+| Quick Tunnel（本轮公网测试） | 用户已用临时隧道地址对外测试游客站；地址一次性、随时失效，不写入手册、不当作正式入口。 |
 | `https://glowpetscharm.com` | 仍指向此前的 Sites 公共游客站。已复现部分直连网络的 Cloudflare 403；换网络出口能返回正常页面，不能据此称大陆手机访问已修复。 |
 | `https://glowpetscharm.quickape14.chatgpt.site` | 原 Sites 托管地址，项目 ID 为 `appgprj_6add0caf5a9c81918776c5719355ae02`。如后续确需维护原站，复用该 ID，不另建同名站。 |
 | `https://glowpets-ort06io2.edgeone.cool/` | 用户已将游客包部署至腾讯云 EdgeOne Makers。已读到 Glowpet HTML；其项目区域由用户确认为“全球可用区（含中国大陆）”，未备案域名添加被平台拒绝。 |
@@ -213,21 +287,27 @@ Makers 的 `_headers` 兼容性不能照搬 Netlify/Cloudflare Pages。使用 `n
 
 参考：[Makers 区域和域名](https://cloud.tencent.com/document/product/1552/127403)、[直接上传](https://pages.edgeone.ai/zh/document/direct-upload)。平台规则可能更新，恢复此任务时再核实。
 
-## 9. 后续工作顺序
+## 11. 后续工作顺序
 
-1. **换机基线**：先处理 [本轮记录](PROJECT_STATUS.md) 的标准安装与游客构建阻塞，再确认游客版可运行、当前代码和素材齐全、适用测试通过。修复明确复现的问题，不借交接重做架构或升级无关依赖。
-2. **按用户新任务推进产品**：保持五种角色和猫专属醒狮帽的批准边界；改动后核验视觉与素材引用。
-3. **账号正式接入**：等用户提供真实 Privy、PostgreSQL、Sepolia 与 relayer 配置，按部署说明执行。补齐真实 OTP、恢复/导出、跨设备钱包与云花园验收。
-4. **NFT 发行准备**：核验批准版次、实际 IPFS 持久 pin 和下载比对，再安排目标网络部署、系列 root 与真实领取，不把本地导出当已发行。
-5. **用户恢复域名任务后**：确认选择备案还是境外节点；使用实际托管记录和证书，先测试后切换 DNS。当前暂不主动推进备案、购买或再发布。
+1. **换机基线**：`git clone` + `npm ci` + 游客版构建；用移动硬盘拷入 12.76 GB 版次并按第 5 节核对哈希。
+2. **开通 Pinata Picnic**：创建 IPFS 文件空间与专用网关域名，`PINATA_JWT` 只放 shell；先跑 `--dry-run` 得到目录 CID 和 13 GB 空间需求。
+3. **上传并核验**：上传后立刻跑双网关校验，保存 `ipfs-publish.json` 与 `ipfs-verification.json`；任一文件失败就停止，不生成证据。
+4. **准备并签署部署**：用真实 CID 和证据生成未签名交易，核对 MetaMask 网络、账户、pending nonce、费用后再签名；确认合约地址与参数后提交 `createSeries`。
+5. **按用户新任务推进产品**：保持五种角色和猫专属醒狮帽的批准边界；改动后核验视觉与素材引用。
+6. **账号正式接入**：等用户提供真实 Privy、PostgreSQL、Sepolia 与 relayer 配置，按部署说明执行。补齐真实 OTP、恢复/导出、跨设备钱包与云花园验收。
+7. **用户恢复域名任务后**：确认选择备案还是境外节点；使用实际托管记录和证书，先测试后切换 DNS。当前暂不主动推进备案、购买或再发布。
 
-## 10. 可交给下一位 agent 的开场指令
+## 12. 可交给下一位 agent 的开场指令
 
 ```text
 请接手 GlowpetDapp。先读 AGENTS.md、docs/AGENT_HANDOFF.md 和相关专题文档，检查 Git 状态并保留已有工作。
 先在本机运行首页与游客花园，再按我接下来的任务推进，并运行与改动相符的检查。
 当前公开版只有游客功能；真实邮箱账号、代付、云存档和新版 NFT 尚未正式上线。
 外观规则为 deltax-unique-v2，有效组合 18,432，醒狮帽仅供小猫，沿用已批准毛绒版本。
+IPFS 存储选定 Pinata Picnic，但账户尚未开通；12.76 GB 版次在 output/deltax-unique-v2-10000-sepolia-20261103/，
+不在 Git 里，换机后需先核对 publish/collection.json 的 SHA-256 a5d3e62f25018c4692043cca0f014780f297b0feb29640a10af073c772717a54。
+上传与校验流程见 docs/SEPOLIA_RELEASE.md：先 --dry-run 打 CAR，再上传，再用两个不同主机名的网关全量下载校验。
+PINATA_JWT 只放环境变量；打包需额外约 13 GB 磁盘。未获得真实 CID 和校验证据前，不生成部署交易、不宣称已发布。
 备案和域名迁移暂缓。不要主动购买、提交备案或重发网站；需要恢复此项时先核对最新平台状态。
 私密环境、领取凭证与浏览器游客存档不在 Git，缺少真实配置时先完成不依赖它的工作。
 报告本次实际修改、测试结果、仍缺的配置和验证，不把 mock、本地链或历史记录当成生产验收。

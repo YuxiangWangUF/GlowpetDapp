@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { getDeltaXTraitRows, nftImageSvg, resolveNftImage } from "../src/nft-image.js";
+import { getDeltaXTraitRows, nftImageSvg, normalizeIpfsGateway, resolveNftImage } from "../src/nft-image.js";
 import { decodeTokenURI } from "../src/contract.js";
 
 const cid = "bafy" + "a".repeat(55);
@@ -47,6 +47,24 @@ test("unique portrait paths reject aliases, out-of-range IDs and URL or SVG inje
   for (const uri of [`https://ipfs.io/ipfs/${cid}/portraits/1.png`, `ipfs://${cid.toUpperCase()}/portraits/1.png`, `ipfs://${cid}@evil.example/portraits/1.png`]) {
     assert.equal(resolveNftImage(uri), "");
   }
+});
+
+test("IPFS gateway base is configurable but only as a plain HTTPS URL", () => {
+  assert.equal(normalizeIpfsGateway(undefined), "https://ipfs.io");
+  assert.equal(normalizeIpfsGateway(""), "https://ipfs.io");
+  assert.equal(normalizeIpfsGateway("https://pets.mypinata.cloud"), "https://pets.mypinata.cloud");
+  assert.equal(normalizeIpfsGateway("https://pets.mypinata.cloud/"), "https://pets.mypinata.cloud");
+  assert.equal(normalizeIpfsGateway(" https://gw.example/ipfs/ "), "https://gw.example");
+  assert.equal(normalizeIpfsGateway("https://cdn.example.com/ipfs-root"), "https://cdn.example.com/ipfs-root");
+  for (const rejected of [
+    "http://ipfs.io", "https://user:pass@ipfs.io", "https://ipfs.io/?gateway=1",
+    "https://ipfs.io/#fragment", "javascript:alert(1)", `ipfs://${cid}`,
+  ]) {
+    assert.equal(normalizeIpfsGateway(rejected), "https://ipfs.io", rejected);
+  }
+  // Resolved URLs always stay inside the configured gateway and CID path.
+  assert.equal(resolveNftImage(`ipfs://${cid}/portraits/7.png`, "https://gw.example"), `https://gw.example/ipfs/${cid}/portraits/7.png`);
+  assert.equal(resolveNftImage(`ipfs://${cid}/cat.png`, "https://gw.example"), `https://gw.example/ipfs/${cid}/cat.png`);
 });
 
 function uniqueMetadata(overrides = []) {
