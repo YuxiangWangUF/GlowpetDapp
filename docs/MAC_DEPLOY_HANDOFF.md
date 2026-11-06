@@ -2,6 +2,13 @@
 
 交接基准：2026-11-06 21:28（Asia/Shanghai）。先读 [AGENT_HANDOFF.md](AGENT_HANDOFF.md)、[PROJECT_STATUS.md](PROJECT_STATUS.md) 和 [SEPOLIA_RELEASE.md](SEPOLIA_RELEASE.md)，再检查实际任务状态；本文件不是完成发布的证明。
 
+## 2026-11-06 22:11 补记（Asia/Shanghai）
+
+- 代码提交 **`403a1d6` 已推送 GitHub**。用户选择保留 Mac 项目在 `~/Downloads/dapp`，没有移动目录；远程 SSH 访问受到 macOS TCC 隐私保护限制，尚未验证该目录的原有素材。不要反复远程访问或绕过限制，由 Mac 本机 agent 接手核验。
+- 另行传至 Mac 主目录下的私密交接包共 **13 个文件，已单独核验**；这不代表原项目或全部立绘已核验。领取材料和其他凭证未进入 Git，继续按交接包内说明私下保管。
+- Windows 最后确认的上传偏移为 **965,969,207 / 10,496,885,603 字节（约 9.2%）**。传输因 HEAD 网络确认失败停滞，正在诊断与恢复；不能将旧的“已启动”状态理解为仍在成功传输，更不能视为已 pin 或已发布。Mac 不启动重复上传，不清空原状态，不编造完成结果。
+- 后续只有真实发布成功、两个独立网关各完成 **10,001 文件、0 失败**核验后，才会生成公开结果 `docs/releases/deltax-unique-v2-sepolia-10000-ipfs.json` 并尝试安全同步 GitHub。Mac 更新代码后应先验证该文件的 `status=ipfs_verified_waiting_for_wallet`、既定 CID/清单/文件集、Pinata fileId 及完整网关证据，再将其中 `publication` 和 `verification` 对象原样保存为本机规范发布记录与核验报告。文件缺失或验证失败就继续等待，不能手填报告；钱包签名与前端发布仍是后续步骤。
+
 ## 两台设备如何分工
 
 Windows 保持开机、联网和现有上传进程运行，继续正式 CAR 上传、Pinata 异步导入及两个独立网关的全量核验。Mac 先接收源码和必要材料，用户自己恢复 MetaMask；真实核验证据到齐后，Mac 才准备并签署 Sepolia 交易、构建和发布 NFT 前端。不要因为换机而停止 Windows、重建上传、清空状态或生成另一套领取凭证。
