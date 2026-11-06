@@ -1,14 +1,18 @@
 # Glowpet 跨设备交接手册
 
-更新日期：2026-11-06（Asia/Shanghai）。仓库：<https://github.com/YuxiangWangUF/GlowpetDapp>。
+本轮状态更新于 2026-11-06 21:28（Asia/Shanghai；正式上传开始于 13:28:44 UTC）。仓库：<https://github.com/YuxiangWangUF/GlowpetDapp>。
 
 本版手册对应提交以 `git log -1 --oneline` 为准，记录了 IPFS 发布工具链与 Sepolia 10,000 版次的当前状态。最新进度与实际验收见 [PROJECT_STATUS.md](PROJECT_STATUS.md)；本手册中的历史结果（10/28、10/30、11/03）不能覆盖新设备的实际检查。
 
 本手册用于在新设备接手当前代码、素材和待办。先运行游客版，再按具体任务启用本地后端或合约。Git 提交记录是代码版本依据；运行中的进程、浏览器存档、平台账号和私密配置不会随 `git clone` 迁移。
 
+本次 Windows 保持开机上传、Mac 接手签名与 EdgeOne 发布的操作顺序，先读 [Mac 部署交接](MAC_DEPLOY_HANDOFF.md)。上传进程留在 Windows，不随代码同步迁移。
+
 ## 0. 当前状态速览
 
-用户最新决定：**新版 NFT 采用 Sepolia（11155111）、总上限 10,000、领取时铸造；IPFS 存储选定 Pinata Picnic（1 TB / $20 月），账户尚未开通，未上传任何内容，未发送链上交易。** 上传与双网关校验脚本已进入仓库并跑通合成版次；前端网关已改为 `VITE_IPFS_GATEWAY` 可配置。备案和域名迁移继续暂缓。本轮具体步骤见 [SEPOLIA_RELEASE.md](SEPOLIA_RELEASE.md)。
+**本轮公开部署已获用户授权。** 新版 NFT 采用 Sepolia（11155111）、总上限 10,000、领取时铸造。用户已确认 Pinata Picnic 开通，JWT 和专用网关已在本机运行进程内存中配置，MetaMask 已连接 Sepolia。备案和 DNS 迁移继续暂停。
+
+**正式去重 CAR 已于 2026-11-06 21:28:44（Asia/Shanghai）开始上传，尚未完成发布。** 原 12,767,137,078 字节 CAR 超出实测 TUS 10 GiB 上限，现已仅去除重复块记录，生成 10,496,885,603 字节新包；原根 CID 不变，全部 10,001 文件回读通过。当前正式版次的持久 pin、全量远端核验、公开 Sepolia 部署交易和新版 NFT 前端发布均未完成。继续按 [Sepolia 发布手册](SEPOLIA_RELEASE.md) 检查正在进行的任务与其独立状态，取得真实上传与双网关证据后再签署交易。
 
 **新版 12.76 GB 版次不在 Git 里。** 它位于 `output/deltax-unique-v2-10000-sepolia-20261103/`，被 `.gitignore` 排除，也不会随 clone 迁移；换机必须用移动硬盘或局域网整目录拷贝（见第 5 节）。
 
@@ -71,7 +75,7 @@ VITE_SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
 VITE_IPFS_GATEWAY=
 ```
 
-`VITE_IPFS_GATEWAY` 只接受纯 HTTPS 基址（空值回退 `https://ipfs.io`，非法值同样回退）；`scripts/build-visitor.mjs` 中显式写死默认值，发布前如需专用网关就改那一行。合约保存的是 CID，不是网关，换网关不需要重新部署。
+`VITE_IPFS_GATEWAY` 只接受纯 HTTPS 基址。正式 NFT 构建必须显式选择已验证、仍提供服务的网关，并检查 `scripts/build-visitor.mjs` 的实际配置；不要沿用旧版 `https://ipfs.io` 回退。`ipfs.io` 与 `dweb.link` 已停止普通 HTTP 网关服务，见 [官方迁移说明](https://gatewaychanges.ipfs.io/)。合约保存的是 CID，不是网关，换网关不需要重新部署。
 
 构建后运行 `npm run preview -- --host 127.0.0.1`，以终端实际端口验收 `dist/`。普通 `npm run build` 按自身环境构建，不会替你切换游客配置；`VITE_*` 都会进入浏览器，不能放入私钥或服务端 secret。`mock` 身份只允许本地开发，生产构建会拒绝它。
 
@@ -85,10 +89,10 @@ VITE_IPFS_GATEWAY=
 | 邮箱账号和内嵌钱包 | `src/auth/` 的 Privy 适配、mock、固定 EOA 地址绑定和账户 UI | 真实 Privy app、邮件 OTP、恢复/导出、独立设备验收 |
 | 代付领取 | API、队列、幂等、nonce/预算预留、广播前持久化、回执对账 | 正式 PostgreSQL、隔离 relayer、真实 Sepolia 合约/系列及运营配置 |
 | 云花园 | 服务端动作校验、时间、revision、幂等、链上所有权检查、前端同步 | 正式服务部署、真实账号和两台物理设备验收 |
-| DeltaX NFT | v2 规则、原 100 图冻结版次、新 10,000 图完整核验、核验器、离线部署计划、IPFS 上传/校验工具 | 真实 Pinata 账户与持久 pin、双网关核验、新合约目标网部署、真实领取 |
+| DeltaX NFT | v2 规则、原 100 图冻结版次、新 10,000 图及 CAR 完整核验、无损去重、发布计划、IPFS 上传/校验工具、已生效的 Pinata Picnic；正式去重包上传中 | 完成正式版次持久 pin、双网关全量核验、新合约目标网部署、真实领取 |
 | 其他 | 原外部钱包与旧 SVG 合约流程仍保留 | BLE 实物连接、自动链上进化、钱包通用代付未交付 |
 
-当前公网实际提供游客功能（本轮用 Quick Tunnel 做临时公网测试，地址为一次性链接，不写入手册）。用户已开始新版 NFT 发行准备，但 Pinata 账户尚未开通，因此尚未上传 IPFS、也未发送链上交易。代码存在不代表邮箱账号、NFT 领取和云端存档已在公网提供。PGlite/mock/本地链成功不等于真实 Privy、Sepolia 或生产数据库验收。
+当前公网实际提供游客功能，先前 Quick Tunnel 公网测试使用一次性链接。Pinata Picnic 已生效，正式去重 CAR 已开始上传；小 CAR 的真实异步导入和文件路径已验证，不能据此宣称正式版次已 pin。新版 NFT 的完整远端核验、Sepolia 部署、真实领取和前端发布均待完成。邮箱账号、代付和云端存档仍需真实服务配置及独立验收。
 
 链上 `evolve` 仍由合约 owner 调用，云端 XP 不自动改变链上 Stage。代付范围是 `claim`，不包含 ERC-721 转移等其他交易。后台没有自动提价替换交易功能；卡住的 nonce 要对账，不能清空任务表“重试”。
 
@@ -108,7 +112,7 @@ VITE_IPFS_GATEWAY=
 a5d3e62f25018c4692043cca0f014780f297b0feb29640a10af073c772717a54
 ```
 
-该目录只在本机、被 Git 忽略，不会随 clone 迁移；未上传 IPFS 或部署。
+该目录只在本机、被 Git 忽略，不会随 clone 迁移；对应去重 CAR 正在上传，尚未完成正式版次 pin 或部署。
 
 原已核验 100 张版次仍位于 `output/deltax-unique-v2/`，公开发布内容为其中 `publish/`；原清单 SHA-256 未变：
 
@@ -157,29 +161,39 @@ npm run ipfs:publish -- \
   --out deployments/sepolia-10000-20261103/ipfs-publish-draft.json --dry-run
 ```
 
-本地打包需要额外约 **13 GB** 磁盘放 CAR；空间不足时用 `--car /外置盘/edition.car` 指定位置。哈希或目录结构有任何不一致就停止，不要继续上传。
+新打包默认去除重复 CID 块记录，本版次 CAR 为 **10,496,885,603 字节**；准备至少约 **13 GB** 额外空间和必要余量，空间不足时用 `--car /外置盘/edition.car` 指定位置。原 CAR 和已冻结材料保留，不能覆盖。哈希或目录结构有任何不一致就停止，不要继续上传。
 
 ## 6. IPFS 发布与校验
 
-已选 **Pinata Picnic**（1 TB）。凭证只放在 shell 环境变量 `PINATA_JWT`，不写入 `.env`、脚本或文档。
+用户已确认 **Pinata Picnic**（1 TB）开通。JWT 和专用网关目前通过本机进程内存配置，进程退出后需重新配置。凭证只通过内存或 shell 环境变量 `PINATA_JWT` 提供，禁止写入 `.env`、脚本或文档。
+
+原 CAR 长度为 **12,767,137,078 字节**，目录根 CID 为 `bafybeiel5kxwyulqcsyd6tqb42scbs5ij57sn2yfj63w73spu2iwg7fqvm`。实测 TUS OPTIONS 返回 `Tus-Max-Size: 10737418240`（10 GiB），解释了原包的总长 413；Picnic 套餐容量不等于该端点单次上传上限。仅删除重复块记录后，新 CAR 为 **10,496,885,603 字节**，保留全部 22,882 个唯一块、原根及原文件字节。该根直接包含 `collection.json` 和 `portraits/`，10,001 个文件已再次从新 CAR 重构并与冻结清单比对通过。新 CAR SHA-256 为 `db57c42e1f6c46f35b12a4eaf5318adcfdfd4015cac7c8630dd15ffe19b4a9f2`。
+
+本轮定位到 Windows 上 Node 24 的 `openAsBlob` 对原文件长度按 2³² 截断。上传已改为 `fs.stat` 加 `fs.read` 的直接 TUS 分块传输，完整总长和读取偏移通过大于 4 GiB 的稀疏文件回归验证。回归也覆盖回执丢失、409/429 重试、413 诊断及错误信息脱敏。未曾上传过的 535 字节小 CAR 已实测导入成功：末块 `upload-cid` 最初是外层 CAR 的临时 CID，约 14 秒后 Files 出现内部真实根，两条公网路径内容匹配。上传器等待 Files 的准确根确认，不把临时 header 当作 pin 证据。
+
+正式去重包于 **2026-11-06 21:28:44（Asia/Shanghai）** 开始上传，对应 `deployments/sepolia-10000-20261106-Gbkt3e/ipfs-publish-deduplicated.json`。同目录下 `deduplicated-car-20261106-yFq5uL/` 保存新 CAR、草稿和本地回读报告；旧失败上传记录保留。接手时先检查任务是否仍运行，不启动第二个上传。当前尚无本次完整版次的持久 pin 或全量远端成功证据。
+
+恢复时复用去重包对应的同一个输出记录、草稿和已有上传状态，不能把原大包状态套到新包。上传地址与偏移会原子保存，未完成传输的重试通过 HEAD 对账；已持久化的末块完整回执直接进入异步导入查询，按已核验 CID 保存并确认 fileId。现存 CAR 必须完整读回校验后复用，新建文件采用排他创建。禁止清空状态、盲目创建新上传、覆盖冻结版次或降低核验门槛。相同输出记录有并发锁，移除残留锁前先确认原进程已退出。上传状态、TUS 会话地址和运行日志仅保留在本机忽略目录。
 
 ```sh
 # 1) 只打包，确认 CID 与目录结构（无需账号）
 node scripts/ipfs-publish.mjs --dir <publish> --out <draft.json> --dry-run
 
-# 2) 上传：本地打 CAR（>90 MB 自动分块续传，car=true），CID 不一致则中止
-PINATA_JWT=... node scripts/ipfs-publish.mjs --dir <publish> --out <deployments/.../ipfs-publish.json>
+# 2) 仅当原任务已退出且需要恢复时，复用对应 CAR、草稿和同一输出记录
+node scripts/ipfs-publish.mjs --dir <publish> --car <existing.car> \
+  --reuse-car <draft.json> --out <deployments/.../ipfs-publish.json>
 
 # 3) 双网关全量下载校验，生成 --ipfs-report 证据
-PINATA_JWT=... node scripts/ipfs-verify.mjs --dir <publish> --cid bafy... \
+node scripts/ipfs-verify.mjs --dir <publish> --cid bafy... \
   --publish-record <ipfs-publish.json> \
-  --gateway https://<专用网关>.mypinata.cloud --gateway https://ipfs.io \
+  --gateway https://<专用网关>.mypinata.cloud --gateway https://ipfs.filebase.io \
   --out <deployments/.../ipfs-verification.json>
 ```
 
 - 目录根必须直接包含 `collection.json` 和 `portraits/`；打包布局与合约 `ipfs://<CID>/portraits/<appearanceId>.png` 一致。
 - 校验脚本先向 Pinata 复核记录中的文件 id 仍解析到该 CID，`pinned: true` 只由这次复核产生；随后逐张下载并比对 SHA-256，中断重跑会复用已校验文件。
-- 两个网关必须是不同主机名；预计下载约 24 GB（10,001 文件 × 2），在 Pinata 250 GB 月出口额度内。
+- 两个网关必须是不同主机名，预计下载约 25.5 GB（10,001 文件 × 2），执行前按账户控制台核对剩余出口额度。
+- 不再使用已退役的 `ipfs.io` / `dweb.link` 普通 HTTP 网关。Filebase 独立公共网关已完成小样本验证，以上命令只是待执行入口，正式版次的双网关全量检查仍待完成；实际可用性及下载结果必须重新验证。
 - 证据文件交给 `scripts/prepare-sepolia-release.mjs --cid … --ipfs-report … --nonce …` 才能生成未签名交易。
 - 网关与备案：直接引用第三方网关不产生 ICP 备案义务；自有域名解析到大陆服务器或走大陆 CDN 才需要备案；面向境内公众提供区块链信息服务另需网信办备案。详见 [SEPOLIA_RELEASE.md](SEPOLIA_RELEASE.md)。
 
@@ -290,12 +304,12 @@ Makers 的 `_headers` 兼容性不能照搬 Netlify/Cloudflare Pages。使用 `n
 ## 11. 后续工作顺序
 
 1. **换机基线**：`git clone` + `npm ci` + 游客版构建；用移动硬盘拷入 12.76 GB 版次并按第 5 节核对哈希。
-2. **开通 Pinata Picnic**：创建 IPFS 文件空间与专用网关域名，`PINATA_JWT` 只放 shell；先跑 `--dry-run` 得到目录 CID 和 13 GB 空间需求。
-3. **上传并核验**：上传后立刻跑双网关校验，保存 `ipfs-publish.json` 与 `ipfs-verification.json`；任一文件失败就停止，不生成证据。
+2. **查看正在进行的上传**：Picnic 已生效，专用网关和 JWT 已在本机内存配置；去重包低于实测 TUS 10 GiB 上限。保留其独立输出记录与状态，先确认任务是否仍运行，禁止另起重复任务；重启进程后需重新提供凭证。
+3. **恢复并核验**：必要时复用已核验去重 CAR 与其草稿，按同一输出状态恢复；真实 Files 根确认后，使用 Pinata 专用网关及已验证的小样本 Filebase 独立公共网关完成正式全量校验。保留实际发布与核验记录，任一文件失败就停止，不生成成功证据。
 4. **准备并签署部署**：用真实 CID 和证据生成未签名交易，核对 MetaMask 网络、账户、pending nonce、费用后再签名；确认合约地址与参数后提交 `createSeries`。
 5. **按用户新任务推进产品**：保持五种角色和猫专属醒狮帽的批准边界；改动后核验视觉与素材引用。
 6. **账号正式接入**：等用户提供真实 Privy、PostgreSQL、Sepolia 与 relayer 配置，按部署说明执行。补齐真实 OTP、恢复/导出、跨设备钱包与云花园验收。
-7. **用户恢复域名任务后**：确认选择备案还是境外节点；使用实际托管记录和证书，先测试后切换 DNS。当前暂不主动推进备案、购买或再发布。
+7. **用户恢复域名任务后**：确认选择备案还是境外节点；使用实际托管记录和证书，先测试后切换 DNS。本轮授权覆盖新版 NFT 公开部署，备案、DNS 迁移和新增云资源购买继续暂停。
 
 ## 12. 可交给下一位 agent 的开场指令
 
@@ -304,11 +318,17 @@ Makers 的 `_headers` 兼容性不能照搬 Netlify/Cloudflare Pages。使用 `n
 先在本机运行首页与游客花园，再按我接下来的任务推进，并运行与改动相符的检查。
 当前公开版只有游客功能；真实邮箱账号、代付、云存档和新版 NFT 尚未正式上线。
 外观规则为 deltax-unique-v2，有效组合 18,432，醒狮帽仅供小猫，沿用已批准毛绒版本。
-IPFS 存储选定 Pinata Picnic，但账户尚未开通；12.76 GB 版次在 output/deltax-unique-v2-10000-sepolia-20261103/，
+用户已授权本轮新版 NFT 公开部署，已确认 Pinata Picnic 开通，MetaMask 已连接 Sepolia。
+JWT 和专用网关仅在本机进程内存中配置，进程重启后重新提供；不要写入文件或提交。
+12.76 GB 版次在 output/deltax-unique-v2-10000-sepolia-20261103/，
 不在 Git 里，换机后需先核对 publish/collection.json 的 SHA-256 a5d3e62f25018c4692043cca0f014780f297b0feb29640a10af073c772717a54。
-上传与校验流程见 docs/SEPOLIA_RELEASE.md：先 --dry-run 打 CAR，再上传，再用两个不同主机名的网关全量下载校验。
-PINATA_JWT 只放环境变量；打包需额外约 13 GB 磁盘。未获得真实 CID 和校验证据前，不生成部署交易、不宣称已发布。
-备案和域名迁移暂缓。不要主动购买、提交备案或重发网站；需要恢复此项时先核对最新平台状态。
+TUS OPTIONS 实测单次上限 10 GiB。原 CAR 已无损去重到 10,496,885,603 字节，全部 10,001 文件回读通过，原 CAR 与冻结图片保留。
+根 CID 不变，为 bafybeiel5kxwyulqcsyd6tqb42scbs5ij57sn2yfj63w73spu2iwg7fqvm。
+正式去重包已于 2026-11-06 21:28:44（Asia/Shanghai）开始上传；先检查原任务，不新建重复上传。
+按 docs/SEPOLIA_RELEASE.md 复用去重包对应的草稿与同一输出状态；等待真实 Files 根确认，再完成两个独立网关全量下载校验。
+ipfs.io 与 dweb.link 已退役普通 HTTP 网关；Filebase 独立公共网关仅完成小样本验证，正式全量待做。
+当前本次正式版次的持久 pin、全量远端核验、公开链上交易及新版 NFT 前端发布均未完成。实际签署部署需要真实上传与双网关证据。
+备案、DNS 迁移与新增云资源购买继续暂停。
 私密环境、领取凭证与浏览器游客存档不在 Git，缺少真实配置时先完成不依赖它的工作。
 报告本次实际修改、测试结果、仍缺的配置和验证，不把 mock、本地链或历史记录当成生产验收。
 ```

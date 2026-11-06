@@ -1,5 +1,5 @@
 import fs from 'node:fs/promises';
-import { createReadStream, createWriteStream } from 'node:fs';
+import { createReadStream } from 'node:fs';
 import path from 'node:path';
 import { Readable, Writable } from 'node:stream';
 import { createHash } from 'node:crypto';
@@ -7,6 +7,7 @@ import { createDirectoryEncoderStream, CAREncoderStream } from 'ipfs-car';
 import { CarWriter } from '@ipld/car';
 import { CID } from 'multiformats/cid';
 import { publishedFileSetHash } from './prepare-sepolia-release.mjs';
+import { uploadCarViaTus } from './ipfs-tus.mjs';
 
 /**
  * IPFS publication helpers for the sealed 10,000-image edition.
@@ -100,16 +101,29 @@ function fileLike(dir, relative, onFile) {
  */
 export async function packPublishDirectory({ inventory, carPath, onProgress }) {
   await fs.mkdir(path.dirname(carPath), { recursive: true });
+  const outputHandle = await fs.open(carPath, 'wx');
   let packed = 0;
   const files = inventory.files.map(file => fileLike(inventory.dir, file, () => {
     packed += 1;
     if (packed % 500 === 0) onProgress?.(packed, inventory.files.length);
   }));
   const blockStream = createDirectoryEncoderStream(files);
+  const seen = new Set();
+  let root;
+  const uniqueBlocks = new TransformStream({
+    transform(block, controller) {
+      // The final input block is the root, including when it was already emitted.
+      root = block.cid;
+      const key = block.cid.toString();
+      if (!seen.has(key)) {
+        seen.add(key);
+        controller.enqueue(block);
+      }
+    },
+  });
   const carStream = new CAREncoderStream([PLACEHOLDER_CID]);
-  const out = Writable.toWeb(createWriteStream(carPath));
-  await blockStream.pipeThrough(carStream).pipeTo(out);
-  const root = carStream.finalBlock?.cid;
+  const out = Writable.toWeb(outputHandle.createWriteStream());
+  await blockStream.pipeThrough(uniqueBlocks).pipeThrough(carStream).pipeTo(out);
   if (!root) throw new Error('The CAR archive contained no blocks.');
   const handle = await fs.open(carPath, 'r+');
   try {
@@ -124,15 +138,94 @@ export async function packPublishDirectory({ inventory, carPath, onProgress }) {
 }
 
 /** Upload a locally built CAR and require the provider to report the same root. */
-export async function uploadCarToPinata({ carPath, jwt, name, onProgress }) {
-  if (!jwt) throw new Error('PINATA_JWT is required to upload.');
-  const { PinataSDK } = await import('pinata');
-  const pinata = new PinataSDK({ pinataJwt: jwt });
-  const blob = await fs.openAsBlob(carPath, { type: 'application/vnd.ipld.car' });
-  const file = new File([blob], path.basename(carPath), { type: 'application/vnd.ipld.car' });
-  onProgress?.({ phase: 'upload-start', bytes: file.size });
-  const upload = await pinata.upload.public.file(file).car().name(name);
-  return { id: upload.id, cid: upload.cid, size: upload.size, createdAt: upload.created_at };
+export async function uploadCarToPinata(options) {
+  return uploadCarViaTus(options);
+}
+
+/** Read every page of matching public records. Only non-secret identity fields leave this function. */
+export async function findPinataFiles({ jwt, cid, name, pending = false, fetchImpl = fetch }) {
+  const found = [];
+  let pageToken;
+  const pages = new Set();
+  do {
+    const url = new URL('https://api.pinata.cloud/v3/files/public');
+    if (cid) url.searchParams.set('cid', cid);
+    if (name) url.searchParams.set('name', name);
+    if (pending) url.searchParams.set('cidPending', 'true');
+    url.searchParams.set('limit', '100');
+    if (pageToken) url.searchParams.set('pageToken', pageToken);
+    const response = await fetchImpl(url.href, {
+      headers: { Authorization: `Bearer ${jwt}` }, redirect: 'error', signal: AbortSignal.timeout(30_000),
+    });
+    if (!response.ok) {
+      await response.body?.cancel();
+      throw Object.assign(new Error(`Pinata listing failed (HTTP ${response.status}).`), { status: response.status });
+    }
+    const data = (await response.json()).data;
+    if (!Array.isArray(data?.files)) throw new Error('Pinata listing response has no file list.');
+    for (const file of data.files) {
+      if (name && file.name !== name) continue;
+      if (cid && file.cid !== cid) continue;
+      found.push({ id: file.id, cid: file.cid ?? null, name: file.name, size: file.size, createdAt: file.created_at });
+    }
+    pageToken = data.next_page_token;
+    if (pageToken && pages.has(pageToken)) throw new Error('Pinata repeated a pagination token.');
+    if (pageToken) pages.add(pageToken);
+  } while (pageToken);
+  return found;
+}
+
+/** CAR acceptance is asynchronous. Only a subsequent public file lookup with the exact root is accepted. */
+export async function waitForPinataImport({
+  jwt, fileId, cid, name, onFileId = async () => {}, timeoutMs = 30 * 60_000, pollMs = 10_000,
+  client, fetchImpl = fetch, log = () => {}, sleep = ms => new Promise(resolve => setTimeout(resolve, ms)), now = Date.now,
+}) {
+  if (!jwt || !cid) throw new Error('PINATA_JWT and the verified CID are required.');
+  if (!Number.isFinite(timeoutMs) || timeoutMs <= 0 || !Number.isFinite(pollMs) || pollMs <= 0) {
+    throw new Error('Import wait and polling intervals must be positive.');
+  }
+  const deadline = now() + timeoutMs;
+  async function getFile() {
+    if (!fileId) {
+      const matches = await findPinataFiles({ jwt, cid, name, fetchImpl });
+      const match = matches.find(file => typeof file.id === 'string' && file.id);
+      if (!match) return null;
+      await onFileId(match.id);
+      fileId = match.id;
+    }
+    if (client) return client.files.public.get(fileId);
+    const response = await fetchImpl(`https://api.pinata.cloud/v3/files/public/${encodeURIComponent(fileId)}`, {
+      headers: { Authorization: `Bearer ${jwt}` },
+      signal: AbortSignal.timeout(Math.max(1, Math.min(30_000, deadline - now()))),
+    });
+    if (!response.ok) {
+      await response.body?.cancel();
+      throw Object.assign(new Error('Pinata file lookup failed.'), { statusCode: response.status });
+    }
+    return (await response.json()).data;
+  }
+  do {
+    let file;
+    try {
+      file = await getFile();
+    } catch (error) {
+      const status = error.statusCode ?? error.status;
+      if (status === 401 || status === 403) throw new Error(`Pinata lookup denied (HTTP ${status}).`);
+      if (status && status !== 404 && status !== 429 && status < 500) {
+        throw new Error(`Pinata lookup failed (HTTP ${status}).`);
+      }
+      log('  Pinata file lookup temporarily unavailable; keeping the saved upload receipt.');
+    }
+    if (file) {
+      if (file.id !== fileId) throw new Error('Pinata returned a different file id.');
+      if (file.cid && file.cid !== cid) throw new Error(`Pinata reports CID ${file.cid}; expected ${cid}.`);
+      if (file.cid === cid) return { id: file.id, cid: file.cid, size: file.size, createdAt: file.created_at };
+      log('  Pinata CAR import is still pending.');
+    }
+    if (now() >= deadline) break;
+    await sleep(Math.min(pollMs, deadline - now()));
+  } while (now() < deadline);
+  throw new Error('Pinata CAR import is still unconfirmed. Re-run the same command to resume checking the saved file id.');
 }
 
 /** Confirm with Pinata that the recorded file id still resolves to the CID. */
